@@ -1,90 +1,158 @@
 # 🐝 MELIPONA OS — Mapeamento de Voo & Ecologia das Abelhas Nativas
+### Ecossistema Digital de Meliponicultura 4.0 | Documentação Completa do Sistema
 
 <p align="center">
   <img src="assets/sistema-real-meliponaos.png" alt="MeliponaOS - Interface Real 3D" width="100%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);" />
 </p>
 
 <p align="center">
-  <strong>Ecossistema inteligente para criação técnica, mapeamento ecológico 3D e preservação das Abelhas Nativas Sem Ferrão (ASF).</strong>
-</p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Status-Ativo-FFC300?style=for-the-badge&logoColor=0D0F12" alt="Status Ativo" />
-  <img src="https://img.shields.io/badge/Interface-3D%20Three.js-F4B41A?style=for-the-badge" alt="Interface 3D" />
-  <img src="https://img.shields.io/badge/Tecnologias-HTML5%20%7C%20TailwindCSS%20%7C%20JS-38BDF8?style=for-the-badge" alt="Tecnologias" />
-  <img src="https://img.shields.io/badge/Licen%C3%A7a-MIT-A855F7?style=for-the-badge" alt="Licença" />
+  <img src="https://img.shields.io/badge/Status-Ativo%20e%20Operacional-FFC300?style=for-the-badge&logoColor=0D0F12" alt="Status" />
+  <img src="https://img.shields.io/badge/Ambiente_Local-http%3A%2F%2Flocalhost%3A8080-38BDF8?style=for-the-badge" alt="Localhost" />
+  <img src="https://img.shields.io/badge/Motor_Gráfico-Three.js%203D-F4B41A?style=for-the-badge" alt="Three.js" />
+  <img src="https://img.shields.io/badge/Licença-MIT-A855F7?style=for-the-badge" alt="Licença" />
 </p>
 
 ---
 
-## 🍯 Sobre o MeliponaOS
+## 📌 Sumário Executivo
 
-O **MeliponaOS** une biologia comportamental e tecnologia espacial interativa para a Meliponicultura 4.0. Dedicado ao manejo racional de espécies de Abelhas Nativas Sem Ferrão (ASF) brasileiras, tais como **Mandaçaia (MQA)**, **Jataí**, **Uruçu**, **Tiúba** e **Mirim**.
+O **MeliponaOS** é uma Single-Page Application (SPA) progressiva e imersiva para o manejo técnico e conservação das **Abelhas Nativas Sem Ferrão (ASF)** do Brasil. 
 
-A plataforma integra:
-1. **Aba Inicial Informativa:** Apresentação completa dos propósitos do sistema, pilares ecológicos e benefícios da criação de abelhas nativas para a conservação da biodiversidade.
-2. **Hex-Radar 3D Interativo:** Simulação tridimensional do ninho, malha poligonal com raios de forrageamento, marcadores botânicos de floradas nativas, fontes de água, iscas-PET e alertas de risco sanitário.
-3. **Visão do Meliponário:** Biometria, pesagem contínua e status ambiental das caixas racionais.
-4. **Espécies Nativas:** Catálogo com fichas biológicas e especificações técnicas de caixas padrão INPA.
-5. **Diário de Manejo:** Registro rápido de alimentação, divisões, colheitas sustentáveis e revisões sanitárias.
-
----
-
-## ✨ Recursos da Aplicação
-
-### 🌐 1. Hex-Radar 3D & Mapeamento Ecológico
-- **Relevo 3D Interativo:** Visualização em perspectiva do terreno, árvores e entorno do meliponário.
-- **Raio de Voo Racional:** Projeção da área de cobertura em favo poligonal ajustada automaticamente para a espécie monitorada.
-- **Pinos de Campo:**
-  - 🌸 **Flores Nativas:** Mapeamento botânico de pasto meliponícola.
-  - 💧 **Fontes de Água:** Pontos de hidratação e umidade seguros.
-  - 🍯 **Iscas-PET 2L:** Acompanhamento de ninhos-isca e captura ética.
-  - ⚠️ **Atenção / Risco:** Zonas de perigo químico (agrotóxicos) ou ataques biológicos (forídeos).
-
-### ☀️ 2. Linha do Tempo e Condições Climáticas
-- Slider sazonal (Janeiro a Dezembro) com transição de estações (*Verão, Outono, Inverno, Primavera Floral*).
-- Simulação de clima dinâmico com alternância de chuvas e monitoramento de temperatura ambiente.
+O sistema integra:
+- **Aba Inicial Institucional/Informativa** (explicação do sistema, benefícios e impacto ambiental).
+- **Mapeamento de Voo 3D em Malha Hexagonal ("Hex-Radar")** renderizado com WebGL / Three.js.
+- **Telemetria de Campo e Biometria de Colmeias** monitorando temperatura, umidade, peso e frequência acústica.
+- **Catálogo de Espécies Nativas Brasileiras** com parâmetros biológicos e medidas de caixas racionais (Padrão INPA).
+- **Diário de Manejo Racional** para histórico operacional e auditoria técnica.
 
 ---
 
-## 🚀 Como Executar Localmente
+## 🏛️ Como o Sistema Está Estruturado
 
-### Pré-requisitos
-- Qualquer navegador web atualizado (Chrome, Edge, Firefox, Safari).
-- PowerShell no Windows ou terminal Unix.
+A aplicação foi projetada para ser **autocontida, leve e de alta performance**, rodando sem necessidade de etapas pesadas de build (como Webpack ou Vite):
 
-### Inicialização Rápida
+```mermaid
+graph TD
+    A[Usuário / Navegador] -->|HTTP :8080| B(Servidor Local PowerShell serve.ps1)
+    B --> C[index.html - Single Page Application]
+    C --> D[Motor 3D Three.js: Cenário, Relevo, Ninho e Partículas]
+    C --> E[Tailwind CSS: Interface Responsiva + Dark/Light Mode]
+    C --> F[Chart.js: Gráficos de Temperatura, Peso e Umidade]
+    C --> G[Camada de Estado JS: Gestão de Espécies, Marcadores e Manejos]
+```
 
-1. **Clone o repositório:**
-   ```bash
-   git clone https://github.com/MarcosAosf/ProjetoMeliponicultura.git
-   cd ProjetoMeliponicultura
-   ```
+### 📁 Estrutura de Diretórios e Arquivos
 
-2. **Inicie o servidor HTTP:**
-   - Execute o script PowerShell incluído:
-     ```powershell
-     powershell -ExecutionPolicy Bypass -File .\serve.ps1
-     ```
-   - Ou abra o arquivo `index.html` diretamente no navegador.
-
-3. **Acesse:**
-   - Abra [http://localhost:8080/](http://localhost:8080/) no seu navegador.
+```text
+ProjetoMeliponicultura/
+├── assets/
+│   └── sistema-real-meliponaos.png  # Captura real da tela 3D do sistema
+├── index.html                       # Núcleo da aplicação (HTML5, Tailwind, Three.js, CSS2D, Chart.js)
+├── serve.ps1                        # Servidor HTTP assíncrono nativo em PowerShell (.NET HttpListener)
+├── MELIPONA_HEX_ARCHITECTURE.md     # Especificação técnica original da arquitetura HexaBio
+└── README.md                        # Guia completo do sistema e documentação
+```
 
 ---
 
-## 🐝 Espécies e Raios de Forrageamento
+## 🖥️ Módulos e Abas do Sistema
 
-| Espécie | Nome Científico | Raio Médio | Área de Cobertura |
-| :--- | :--- | :--- | :--- |
-| **Jataí** | *Tetragonisca angustula* | ~500 m | ~0.65 km² |
-| **Mirim Droryana** | *Plebeia droryana* | ~400 m | ~0.41 km² |
-| **Mandaçaia** | *Melipona quadrifasciata* | ~1.500 m | ~5.84 km² |
-| **Uruçu Amarela** | *Melipona flavolineata* | ~2.000 m | ~10.39 km² |
-| **Tiúba** | *Melipona fasciculata* | ~2.200 m | ~12.57 km² |
+### 1. 🏠 Aba Inicial: "Início / Sobre" *(Tela Principal Atual)*
+- **Objetivo:** Fornecer ao usuário ou pesquisador uma visão clara do que é o sistema antes de entrar nos mapas e dados complexos.
+- **Conteúdo:**
+  - Apresentação dos pilares do MeliponaOS.
+  - Cartões explicativos para cada funcionalidade.
+  - Guia de importância das abelhas sem ferrão (polinização florestal, produção de mel medicinal e função como bioindicadores ecológicos).
+  - Acesso direto via botões de ação para os módulos operacionais.
+
+### 2. 🗺️ Aba "Hex-Radar 3D" (Mapeamento de Voo)
+- **Renderizador 3D:** Construído em **Three.js** com iluminação dinâmica, sombras, relevo topográfico procedural e vegetação poligonal (*low-poly*).
+- **Hex-Radar Vetorial:** Em vez de circunferências genéricas, projeta um favo hexagonal com pulso luminoso que corresponde ao raio real de forrageamento da colmeia selecionada:
+  - 🌸 **Flores Nativas (Rosa):** Pasto meliponícola monitorado.
+  - 💧 **Fontes de Água (Azul):** Bebedouros naturais ou artificiais.
+  - 🍯 **Iscas-PET 2L (Roxo):** Localização de garrafas-isca para atração de enxames.
+  - ⚠️ **Atenção / Risco (Vermelho):** Aplicações de agrotóxicos ou incidência de forídeos.
+- **Controles Interativos:**
+  - Alternância de espécies ativas (com redimensionamento imediato do hexágono).
+  - Filtro dinâmico por camadas de recursos.
+  - Slider temporal das estações (*Verão, Outono, Inverno, Primavera Floral*).
+  - Simulação de chuva com desativação do voo das campeiras.
+  - Alternador de visão de câmera (Orbital livre, Top-Down / Aérea ou Foco no Ninho).
+
+### 3. 📊 Aba "Meliponário" (Telemetria & Biometria)
+- Painéis de acompanhamento em tempo real:
+  - **Temperatura de Ninho e Ambiente:** Mostradores circulares com indicação de conforto térmico.
+  - **Umidade Relativa Interna:** Sensores de controle para evitar proliferação de fungos.
+  - **Evolução de Peso (Célula de Carga):** Curva de acúmulo de mel e pólen ao longo das semanas.
+  - **Bioacústica da Colmeia:** Gráfico de espectro sonoro em Hz com detecção do padrão de vibração da rainha.
+
+### 4. 🐝 Aba "Espécies Nativas" (Enciclopédia Visual)
+- Fichas técnicas detalhadas das principais abelhas sem ferrão do Brasil:
+  - **Mandaçaia (*Melipona quadrifasciata*):** Raio ~1.500 m (~5.84 km²).
+  - **Jataí (*Tetragonisca angustula*):** Raio ~500 m (~0.65 km²).
+  - **Uruçu-Amarela (*Melipona flavolineata*):** Raio ~2.000 m (~10.39 km²).
+  - **Tiúba (*Melipona fasciculata*):** Raio ~2.200 m (~12.57 km²).
+  - **Mirim Droryana (*Plebeia droryana*):** Raio ~400 m (~0.41 km²).
+- Detalhes de arquitetura de ninho, modelo de caixa recomendado e medidas construtivas em centímetros.
+
+### 5. 📋 Aba "Diário de Manejo"
+- Histórico auditável de intervenções:
+  - Alimentação energética (xarope 1:1) e proteica (bombom de pólen).
+  - Divisão de colônias (métodos 1:1 e 2:1).
+  - Colheita de mel com bomba de sucção a vácuo.
+  - Controle sanitário contra forídeos (*Pseudohypocera kerteszi*).
+- Modal para cadastro rápido de novo manejo em menos de 10 segundos.
+
+---
+
+## ⚙️ Como o Sistema Está Rodando Atualmente
+
+O ambiente está configurado e operando localmente no endereço padrão:
+
+### 1. Servidor Local HTTP Ativo
+- **Script:** `serve.ps1`
+- **Mecanismo:** Utiliza a classe nativa `.NET System.Net.HttpListener`, dispensando a instalação de Node.js, Apache ou Nginx.
+- **Porta:** `8080`
+- **URL de Acesso:** [http://localhost:8080/](http://localhost:8080/)
+- **Execução em Segundo Plano:** O serviço permanece ativo automaticamente no PowerShell da máquina.
+
+### 2. Sincronização e Versionamento Git
+- **Repositório Remoto:** [github.com/MarcosAosf/ProjetoMeliponicultura](https://github.com/MarcosAosf/ProjetoMeliponicultura)
+- **Branch Ativa:** `main` (sincronizada e atualizada).
+- **Ambiente Git:** MinGit configurado localmente no usuário, integrado à autenticação oficial do GitHub CLI (`gh`).
+
+---
+
+## 🚀 Como Iniciar ou Reiniciar o Serviço Manualmente
+
+Se fechar o terminal ou reiniciar o computador, basta executar:
+
+```powershell
+# 1. Abra o PowerShell na raiz do projeto
+cd E:\ProjetoMeliponicultura
+
+# 2. Inicie o servidor
+powershell -ExecutionPolicy Bypass -File .\serve.ps1
+```
+
+O script inicializa o listener HTTP e abre a aplicação automaticamente no navegador padrão em `http://localhost:8080/`.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+| Tecnologia | Finalidade |
+| :--- | :--- |
+| **HTML5 & Vanilla JavaScript** | Arquitetura SPA desacoplada e sem overhead de compilação |
+| **Tailwind CSS (CDN)** | Design responsivo, paleta HexaBio e suporte a Dark/Light Mode |
+| **Three.js (r128)** | Renderização de gráficos 3D, relevo de terreno e animação de partículas |
+| **CSS2DRenderer** | Rótulos e marcadores HTML sobrepostos com posicionamento 3D no mapa |
+| **Chart.js** | Visualização de telemetria histórica e curvas de biomassa |
+| **PowerShell + .NET** | Servidor web HTTP local ultra-leve |
+| **Git & GitHub CLI** | Controle de versão e publicação remota contínua |
 
 ---
 
 <p align="center">
-  Feito com 💛 e dedicação à preservação das abelhas nativas do Brasil.
+  <strong>MeliponaOS</strong> — Protegendo as abelhas nativas e impulsionando a meliponicultura sustentável. 🐝🍯
 </p>
