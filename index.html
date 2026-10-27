@@ -1044,24 +1044,45 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-        <!-- CARD 1: JATAÃ -->
+        <!-- CARD: JATAÃ­ -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
-            <div class="h-48 w-full relative overflow-hidden bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800">
-              <img src="./assets/species/jatai.jpg" alt="JataÃ­ (Tetragonisca angustula)" class="w-full h-full object-cover" loading="lazy" />
-              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md">
+            <div id="species-carousel-jatai" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
+              <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
+                <img src="./assets/species/jatai.jpg" alt="JataÃ­ - Macro da Abelha" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Macro da Abelha
+                </span>
+              </div>
+              <div class="carousel-slide hidden absolute inset-0 w-full h-full transition-opacity duration-300" data-index="1">
+                <img src="./assets/species/jatai_ninho.jpg" alt="JataÃ­ - Estrutura do Ninho" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Estrutura do Ninho
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 500m Raio
               </span>
-              <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/60 text-amber-300 backdrop-blur-sm border border-amber-400/20">
-                Tubo de Cera TranslÃºcido
-              </span>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-jatai', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
+                â®
+              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-jatai', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="PrÃ³xima foto">
+                â¯
+              </button>
+              <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-jatai', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-jatai', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
+              </div>
             </div>
             <div class="p-6 space-y-4">
               <div>
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold text-honey-600 dark:text-honey-400 uppercase tracking-wider">Tribo Trigonini</span>
-                  <span class="text-xs text-gray-400 font-mono">1. JAT</span>
+                  <span class="text-xs text-gray-400 font-mono font-bold">1. JAT</span>
                 </div>
                 <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">JataÃ­</h3>
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Tetragonisca angustula</p>
@@ -1099,23 +1120,45 @@
           </div>
         </div>
 
-        <!-- CARD 2: MANDAÃ‡AIA -->
+        <!-- CARD: MANDAÃ§AIA -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
-            <div class="h-48 w-full relative overflow-hidden bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800">
-              <img src="./assets/species/mandacaia.jpg" alt="MandaÃ§aia (Melipona quadrifasciata)" class="w-full h-full object-cover" loading="lazy" />
-              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md">
+            <div id="species-carousel-mandacaia" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
+              <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
+                <img src="./assets/species/mandacaia.jpg" alt="MandaÃ§aia - Macro da Abelha" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Macro da Abelha
+                </span>
+              </div>
+              <div class="carousel-slide hidden absolute inset-0 w-full h-full transition-opacity duration-300" data-index="1">
+                <img src="./assets/species/mandacaia_ninho.jpg" alt="MandaÃ§aia - Estrutura do Ninho" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Estrutura do Ninho
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 1.500m Raio
               </span>
-              <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/60 text-amber-300 backdrop-blur-sm border border-amber-400/20">
-                Raias de Barro Geopropolis
-              </span>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mandacaia', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
+                â®
+              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mandacaia', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="PrÃ³xima foto">
+                â¯
+              </button>
+              <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-mandacaia', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-mandacaia', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
+              </div>
             </div>
             <div class="p-6 space-y-4">
               <div>
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold text-honey-600 dark:text-honey-400 uppercase tracking-wider">Tribo Meliponini</span>
-                  <span class="text-xs text-gray-400 font-mono">2. MQA</span>
+                  <span class="text-xs text-gray-400 font-mono font-bold">2. MQA</span>
                 </div>
                 <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">MandaÃ§aia</h3>
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona quadrifasciata</p>
@@ -1153,23 +1196,45 @@
           </div>
         </div>
 
-        <!-- CARD 3: URUÃ‡U AMARELA -->
+        <!-- CARD: URUÃ§U AMARELA -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
-            <div class="h-48 w-full relative overflow-hidden bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800">
-              <img src="./assets/species/urucu.jpg" alt="UruÃ§u Amarela (Melipona flavolineata)" class="w-full h-full object-cover" loading="lazy" />
-              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md">
+            <div id="species-carousel-urucu" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
+              <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
+                <img src="./assets/species/urucu.jpg" alt="UruÃ§u Amarela - Macro da Abelha" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Macro da Abelha
+                </span>
+              </div>
+              <div class="carousel-slide hidden absolute inset-0 w-full h-full transition-opacity duration-300" data-index="1">
+                <img src="./assets/species/urucu_ninho.jpg" alt="UruÃ§u Amarela - Estrutura do Ninho" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Estrutura do Ninho
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 2.000m Raio
               </span>
-              <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/60 text-amber-300 backdrop-blur-sm border border-amber-400/20">
-                OrifÃ­cio Amplo com Sentinela
-              </span>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-urucu', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
+                â®
+              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-urucu', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="PrÃ³xima foto">
+                â¯
+              </button>
+              <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-urucu', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-urucu', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
+              </div>
             </div>
             <div class="p-6 space-y-4">
               <div>
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold text-honey-600 dark:text-honey-400 uppercase tracking-wider">Tribo Meliponini</span>
-                  <span class="text-xs text-gray-400 font-mono">3. MFL</span>
+                  <span class="text-xs text-gray-400 font-mono font-bold">3. MFL</span>
                 </div>
                 <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">UruÃ§u Amarela</h3>
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona flavolineata</p>
@@ -1207,23 +1272,45 @@
           </div>
         </div>
 
-        <!-- CARD 4: URUÃ‡U NORDESTINA -->
+        <!-- CARD: URUÃ§U NORDESTINA -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
-            <div class="h-48 w-full relative overflow-hidden bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800">
-              <img src="./assets/species/urucu_nordestina.jpg" alt="UruÃ§u Nordestina (Melipona scutellaris)" class="w-full h-full object-cover" loading="lazy" />
-              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md">
+            <div id="species-carousel-urucu_nordestina" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
+              <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
+                <img src="./assets/species/urucu_nordestina.jpg" alt="UruÃ§u Nordestina - Macro da Abelha" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Macro da Abelha
+                </span>
+              </div>
+              <div class="carousel-slide hidden absolute inset-0 w-full h-full transition-opacity duration-300" data-index="1">
+                <img src="./assets/species/urucu_nordestina_ninho.jpg" alt="UruÃ§u Nordestina - Estrutura do Ninho" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Estrutura do Ninho
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 2.000m Raio
               </span>
-              <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/60 text-amber-300 backdrop-blur-sm border border-amber-400/20">
-                TÃ³rax com Pilosidade Fulva
-              </span>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-urucu_nordestina', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
+                â®
+              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-urucu_nordestina', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="PrÃ³xima foto">
+                â¯
+              </button>
+              <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-urucu_nordestina', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-urucu_nordestina', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
+              </div>
             </div>
             <div class="p-6 space-y-4">
               <div>
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold text-honey-600 dark:text-honey-400 uppercase tracking-wider">Tribo Meliponini</span>
-                  <span class="text-xs text-gray-400 font-mono">4. MSC</span>
+                  <span class="text-xs text-gray-400 font-mono font-bold">4. MSC</span>
                 </div>
                 <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">UruÃ§u Nordestina</h3>
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona scutellaris</p>
@@ -1261,23 +1348,45 @@
           </div>
         </div>
 
-        <!-- CARD 5: TIÃšBA -->
+        <!-- CARD: TIÃºBA / URUÃ§U-CINZENTA -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
-            <div class="h-48 w-full relative overflow-hidden bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800">
-              <img src="./assets/species/tiuba.jpg" alt="TiÃºba (Melipona fasciculata)" class="w-full h-full object-cover" loading="lazy" />
-              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md">
+            <div id="species-carousel-tiuba" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
+              <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
+                <img src="./assets/species/tiuba.jpg" alt="TiÃºba / UruÃ§u-Cinzenta - Macro da Abelha" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Macro da Abelha
+                </span>
+              </div>
+              <div class="carousel-slide hidden absolute inset-0 w-full h-full transition-opacity duration-300" data-index="1">
+                <img src="./assets/species/tiuba_ninho.jpg" alt="TiÃºba / UruÃ§u-Cinzenta - Estrutura do Ninho" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Estrutura do Ninho
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 2.200m Raio
               </span>
-              <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/60 text-amber-300 backdrop-blur-sm border border-amber-400/20">
-                Tubo de Entrada Estriado
-              </span>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-tiuba', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
+                â®
+              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-tiuba', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="PrÃ³xima foto">
+                â¯
+              </button>
+              <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-tiuba', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-tiuba', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
+              </div>
             </div>
             <div class="p-6 space-y-4">
               <div>
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold text-honey-600 dark:text-honey-400 uppercase tracking-wider">Tribo Meliponini</span>
-                  <span class="text-xs text-gray-400 font-mono">5. MFA</span>
+                  <span class="text-xs text-gray-400 font-mono font-bold">5. MFA</span>
                 </div>
                 <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">TiÃºba / UruÃ§u-Cinzenta</h3>
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona fasciculata</p>
@@ -1315,23 +1424,45 @@
           </div>
         </div>
 
-        <!-- CARD 6: MIRIM DRORYANA -->
+        <!-- CARD: MIRIM DRORYANA -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
-            <div class="h-48 w-full relative overflow-hidden bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800">
-              <img src="./assets/species/mirim.jpg" alt="Mirim Droryana (Plebeia droryana)" class="w-full h-full object-cover" loading="lazy" />
-              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md">
+            <div id="species-carousel-mirim" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
+              <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
+                <img src="./assets/species/mirim.jpg" alt="Mirim Droryana - Macro da Abelha" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Macro da Abelha
+                </span>
+              </div>
+              <div class="carousel-slide hidden absolute inset-0 w-full h-full transition-opacity duration-300" data-index="1">
+                <img src="./assets/species/mirim_ninho.jpg" alt="Mirim Droryana - Estrutura do Ninho" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Estrutura do Ninho
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 400m Raio
               </span>
-              <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/60 text-amber-300 backdrop-blur-sm border border-amber-400/20">
-                PrÃ³polis TranslÃºcido
-              </span>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mirim', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
+                â®
+              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mirim', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="PrÃ³xima foto">
+                â¯
+              </button>
+              <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-mirim', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-mirim', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
+              </div>
             </div>
             <div class="p-6 space-y-4">
               <div>
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold text-honey-600 dark:text-honey-400 uppercase tracking-wider">Tribo Trigonini</span>
-                  <span class="text-xs text-gray-400 font-mono">6. PDR</span>
+                  <span class="text-xs text-gray-400 font-mono font-bold">6. PDR</span>
                 </div>
                 <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">Mirim Droryana</h3>
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Plebeia droryana</p>
@@ -1369,23 +1500,45 @@
           </div>
         </div>
 
-        <!-- CARD 7: IRAÃ -->
+        <!-- CARD: IRAÃ­ -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
-            <div class="h-48 w-full relative overflow-hidden bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800">
-              <img src="./assets/species/irai.jpg" alt="IraÃ­ (Nannotrigona testaceicornis)" class="w-full h-full object-cover" loading="lazy" />
-              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md">
+            <div id="species-carousel-irai" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
+              <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
+                <img src="./assets/species/irai.jpg" alt="IraÃ­ - Macro da Abelha" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Macro da Abelha
+                </span>
+              </div>
+              <div class="carousel-slide hidden absolute inset-0 w-full h-full transition-opacity duration-300" data-index="1">
+                <img src="./assets/species/irai_ninho.jpg" alt="IraÃ­ - Estrutura do Ninho" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Estrutura do Ninho
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 600m Raio
               </span>
-              <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/60 text-amber-300 backdrop-blur-sm border border-amber-400/20">
-                Tubo com OrifÃ­cios Rendilhados
-              </span>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-irai', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
+                â®
+              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-irai', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="PrÃ³xima foto">
+                â¯
+              </button>
+              <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-irai', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-irai', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
+              </div>
             </div>
             <div class="p-6 space-y-4">
               <div>
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold text-honey-600 dark:text-honey-400 uppercase tracking-wider">Tribo Trigonini</span>
-                  <span class="text-xs text-gray-400 font-mono">7. NTE</span>
+                  <span class="text-xs text-gray-400 font-mono font-bold">7. NTE</span>
                 </div>
                 <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">IraÃ­</h3>
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Nannotrigona testaceicornis</p>
@@ -1423,23 +1576,45 @@
           </div>
         </div>
 
-        <!-- CARD 8: BORÃ -->
+        <!-- CARD: BORÃ¡ -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
-            <div class="h-48 w-full relative overflow-hidden bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800">
-              <img src="./assets/species/bora.jpg" alt="BorÃ¡ (Tetragona clavipes)" class="w-full h-full object-cover" loading="lazy" />
-              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md">
+            <div id="species-carousel-bora" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
+              <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
+                <img src="./assets/species/bora.jpg" alt="BorÃ¡ - Macro da Abelha" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Macro da Abelha
+                </span>
+              </div>
+              <div class="carousel-slide hidden absolute inset-0 w-full h-full transition-opacity duration-300" data-index="1">
+                <img src="./assets/species/bora_ninho.jpg" alt="BorÃ¡ - Estrutura do Ninho" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Estrutura do Ninho
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 1.200m Raio
               </span>
-              <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/60 text-amber-300 backdrop-blur-sm border border-amber-400/20">
-                Pito CÃ´nico Achatado
-              </span>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-bora', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
+                â®
+              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-bora', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="PrÃ³xima foto">
+                â¯
+              </button>
+              <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-bora', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-bora', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
+              </div>
             </div>
             <div class="p-6 space-y-4">
               <div>
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold text-honey-600 dark:text-honey-400 uppercase tracking-wider">Tribo Trigonini</span>
-                  <span class="text-xs text-gray-400 font-mono">8. TCL</span>
+                  <span class="text-xs text-gray-400 font-mono font-bold">8. TCL</span>
                 </div>
                 <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">BorÃ¡</h3>
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Tetragona clavipes</p>
@@ -1451,10 +1626,10 @@
                 <div>
                   <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
                     <span>Docilidade & Manejo</span>
-                    <span class="text-amber-500 font-bold">75% (Defensiva no Ninho)</span>
+                    <span class="text-emerald-500 font-bold">75% (Defensiva no Ninho)</span>
                   </div>
                   <div class="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                    <div class="h-full bg-amber-500 rounded-full" style="width: 75%"></div>
+                    <div class="h-full bg-emerald-500 rounded-full" style="width: 75%"></div>
                   </div>
                 </div>
                 <div>
@@ -1477,23 +1652,45 @@
           </div>
         </div>
 
-        <!-- CARD 9: MANDURI -->
+        <!-- CARD: MANDURI -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
-            <div class="h-48 w-full relative overflow-hidden bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800">
-              <img src="./assets/species/manduri.jpg" alt="Manduri (Melipona marginata)" class="w-full h-full object-cover" loading="lazy" />
-              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md">
+            <div id="species-carousel-manduri" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
+              <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
+                <img src="./assets/species/manduri.jpg" alt="Manduri - Macro da Abelha" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Macro da Abelha
+                </span>
+              </div>
+              <div class="carousel-slide hidden absolute inset-0 w-full h-full transition-opacity duration-300" data-index="1">
+                <img src="./assets/species/manduri_ninho.jpg" alt="Manduri - Estrutura do Ninho" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Estrutura do Ninho
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 1.000m Raio
               </span>
-              <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/60 text-amber-300 backdrop-blur-sm border border-amber-400/20">
-                Linhas Amarelas Finas
-              </span>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-manduri', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
+                â®
+              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-manduri', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="PrÃ³xima foto">
+                â¯
+              </button>
+              <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-manduri', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-manduri', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
+              </div>
             </div>
             <div class="p-6 space-y-4">
               <div>
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold text-honey-600 dark:text-honey-400 uppercase tracking-wider">Tribo Meliponini</span>
-                  <span class="text-xs text-gray-400 font-mono">9. MMA</span>
+                  <span class="text-xs text-gray-400 font-mono font-bold">9. MMA</span>
                 </div>
                 <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">Manduri</h3>
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona marginata</p>
@@ -1531,23 +1728,45 @@
           </div>
         </div>
 
-        <!-- CARD 10: BUGIA -->
+        <!-- CARD: BUGIA -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
-            <div class="h-48 w-full relative overflow-hidden bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800">
-              <img src="./assets/species/bugia.jpg" alt="Bugia (Melipona mondury)" class="w-full h-full object-cover" loading="lazy" />
-              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md">
+            <div id="species-carousel-bugia" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
+              <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
+                <img src="./assets/species/bugia.jpg" alt="Bugia - Macro da Abelha" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Macro da Abelha
+                </span>
+              </div>
+              <div class="carousel-slide hidden absolute inset-0 w-full h-full transition-opacity duration-300" data-index="1">
+                <img src="./assets/species/bugia_ninho.jpg" alt="Bugia - Estrutura do Ninho" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Estrutura do Ninho
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 1.800m Raio
               </span>
-              <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/60 text-amber-300 backdrop-blur-sm border border-amber-400/20">
-                Cores Amarelo-Ocre Douradas
-              </span>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-bugia', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
+                â®
+              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-bugia', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="PrÃ³xima foto">
+                â¯
+              </button>
+              <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-bugia', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-bugia', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
+              </div>
             </div>
             <div class="p-6 space-y-4">
               <div>
                 <div class="flex items-center justify-between">
                   <span class="text-xs font-bold text-honey-600 dark:text-honey-400 uppercase tracking-wider">Tribo Meliponini</span>
-                  <span class="text-xs text-gray-400 font-mono">10. MMO</span>
+                  <span class="text-xs text-gray-400 font-mono font-bold">10. MMO</span>
                 </div>
                 <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">Bugia</h3>
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona mondury</p>
@@ -5055,7 +5274,48 @@
       switchTab('management');
     }
 
-    function onWindowResize() {
+    
+    // ==========================================
+    // CARROSSEL INTERATIVO DE FOTOS DO CATÃLOGO
+    // ==========================================
+    function setSpeciesCarouselSlide(containerId, targetIndex) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const slides = container.querySelectorAll(".carousel-slide");
+      const dots = container.querySelectorAll(".carousel-dot");
+      if (!slides.length) return;
+      const total = slides.length;
+      const activeIndex = (targetIndex + total) % total;
+      slides.forEach((slide, idx) => {
+        if (idx === activeIndex) {
+          slide.classList.remove("hidden");
+        } else {
+          slide.classList.add("hidden");
+        }
+      });
+      dots.forEach((dot, idx) => {
+        if (idx === activeIndex) {
+          dot.className = "carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer";
+        } else {
+          dot.className = "carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer";
+        }
+      });
+    }
+
+    function navigateSpeciesCarousel(containerId, direction) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      const slides = container.querySelectorAll(".carousel-slide");
+      let currentIndex = 0;
+      slides.forEach((slide, idx) => {
+        if (!slide.classList.contains("hidden")) {
+          currentIndex = idx;
+        }
+      });
+      setSpeciesCarouselSlide(containerId, currentIndex + direction);
+    }
+
+function onWindowResize() {
       const container = document.getElementById('three-canvas-container');
       if (!container || !renderer || !camera) return;
       const width = container.clientWidth;
