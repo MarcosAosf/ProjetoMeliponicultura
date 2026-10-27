@@ -1,20 +1,20 @@
-const CACHE_NAME = 'melipona-v3';
+const CACHE_NAME = 'melipona-v4';
 const ASSETS = [
   './',
   './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
-  './assets/species/jatai.png',
-  './assets/species/mandacaia.png',
-  './assets/species/urucu.png',
-  './assets/species/urucu_nordestina.png',
-  './assets/species/tiuba.png',
-  './assets/species/mirim.png',
-  './assets/species/irai.png',
-  './assets/species/bora.png',
-  './assets/species/manduri.png',
-  './assets/species/bugia.png'
+  './assets/species/jatai.jpg',
+  './assets/species/mandacaia.jpg',
+  './assets/species/urucu.jpg',
+  './assets/species/urucu_nordestina.jpg',
+  './assets/species/tiuba.jpg',
+  './assets/species/mirim.jpg',
+  './assets/species/irai.jpg',
+  './assets/species/bora.jpg',
+  './assets/species/manduri.jpg',
+  './assets/species/bugia.jpg'
 ];
 
 self.addEventListener('install', (e) => {
