@@ -455,6 +455,11 @@
 
           <!-- Conteúdo que pode ser recolhido -->
           <div id="panel-expandable-content" class="space-y-2">
+            <!-- Botão de Ação: Fixar Caixa via GPS -->
+            <button onclick="openGpsModal()" class="w-full py-2 px-3 rounded-xl bg-honey-500 hover:bg-honey-600 text-gray-950 font-bold text-xs shadow-sm flex items-center justify-center gap-1.5 transition-all hover:scale-[1.02] cursor-pointer">
+              <span>📍</span> Fixar Caixa via GPS
+            </button>
+
             <!-- Seletor de Espécie -->
             <div class="relative">
               <select id="species-3d-select" onchange="onSelectSpecies(this.value)" class="w-full bg-white dark:bg-[#12151D] border border-gray-200 dark:border-gray-700/80 text-gray-900 dark:text-white text-xs font-bold rounded-xl px-2.5 py-1.5 appearance-none focus:outline-none focus:ring-2 focus:ring-honey-500 cursor-pointer shadow-sm">
@@ -1083,6 +1088,54 @@
 
   </main>
 
+  <!-- MODAL: FIXAR CAIXA VIA GPS -->
+  <div id="gps-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+    <div class="relative w-full max-w-md p-6 rounded-3xl bg-white dark:bg-[#151821] shadow-2xl border border-gray-100 dark:border-gray-800 text-gray-900 dark:text-white">
+      <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-honey-500 text-gray-950 flex items-center justify-center font-bold text-base">📍</div>
+          <div>
+            <h3 class="text-base font-bold text-gray-900 dark:text-white">Fixar Caixa via GPS</h3>
+            <p class="text-[11px] text-gray-500 dark:text-gray-400">Captura a coordenada real do seu dispositivo</p>
+          </div>
+        </div>
+        <button onclick="closeGpsModal()" class="text-gray-400 hover:text-black dark:hover:text-white text-sm">✕</button>
+      </div>
+
+      <form onsubmit="submitGpsHive(event)" class="mt-4 space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Qual espécie está nesta caixa?</label>
+          <select id="gps-modal-species" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white focus:outline-none focus:border-honey-500 font-medium">
+            <option value="mandacaia">Mandaçaia MQA (~1.500m de voo)</option>
+            <option value="jatai" selected>Jataí Dourada (~500m de voo)</option>
+            <option value="urucu">Uruçu Amarela (~2.000m de voo)</option>
+            <option value="tiuba">Tiúba (~2.200m de voo)</option>
+            <option value="mirim">Mirim Droryana (~400m de voo)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Identificação / Código da Caixa (opcional):</label>
+          <input type="text" id="gps-modal-name" placeholder="Ex: CX-02 Leste" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white focus:outline-none focus:border-honey-500">
+        </div>
+
+        <div id="gps-status-feedback" class="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 text-[11px] flex items-center gap-2">
+          <span>📡</span>
+          <span id="gps-status-text">Pronto para capturar coordenada via sensor GPS do navegador.</span>
+        </div>
+
+        <div class="flex items-center gap-2 pt-2">
+          <button type="button" onclick="closeGpsModal()" class="flex-1 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-100 dark:hover:bg-gray-800 transition-all">
+            Cancelar
+          </button>
+          <button type="submit" id="btn-confirm-gps" class="flex-1 py-2.5 rounded-xl bg-honey-500 hover:bg-honey-600 text-gray-950 font-bold shadow-md transition-all flex items-center justify-center gap-1.5 cursor-pointer">
+            <span>📍 Confirmar Localização</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL: NOVO REGISTRO -->
   <div id="quick-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
     <div class="relative w-full max-w-md p-6 rounded-3xl bg-white dark:bg-[#151821] shadow-2xl border border-gray-100 dark:border-gray-800 text-gray-900 dark:text-white">
@@ -1265,6 +1318,48 @@
     let targetHexScale = SPECIES_CONFIG.mandacaia.scale3D;
     let currentHexScale = targetHexScale;
     let isDarkMode = false; // PADRÃO CLEAN: LIGHT MODE ATIVO
+
+    // ==========================================
+    // ESTADO DE GEOLOCALIZAÇÃO & MÚLTIPLAS CAIXAS
+    // ==========================================
+    let gpsAnchor = null; // { lat, lon, timestamp } - Coordenada zero do Three.js (0,0)
+    let hivesArray = [
+      {
+        id: 'CX-01',
+        name: 'Mandaçaia - MQA (Central)',
+        speciesKey: 'mandacaia',
+        x: 0,
+        z: 0,
+        lat: null,
+        lon: null,
+        meshGroup: null,
+        radarLine: null,
+        radarFill: null,
+        baseScale: SPECIES_CONFIG.mandacaia.scale3D,
+        hasOverlap: false
+      }
+    ];
+
+    // Constante de conversão: 1 unidade no Three.js = 10 metros reais
+    const SCALE_METERS_PER_UNIT = 10.0;
+
+    // Fórmula para calcular delta X (Leste-Oeste) e delta Z (Norte-Sul) em metros
+    function calculateGpsOffsetMeters(lat, lon, anchorLat, anchorLon) {
+      const dLat = (lat - anchorLat) * (Math.PI / 180);
+      const dLon = (lon - anchorLon) * (Math.PI / 180);
+      const meanLat = ((lat + anchorLat) / 2) * (Math.PI / 180);
+
+      // 1 grau de latitude ≈ 111.320 metros
+      // 1 grau de longitude ≈ 111.320 * cos(latitude) metros
+      const deltaZ = - dLat * 111320; // No Three.js, Norte é geralmente -Z
+      const deltaX = dLon * 111320 * Math.cos(meanLat); // Leste é +X
+
+      return {
+        x: deltaX / SCALE_METERS_PER_UNIT,
+        z: deltaZ / SCALE_METERS_PER_UNIT,
+        distanceMeters: Math.hypot(deltaX, deltaZ)
+      };
+    }
 
     // VARIÁVEIS THREE.JS & CSS2D
     let scene, camera, renderer, labelRenderer, controls;
@@ -1489,7 +1584,7 @@
       dirLightRef = dirLight;
 
       createTerrainWithRiver();
-      createDetailedHive();
+      createAllHives();
       createColorfulTrees();
       createGroundDetails(); // Detalhes do solo: pedrinhas e grama low-poly
       createHexContourGlow(); // Linha vetorial de apoio ao relevo
@@ -1594,9 +1689,10 @@
       return labelObj;
     }
 
-    // 2. COLMEIA DETALHADA NO CENTRO COM PLAQUINHA CSS2D
-    function createDetailedHive() {
+    // 2. CRIAÇÃO DE INSTÂNCIA DE CAIXA DE ABELHA 3D
+    function createHiveInstance(hiveData) {
       const hiveGroup = new THREE.Group();
+      hiveGroup.userData = hiveData;
 
       const standMat = new THREE.MeshStandardMaterial({ color: isDarkMode ? 0x242A38 : 0xD1D5DB, roughness: 0.8 });
       const leg1 = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.8), standMat);
@@ -1612,13 +1708,15 @@
         metalness: 0.05
       });
       const boxGeom = new THREE.BoxGeometry(2, 2.2, 2);
-      hiveMesh = new THREE.Mesh(boxGeom, boxMat);
-      hiveMesh.position.y = 1.9;
-      hiveMesh.castShadow = true;
-      hiveGroup.add(hiveMesh);
+      const boxMesh = new THREE.Mesh(boxGeom, boxMat);
+      boxMesh.position.y = 1.9;
+      boxMesh.castShadow = true;
+      boxMesh.userData = hiveData;
+      hiveGroup.add(boxMesh);
 
       const roofGeom = new THREE.BoxGeometry(2.3, 0.28, 2.3);
-      const roofMat = new THREE.MeshStandardMaterial({ color: 0xFFC300, roughness: 0.25 });
+      const roofColor = hiveData.speciesKey === 'jatai' ? 0xFBBF24 : (hiveData.speciesKey === 'urucu' ? 0xF59E0B : 0xFFC300);
+      const roofMat = new THREE.MeshStandardMaterial({ color: roofColor, roughness: 0.25 });
       const roof = new THREE.Mesh(roofGeom, roofMat);
       roof.position.y = 3.05;
       roof.castShadow = true;
@@ -1631,25 +1729,134 @@
       tube.position.set(0, 1.4, 1.25);
       hiveGroup.add(tube);
 
-      // 4. NA CAIXA DA COLMEIA CENTRAL (Label: "🐝 Mandaçaia - MQA")
-      const hiveLabel = createMapPinLabel("🐝 Mandaçaia - MQA");
+      // Plaquinha flutuante CSS2D: Exibe "🐝 Jataí - CX-02"
+      const speciesName = SPECIES_CONFIG[hiveData.speciesKey]?.name || hiveData.name;
+      const labelText = `🐝 ${speciesName} (${hiveData.id})`;
+      const hiveLabel = createMapPinLabel(labelText);
       hiveLabel.position.set(0, 3.8, 0);
-      hiveMesh.add(hiveLabel);
+      boxMesh.add(hiveLabel);
 
+      // Posiciona no mundo 3D
+      const groundY = getTerrainHeight(hiveData.x, hiveData.z);
+      hiveGroup.position.set(hiveData.x, groundY, hiveData.z);
       scene.add(hiveGroup);
 
-      // Sentinelas na entrada
-      sentryBees = [];
-      for (let i = 0; i < 4; i++) {
+      // Hex-Radar próprio para esta caixa
+      const radarLines = createHiveRadarLines(hiveData);
+
+      hiveData.meshGroup = hiveGroup;
+      hiveData.boxMesh = boxMesh;
+      hiveData.radarLine = radarLines.line;
+      hiveData.radarFill = radarLines.fill;
+
+      // Sentinelas na entrada da caixa
+      hiveData.sentinels = [];
+      for (let i = 0; i < 3; i++) {
         const sBee = createSingleBeeMesh();
-        sBee.position.set((Math.random() - 0.5) * 0.8, 1.4 + (Math.random() - 0.5) * 0.4, 1.6 + Math.random() * 0.3);
+        sBee.position.set(
+          hiveData.x + (Math.random() - 0.5) * 0.7,
+          groundY + 1.4 + (Math.random() - 0.5) * 0.3,
+          hiveData.z + 1.5 + Math.random() * 0.3
+        );
         scene.add(sBee);
-        sentryBees.push({
+        hiveData.sentinels.push({
           mesh: sBee,
           basePos: sBee.position.clone(),
           phase: Math.random() * Math.PI * 2
         });
       }
+
+      return hiveGroup;
+    }
+
+    // Cria as linhas e o preenchimento de radar para uma caixa específica
+    function createHiveRadarLines(hiveData) {
+      const PERIM_POINTS = 120;
+      const geom = new THREE.BufferGeometry();
+      geom.setAttribute('position', new THREE.BufferAttribute(new Float32Array((PERIM_POINTS + 1) * 3), 3));
+      
+      const mat = new THREE.LineBasicMaterial({
+        color: 0xFFC300,
+        linewidth: 3,
+        transparent: true,
+        opacity: isDarkMode ? 0.95 : 0.85,
+        depthWrite: false
+      });
+      const line = new THREE.Line(geom, mat);
+      line.renderOrder = 16;
+      scene.add(line);
+
+      // Preenchimento hexagonal sutil
+      const hexShape = new THREE.Shape();
+      for (let i = 0; i < 6; i++) {
+        const angle = (i / 6) * Math.PI * 2;
+        const pt = getUnitHexagonPoint(angle);
+        if (i === 0) hexShape.moveTo(pt.x, pt.z);
+        else hexShape.lineTo(pt.x, pt.z);
+      }
+      hexShape.closePath();
+
+      const fillGeom = new THREE.ShapeGeometry(hexShape);
+      fillGeom.rotateX(Math.PI / 2);
+      const fillMat = new THREE.MeshBasicMaterial({
+        color: 0xFFC300,
+        transparent: true,
+        opacity: isDarkMode ? 0.12 : 0.08,
+        depthWrite: false,
+        side: THREE.DoubleSide
+      });
+      const fill = new THREE.Mesh(fillGeom, fillMat);
+      fill.position.set(hiveData.x, 0.04, hiveData.z);
+      fill.renderOrder = 15;
+      scene.add(fill);
+
+      return { line, fill };
+    }
+
+    // Verifica sobreposição e alerta de competição de pasto floral
+    function updateHivesCompetitionCheck() {
+      for (let i = 0; i < hivesArray.length; i++) {
+        hivesArray[i].hasOverlap = false;
+      }
+
+      for (let i = 0; i < hivesArray.length; i++) {
+        for (let j = i + 1; j < hivesArray.length; j++) {
+          const h1 = hivesArray[i];
+          const h2 = hivesArray[j];
+          const dist = Math.hypot(h1.x - h2.x, h1.z - h2.z);
+          const r1 = SPECIES_CONFIG[h1.speciesKey]?.scale3D || h1.baseScale;
+          const r2 = SPECIES_CONFIG[h2.speciesKey]?.scale3D || h2.baseScale;
+
+          // Se a distância for menor que a soma dos raios dos radares -> SOBREPOSIÇÃO
+          if (dist < (r1 + r2)) {
+            h1.hasOverlap = true;
+            h2.hasOverlap = true;
+          }
+        }
+      }
+
+      // Atualiza cores dos radares (Amarelo Favo se OK, Laranja/Vermelho Alerta se houver sobreposição)
+      hivesArray.forEach(h => {
+        if (!h.radarLine) return;
+        const colorHex = h.hasOverlap ? 0xEF4444 : 0xFFC300; // Vermelho Alerta de Competição
+        const fillColorHex = h.hasOverlap ? 0xEF4444 : 0xFFC300;
+        h.radarLine.material.color.setHex(colorHex);
+        if (h.radarFill) {
+          h.radarFill.material.color.setHex(fillColorHex);
+          h.radarFill.material.opacity = h.hasOverlap ? 0.22 : (isDarkMode ? 0.12 : 0.08);
+        }
+      });
+    }
+
+    // Inicializa todas as colmeias do array
+    function createAllHives() {
+      hivesArray.forEach(h => {
+        createHiveInstance(h);
+      });
+      if (hivesArray[0]) {
+        hiveMesh = hivesArray[0].boxMesh;
+      }
+      updateHivesCompetitionCheck();
     }
 
     // 3. ÁRVORES LOW-POLY EM CORES PASTÉIS SUAVES (MINIMALISTA)
@@ -2179,6 +2386,45 @@
         outlinePos.needsUpdate = true;
       }
 
+      // Atualiza os radares individuais de cada caixa registrada (múltiplas colmeias)
+      hivesArray.forEach(h => {
+        if (!h.radarLine) return;
+        const hConfig = SPECIES_CONFIG[h.speciesKey];
+        const hRadius = (hConfig ? hConfig.scale3D : h.baseScale) + pulse;
+
+        const linePos = h.radarLine.geometry.attributes.position;
+        const PTS = 120;
+        for (let p = 0; p <= PTS; p++) {
+          const theta = (p / PTS) * Math.PI * 2;
+          const pt = getUnitHexagonPoint(theta);
+          const wx = h.x + pt.x * hRadius;
+          const wz = h.z + pt.z * hRadius;
+          const wy = getSurfaceHeight(wx, wz) + 0.08;
+          linePos.setXYZ(p, wx, wy, wz);
+        }
+        linePos.needsUpdate = true;
+
+        if (h.radarFill) {
+          h.radarFill.position.set(h.x, 0.04, h.z);
+          h.radarFill.scale.set(hRadius, hRadius, hRadius);
+        }
+
+        // Animação das sentinelas de cada caixa
+        if (h.sentinels) {
+          h.sentinels.forEach(sb => {
+            const sm = sb.mesh;
+            sm.position.y = sb.basePos.y + Math.sin(elapsedTime * 4 + sb.phase) * 0.1;
+            sm.position.x = sb.basePos.x + Math.cos(elapsedTime * 3 + sb.phase) * 0.07;
+            const wL = sm.children[2];
+            const wR = sm.children[3];
+            if (wL && wR) {
+              wL.rotation.z = Math.sin(elapsedTime * 35) * 0.6;
+              wR.rotation.z = -Math.sin(elapsedTime * 35) * 0.6;
+            }
+          });
+        }
+      });
+
       // Sentinelas
       sentryBees.forEach((sb) => {
         const mesh = sb.mesh;
@@ -2610,8 +2856,10 @@
       raycaster.setFromCamera(mouse, camera);
 
       const interactiveObjects = [];
-      // Inclui a colmeia central
-      if (hiveMesh) interactiveObjects.push(hiveMesh);
+      // Inclui todas as caixas de abelha registradas no array
+      hivesArray.forEach(h => {
+        if (h.boxMesh) interactiveObjects.push(h.boxMesh);
+      });
 
       // Inclui todos os pins visíveis (flores, bebedouros, iscas, ameaças)
       pinMeshes.forEach(g => {
@@ -2628,16 +2876,20 @@
         const hit = intersects[0];
         let root = hit.object;
 
-        if (root === hiveMesh || root.parent === hiveMesh) {
+        // Se clicou em uma das caixas do meliponário
+        const matchedHive = hivesArray.find(h => h.boxMesh === root || (root.userData && root.userData.id === h.id));
+        if (matchedHive) {
+          const cfg = SPECIES_CONFIG[matchedHive.speciesKey] || {};
+          const statusOverlap = matchedHive.hasOverlap ? '⚠️ Alerta: Competição de Pasto Detectada!' : '✅ Pasto Floral Equilibrado';
           showPinInspector({
-            name: 'Colmeia Central Mandaçaia',
-            sub: 'Caixa INPA Modelo MQA-04',
-            dist: '0m (Origem)',
-            desc: 'Matriz reprodutiva saudável com ninho, sobre-ninho e melgueira ativa com forte postura.',
+            name: `${matchedHive.name || cfg.name} (${matchedHive.id})`,
+            sub: `${cfg.scientific || ''} • Raio: ${cfg.radiusMeters}m`,
+            dist: matchedHive.lat ? `GPS: ${matchedHive.lat.toFixed(5)}, ${matchedHive.lon.toFixed(5)}` : 'Origem Fixa',
+            desc: `${statusOverlap}. Colmeia racional com telemetria ativa e monitoramento do raio de voo.`,
             icon: '🐝',
             type: 'hive'
           });
-          focusCameraOnObject(new THREE.Vector3(0, 1.9, 0));
+          focusCameraOnObject(new THREE.Vector3(matchedHive.x, 1.9, matchedHive.z));
           return;
         }
 
@@ -2890,6 +3142,146 @@
           }
         });
       }
+    }
+
+    // ==========================================
+    // FUNÇÕES DO MODAL GPS & REGISTRO DE COLMEIAS
+    // ==========================================
+    function openGpsModal() {
+      document.getElementById('gps-modal').classList.remove('hidden');
+      const statusText = document.getElementById('gps-status-text');
+      statusText.innerText = gpsAnchor 
+        ? `Âncora atual: Lat ${gpsAnchor.lat.toFixed(4)}, Lon ${gpsAnchor.lon.toFixed(4)}. Pronto para capturar nova caixa.`
+        : 'A 1ª caixa registrada definirá o Ponto Zero (Origem X:0, Z:0) do seu terreno!';
+    }
+
+    function closeGpsModal() {
+      document.getElementById('gps-modal').classList.add('hidden');
+    }
+
+    function submitGpsHive(event) {
+      event.preventDefault();
+      const statusText = document.getElementById('gps-status-text');
+      const submitBtn = document.getElementById('btn-confirm-gps');
+      const speciesKey = document.getElementById('gps-modal-species').value;
+      const customName = document.getElementById('gps-modal-name').value.trim();
+
+      if (!navigator.geolocation) {
+        statusText.innerText = '❌ Erro: Seu navegador não suporta a API nativa de Geolocalização.';
+        return;
+      }
+
+      statusText.innerText = '⏳ Obtendo coordenadas de alta precisão via GPS...';
+      submitBtn.disabled = true;
+      submitBtn.classList.add('opacity-60');
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('opacity-60');
+
+          const userLat = position.coords.latitude;
+          const userLon = position.coords.longitude;
+          const accuracy = Math.round(position.coords.accuracy || 5);
+
+          // 1. PRIMEIRA CAIXA FIXA A ÂNCORA (Ponto Zero X:0, Z:0)
+          if (!gpsAnchor) {
+            gpsAnchor = { lat: userLat, lon: userLon, timestamp: Date.now() };
+
+            // Atualiza a primeira caixa no array com as coordenadas reais
+            hivesArray[0].lat = userLat;
+            hivesArray[0].lon = userLon;
+            hivesArray[0].speciesKey = speciesKey;
+            hivesArray[0].name = customName || `${SPECIES_CONFIG[speciesKey].name} (Ponto Zero)`;
+
+            // Atualiza a caixa central visualmente
+            if (hivesArray[0].meshGroup) {
+              scene.remove(hivesArray[0].meshGroup);
+              if (hivesArray[0].radarLine) scene.remove(hivesArray[0].radarLine);
+              if (hivesArray[0].radarFill) scene.remove(hivesArray[0].radarFill);
+            }
+            createHiveInstance(hivesArray[0]);
+
+            closeGpsModal();
+            onSelectSpecies(speciesKey);
+            focusCameraOnObject(new THREE.Vector3(0, 1.9, 0));
+            showPinInspector({
+              name: hivesArray[0].name,
+              sub: `Ponto Zero Âncora GPS • Precisão ±${accuracy}m`,
+              dist: `Lat: ${userLat.toFixed(5)}, Lon: ${userLon.toFixed(5)}`,
+              desc: `Ponto Zero estabelecido com sucesso! As próximas caixas serão projetadas com a distância real em metros calculada a partir desta posição.`,
+              icon: '📍',
+              type: 'hive'
+            });
+            updateHivesCompetitionCheck();
+            return;
+          }
+
+          // 2. PRÓXIMAS CAIXAS: Calcula distância até a Âncora e converte em X/Z
+          const offset = calculateGpsOffsetMeters(userLat, userLon, gpsAnchor.lat, gpsAnchor.lon);
+          const nextIndex = hivesArray.length + 1;
+          const hiveId = `CX-0${nextIndex}`;
+          const speciesName = SPECIES_CONFIG[speciesKey]?.name || 'Abelha Nativa';
+
+          const newHiveData = {
+            id: hiveId,
+            name: customName || `${speciesName} - ${hiveId}`,
+            speciesKey: speciesKey,
+            x: offset.x,
+            z: offset.z,
+            lat: userLat,
+            lon: userLon,
+            meshGroup: null,
+            radarLine: null,
+            radarFill: null,
+            baseScale: SPECIES_CONFIG[speciesKey]?.scale3D || 10.0,
+            hasOverlap: false
+          };
+
+          hivesArray.push(newHiveData);
+          createHiveInstance(newHiveData);
+          updateHivesCompetitionCheck();
+
+          // Atualiza também o dropdown do modal de manejo para permitir registrar ações na nova caixa
+          const modalSelect = document.getElementById('modal-hive');
+          if (modalSelect) {
+            const opt = document.createElement('option');
+            opt.value = hiveId;
+            opt.innerText = `${hiveId} (${newHiveData.name})`;
+            modalSelect.appendChild(opt);
+          }
+
+          closeGpsModal();
+          focusCameraOnObject(new THREE.Vector3(newHiveData.x, 1.9, newHiveData.z));
+
+          const distReal = Math.round(offset.distanceMeters);
+          showPinInspector({
+            name: newHiveData.name,
+            sub: `Fixada via GPS • Distância da Âncora: ${distReal}m`,
+            dist: `Lat: ${userLat.toFixed(5)}, Lon: ${userLon.toFixed(5)}`,
+            desc: newHiveData.hasOverlap 
+              ? `⚠️ ATENÇÃO: O raio desta caixa colide com outra colmeia! Conflito de forrageamento detectado no radar.`
+              : `✅ Caixa registrada com sucesso no terreno 3D a ${distReal} metros da colmeia âncora.`,
+            icon: '📍',
+            type: 'hive'
+          });
+        },
+        (error) => {
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('opacity-60');
+          let errMsg = 'Não foi possível obter o sinal GPS.';
+          if (error.code === 1) errMsg = 'Permissão de localização negada pelo usuário no navegador.';
+          else if (error.code === 2) errMsg = 'Posição GPS indisponível no dispositivo.';
+          else if (error.code === 3) errMsg = 'Tempo limite esgotado ao buscar sinal GPS.';
+          
+          statusText.innerText = `⚠️ ${errMsg} (Dica: Permita o acesso à localização quando o navegador solicitar).`;
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 0
+        }
+      );
     }
 
     function switchTab(tabId) {
