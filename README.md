@@ -1,7 +1,7 @@
 # 🐝 MELIPONA HEX — Ecossistema Digital de Meliponicultura 4.0
 
 <p align="center">
-  <img src="assets/banner.png" alt="MELIPONA HEX Banner" width="100%" />
+  <img src="assets/banner.png" alt="MELIPONA HEX Interface Real" width="100%" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);" />
 </p>
 
 <p align="center">
@@ -19,12 +19,12 @@
 
 ## 🍯 Sobre o Projeto
 
-O **MELIPONA HEX** une o conhecimento biológico ancestral das florestas brasileiras à tecnologia moderna (Georreferenciamento Vetorial, Telemetria IoT e Simulação de Enxames). 
+O **MELIPONA HEX** une o conhecimento biológico ancestral das florestas brasileiras à tecnologia de ponta (Georreferenciamento Vetorial, Telemetria IoT e Simulação de Enxames). 
 
 Dedicado à conservação e manejo racional de espécies como **Mandaçaia**, **Jataí**, **Uruçu**, **Tiúba** e **Mirim**, o ecossistema transforma dados de campo e telemetria em ações assertivas para o meliponicultor.
 
 <p align="center">
-  <img src="assets/radar-preview.png" alt="Interface Hex-Radar e Telemetria" width="90%" />
+  <img src="assets/radar-preview.png" alt="Visão do Hex-Radar e Telemetria em Tempo Real" width="95%" style="border-radius: 10px;" />
 </p>
 
 ---
@@ -32,26 +32,28 @@ Dedicado à conservação e manejo racional de espécies como **Mandaçaia**, **
 ## ✨ Principais Funcionalidades
 
 ### 🌐 1. Hex-Radar Georreferenciado
-- **Área de Cobertura Hexagonal:** Abandono de círculos de GPS convencionais por favos hexagonais pulsantes dinâmicos calculados pelo raio real de forrageamento de cada espécie.
+- **Área de Cobertura Hexagonal:** Abandono de círculos de GPS convencionais por favos hexagonais pulsantes calculados dinamicamente com base no raio real de forrageamento da espécie selecionada.
 - **Mapeamento de Bio-Recursos:**
   - 🌸 **Floradas (Néctar e Pólen):** Identificação de pasto meliponícola e rotas de campeiras.
   - 💧 **Fontes de Água Segura:** Mapeamento de bebedouros e áreas limpas.
-  - 🍯 **Iscas-PET e Ocos Potenciais:** Monitoramento geolocalizado de captura de enxames.
-  - ⚠️ **Zonas de Risco:** Alertas contra aplicação de agrotóxicos e proliferação de forídeos.
+  - 🍯 **Iscas-PET e Ninhos:** Monitoramento geolocalizado de captura de enxames.
+  - ⚠️ **Zonas de Risco:** Alertas contra aplicação de agrotóxicos e controle de forídeos.
 
-### 📊 2. Telemetria IoT em Tempo Real
-- Sensores integrados de temperatura do ninho, umidade relativa e bioacústica.
-- Monitoramento de peso por célula de carga para prever floradas e maturação de mel.
+### 📊 2. Telemetria Bio-IoT em Tempo Real
+- Sensores de temperatura de ninho e ambiente (`34.2 °C`).
+- Umidade relativa interna (`67%`).
+- Analisador de espectro de frequência bioacústica das abelhas rainha e campeiras (`248 Hz`).
+- Índice de atividade de fluxo da colmeia (*Hive Activity Index*).
 
 ### 📚 3. Catálogo Nativo e Manejo Racional
 - Enciclopédia técnica de espécies nativas do Brasil com especificações de caixas racionais (Padrão INPA, Baiano, etc.).
-- Registro de manejos rápidos em menos de 10 segundos (alimentação, divisão de enxames, trocas de campeiras e controle sanitário).
+- Registro de manejos rápidos em menos de 10 segundos (alimentação, divisões 1:1 e 2:1, trocas de campeiras e controle sanitário).
 
 ---
 
 ## 🎨 Design System "HexaBio"
 
-Construído sob uma estética que celebra o favo de mel e a tecnologia:
+Interface construída sob a identidade visual biológica com alta legibilidade em campo:
 
 | Token de Cor | Hex Code | Função |
 | :--- | :--- | :--- |
@@ -61,7 +63,7 @@ Construído sob uma estética que celebra o favo de mel e a tecnologia:
 | **Grafite Biológico** | `#14171E` | Superfícies flutuantes e cards de telemetria |
 | **Florada Néctar / Pólen** | `#FF5C8A` | Marcadores botânicos |
 | **Água Mineral** | `#38BDF8` | Marcadores hídricos |
-| **Iscas & Atrativos** | `#A855F7` | Ninhos-isca e captura |
+| **Iscas & Atrativos** | `#A855F7` | Ninhos-isca e pontos de captura |
 
 ---
 
@@ -87,7 +89,7 @@ Construído sob uma estética que celebra o favo de mel e a tecnologia:
    - Ou abra diretamente o arquivo `index.html` em seu navegador.
 
 3. **Acesse no navegador:**
-   - Abra [http://localhost:8080/](http://localhost:8080/) para testar a experiência completa.
+   - Acesse [http://localhost:8080/](http://localhost:8080/) para testar a experiência completa do sistema.
 
 ---
 
@@ -96,8 +98,8 @@ Construído sob uma estética que celebra o favo de mel e a tecnologia:
 ```text
 ProjetoMeliponicultura/
 ├── assets/
-│   ├── banner.png             # Imagem de capa do projeto
-│   └── radar-preview.png      # Demonstração do Hex-Radar & Telemetria
+│   ├── banner.png             # Imagem da interface real do sistema
+│   └── radar-preview.png      # Demonstração real do Hex-Radar & Telemetria
 ├── index.html                 # Aplicação Web SPA e Interface HexaBio
 ├── MELIPONA_HEX_ARCHITECTURE.md # Documentação técnica detalhada
 ├── serve.ps1                  # Servidor local HTTP rápido em PowerShell
