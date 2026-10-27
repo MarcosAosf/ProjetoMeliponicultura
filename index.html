@@ -543,36 +543,32 @@
 
       </div>
 
-      <!-- CONTROLE SAZONAL: MÁQUINA DO TEMPO FLORAL (INFERIOR CENTRO) -->
+      <!-- MONITOR SAZONAL AUTOMÁTICO (INFERIOR CENTRO) -->
       <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 w-[90%] max-w-md p-3.5 rounded-2xl glass-panel shadow-apple flex flex-col gap-2 transition-all">
         <div class="flex items-center justify-between text-xs">
-          <div class="flex items-center gap-1.5 font-bold text-gray-900 dark:text-white">
-            <span id="season-icon">🌸</span>
-            <span id="season-name">Primavera Floral</span>
+          <div class="flex items-center gap-2 font-bold text-gray-900 dark:text-white">
+            <span id="season-icon" class="text-base">🌸</span>
+            <div>
+              <span id="season-name">Primavera Floral</span>
+              <span class="ml-1.5 px-2 py-0.5 rounded-full text-[9px] font-semibold bg-honey-500/15 text-honey-700 dark:text-honey-400 border border-honey-500/25">Automático</span>
+            </div>
           </div>
           <span id="season-month" class="font-mono text-[11px] font-semibold text-honey-600 dark:text-honey-400">
-            Outubro (Mês 10)
+            Outubro (Mês Atual)
           </span>
         </div>
-        <div class="flex items-center gap-3">
-          <span class="text-[10px] font-bold text-gray-400">JAN</span>
-          <input 
-            type="range" 
-            id="season-slider" 
-            min="1" 
-            max="12" 
-            value="10" 
-            oninput="onSeasonSliderChange(this.value)"
-            class="w-full accent-honey-500 cursor-pointer h-1.5 rounded-lg bg-gray-200 dark:bg-gray-700"
-            title="Arraste para alterar os meses e estações do ano"
-          >
-          <span class="text-[10px] font-bold text-gray-400">DEZ</span>
-        </div>
-        <div class="flex items-center justify-between text-[9px] text-gray-500 dark:text-gray-400 px-0.5">
-          <span>☀️ Verão</span>
-          <span>🍂 Outono</span>
-          <span>❄️ Inverno</span>
-          <span class="text-honey-600 dark:text-honey-400 font-bold">🌸 Primavera</span>
+        
+        <!-- Barra de Progresso do Ciclo Anual (Leitura Automática) -->
+        <div class="space-y-1">
+          <div class="w-full bg-gray-200 dark:bg-gray-800 h-2 rounded-full overflow-hidden relative">
+            <div id="season-progress-bar" class="h-full bg-gradient-to-r from-amber-400 via-honey-500 to-emerald-400 rounded-full transition-all duration-700" style="width: 83.3%;"></div>
+          </div>
+          <div class="flex items-center justify-between text-[10px] text-gray-400 font-medium px-0.5">
+            <span id="label-verao">☀️ Verão</span>
+            <span id="label-outono">🍂 Outono</span>
+            <span id="label-inverno">❄️ Inverno</span>
+            <span id="label-primavera" class="text-honey-600 dark:text-honey-400 font-bold">🌸 Primavera</span>
+          </div>
         </div>
       </div>
 
@@ -1835,10 +1831,10 @@
       hiveData.radarLine = radarLines.line;
       hiveData.radarFill = radarLines.fill;
 
-      // Sentinelas na entrada da caixa
+      // Sentinelas na entrada da caixa com fenótipo da espécie
       hiveData.sentinels = [];
       for (let i = 0; i < 3; i++) {
-        const sBee = createSingleBeeMesh();
+        const sBee = createSingleBeeMesh(hiveData.speciesKey);
         sBee.position.set(
           hiveData.x + (Math.random() - 0.5) * 0.7,
           groundY + 1.4 + (Math.random() - 0.5) * 0.3,
@@ -1945,7 +1941,7 @@
       updateHivesCompetitionCheck();
     }
 
-    // Função utilitária para plantar uma árvore low-poly em uma posição X, Z
+    // Função utilitária para plantar uma árvore low-poly em uma posição X, Z com suporte a florada na Primavera
     function plantSingleTree(tx, tz, isRealPark = false) {
       const treeTypes = [
         { foliageColor: isDarkMode ? 0xEC4899 : 0xF9A8D4, type: 'aroeira_rosa' }, // Rosa Pastel Suave
@@ -1987,10 +1983,36 @@
       crown2.castShadow = true;
       treeGroup.add(crown2);
 
+      // FLORES SALPICADAS NAS COPAS (ATIVAS NA PRIMAVERA)
+      const flowersGroup = new THREE.Group();
+      const flowerColor = (treeType.type === 'aroeira_rosa' || treeType.type === 'mata_esmeralda') ? 0xFDA4AF : 0xFEF08A;
+      const flowerMat = new THREE.MeshStandardMaterial({
+        color: flowerColor,
+        roughness: 0.3,
+        emissive: flowerColor,
+        emissiveIntensity: 0.2
+      });
+
+      const numFlowers = 6 + Math.floor(Math.random() * 6);
+      for (let f = 0; f < numFlowers; f++) {
+        const fa = (Math.PI * 2 / numFlowers) * f + (Math.random() - 0.5) * 0.3;
+        const fr = crownSize * (0.8 + Math.random() * 0.25);
+        const flGeom = new THREE.DodecahedronGeometry(0.14, 0);
+        const flower = new THREE.Mesh(flGeom, flowerMat);
+        const targetCrown = Math.random() > 0.4 ? crown1 : crown2;
+        flower.position.set(
+          targetCrown.position.x + Math.cos(fa) * fr,
+          targetCrown.position.y + (Math.random() - 0.5) * 0.6,
+          targetCrown.position.z + Math.sin(fa) * fr
+        );
+        flowersGroup.add(flower);
+      }
+      treeGroup.add(flowersGroup);
+
       const groundY = getTerrainHeight(tx, tz);
       treeGroup.position.set(tx, groundY, tz);
       scene.add(treeGroup);
-      treeGroups.push({ group: treeGroup, foliageMat, treeType });
+      treeGroups.push({ group: treeGroup, foliageMat, treeType, flowersGroup });
       return treeGroup;
     }
 
@@ -2733,46 +2755,67 @@
     }
 
     // ========================================================
-    // MÁQUINA DO TEMPO FLORAL (SAZONALIDADE & REAÇÃO DO BIOMA)
+    // MÁQUINA DO TEMPO FLORAL (SAZONALIDADE AUTOMÁTICA & REAÇÃO DO BIOMA)
     // ========================================================
     const MONTH_NAMES = [
       '', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
       'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
     ];
 
-    function onSeasonSliderChange(monthVal) {
-      currentSeasonMonth = parseInt(monthVal);
-      const m = currentSeasonMonth;
+    // Detecta automaticamente a estação com base no mês real atual (Hemisfério Sul / Brasil)
+    function applyCurrentRealSeason() {
+      const realMonth = (new Date()).getMonth() + 1; // 1 a 12
+      currentSeasonMonth = realMonth;
+      updateSeasonalState(realMonth);
+    }
 
+    function updateSeasonalState(m) {
       const monthNameEl = document.getElementById('season-month');
       const seasonNameEl = document.getElementById('season-name');
       const seasonIconEl = document.getElementById('season-icon');
+      const progressBar = document.getElementById('season-progress-bar');
 
       let seasonTitle = '';
       let seasonIcon = '🌸';
       let seasonType = 'spring'; // 'summer', 'autumn', 'winter', 'spring'
 
       if (m === 12 || m <= 2) {
-        seasonTitle = 'Verão Tropical (Floração Ativa)';
+        seasonTitle = 'Verão Tropical (Floração e Néctar Plenos)';
         seasonIcon = '☀️';
         seasonType = 'summer';
       } else if (m >= 3 && m <= 5) {
-        seasonTitle = 'Outono Dourado (Seca Gradual)';
+        seasonTitle = 'Outono Âmbar (Seca Gradual e Maturação)';
         seasonIcon = '🍂';
         seasonType = 'autumn';
       } else if (m >= 6 && m <= 8) {
-        seasonTitle = 'Inverno Seco (Escassez de Néctar)';
+        seasonTitle = 'Inverno Seco (Recolhimento e Cuidados)';
         seasonIcon = '❄️';
         seasonType = 'winter';
       } else {
-        seasonTitle = 'Primavera Floral (Safra Plena)';
+        seasonTitle = 'Primavera Floral (Pico de Floradas Nativas)';
         seasonIcon = '🌸';
         seasonType = 'spring';
       }
 
-      if (monthNameEl) monthNameEl.innerText = `${MONTH_NAMES[m]} (Mês ${m})`;
+      if (monthNameEl) monthNameEl.innerText = `${MONTH_NAMES[m]} (Mês Atual)`;
       if (seasonNameEl) seasonNameEl.innerText = seasonTitle;
       if (seasonIconEl) seasonIconEl.innerText = seasonIcon;
+      if (progressBar) {
+        const pct = (m / 12) * 100;
+        progressBar.style.width = `${pct}%`;
+      }
+
+      // Destaca a etiqueta da estação atual
+      ['verao', 'outono', 'inverno', 'primavera'].forEach(st => {
+        const lbl = document.getElementById(`label-${st}`);
+        if (lbl) {
+          if (st === seasonType || (st === 'primavera' && seasonType === 'spring') || (st === 'verao' && seasonType === 'summer') || (st === 'outono' && seasonType === 'autumn') || (st === 'inverno' && seasonType === 'winter')) {
+            lbl.className = 'text-honey-600 dark:text-honey-400 font-bold scale-105 transition-all';
+          } else {
+            lbl.className = 'text-gray-400 font-medium';
+          }
+        }
+      });
 
       applySeasonalBiomaColors(seasonType, m);
     }
@@ -2782,16 +2825,20 @@
 
       // Paletas Sazonais para as Árvores Low-Poly
       let pal;
+      let showTreeFlowers = false;
+
       if (seasonType === 'spring') {
-        // Primavera: Cores vibrantes frescas
+        // Primavera: Cores vibrantes frescas + FLORES EM FLORADA NAS COPAS DAS ÁRVORES
+        showTreeFlowers = true;
         pal = {
-          aroeira: isDarkMode ? 0xEC4899 : 0xF472B6, // Rosa vivo
-          ipe: isDarkMode ? 0xF59E0B : 0xFBBF24,     // Amarelo favo
-          esmeralda: isDarkMode ? 0x10B981 : 0x34D399,
-          densa: isDarkMode ? 0x059669 : 0x10B981
+          aroeira: isDarkMode ? 0xF472B6 : 0xFB7185, // Rosa florada vívido
+          ipe: isDarkMode ? 0xFBBF24 : 0xFDE047,     // Amarelo ipê radiante
+          esmeralda: isDarkMode ? 0x34D399 : 0x4ADE80, // Verde broto fresco
+          densa: isDarkMode ? 0x10B981 : 0x22C55E
         };
       } else if (seasonType === 'summer') {
         // Verão: Folhagens maduras e tons verdes densos
+        showTreeFlowers = false;
         pal = {
           aroeira: isDarkMode ? 0xBE185D : 0xFB7185,
           ipe: isDarkMode ? 0xD97706 : 0xF59E0B,
@@ -2800,6 +2847,7 @@
         };
       } else if (seasonType === 'autumn') {
         // Outono: Tons ocres, laranjas, âmbar e marrom dourado
+        showTreeFlowers = false;
         pal = {
           aroeira: isDarkMode ? 0xC2410C : 0xFB923C, // Laranja terroso
           ipe: isDarkMode ? 0xB45309 : 0xD97706,     // Ocre
@@ -2808,6 +2856,7 @@
         };
       } else {
         // Inverno: Folhagem seca, marrom acinzentado e verde seco
+        showTreeFlowers = false;
         pal = {
           aroeira: isDarkMode ? 0x57534E : 0x78716C, // Galhos secos
           ipe: isDarkMode ? 0x78350F : 0x9A3412,
@@ -2816,7 +2865,7 @@
         };
       }
 
-      // Transição suave nas cores das copas
+      // Transição suave nas cores das copas e exibição de flores na Primavera
       treeGroups.forEach(tg => {
         let targetHex = pal.esmeralda;
         if (tg.treeType.type === 'aroeira_rosa') targetHex = pal.aroeira;
@@ -2824,19 +2873,28 @@
         else if (tg.treeType.type === 'mata_densa') targetHex = pal.densa;
 
         tg.foliageMat.color.lerp(new THREE.Color(targetHex), 0.85);
+
+        // Flores nas árvores ativadas na Primavera
+        if (tg.flowersGroup) {
+          tg.flowersGroup.visible = showTreeFlowers;
+          if (showTreeFlowers) {
+            tg.flowersGroup.scale.lerp(new THREE.Vector3(1, 1, 1), 0.2);
+          } else {
+            tg.flowersGroup.scale.set(0.001, 0.001, 0.001);
+          }
+        }
       });
 
-      // Dinâmica nos Modelos de Flores Nativas (Escassez no Inverno / Pico na Primavera)
+      // Dinâmica nos Modelos de Flores Nativas de Campo
       pinMeshes.forEach(group => {
         if (group.userData && group.userData.type === 'flora') {
           if (seasonType === 'winter') {
-            // Escassez no inverno: flores encolhem suavemente
             group.scale.lerp(new THREE.Vector3(0.45, 0.45, 0.45), 0.5);
           } else if (seasonType === 'autumn') {
             group.scale.lerp(new THREE.Vector3(0.75, 0.75, 0.75), 0.5);
           } else {
-            // Primavera e Verão: flores com volume e exuberância total
-            group.scale.lerp(new THREE.Vector3(1.0, 1.0, 1.0), 0.5);
+            // Primavera e Verão: floração máxima e exuberante
+            group.scale.lerp(new THREE.Vector3(1.15, 1.15, 1.15), 0.5);
           }
         }
       });
@@ -2963,13 +3021,33 @@
       document.getElementById('badge-species-name').innerText = config.name.split(' ')[0];
       closeInspector();
 
-      // Recria as abelhas em voo com o fenótipo visual (cor, porte, listras) da espécie selecionada
+      // 1. Recria/atualiza as abelhas em voo com o fenótipo visual (cor, porte, listras) da espécie selecionada
       if (flyingBees && flyingBees.length > 0) {
         flyingBees.forEach(b => {
           if (b.mesh) {
             b.mesh.position.copy(HIVE_ORIGIN);
-            // Atualiza materiais e escalas internas da abelha
             updateBeeMeshAppearance(b.mesh, key);
+          }
+        });
+      }
+
+      // 2. ATUALIZA TAMBÉM AS SENTINELAS E PROTETORAS NA ENTRADA DA CAIXA CENTRAL
+      if (hivesArray[0]) {
+        hivesArray[0].speciesKey = key;
+        if (hivesArray[0].sentinels) {
+          hivesArray[0].sentinels.forEach(sb => {
+            if (sb.mesh) {
+              updateBeeMeshAppearance(sb.mesh, key);
+            }
+          });
+        }
+      }
+
+      // Atualiza qualquer outra sentinela ativa
+      if (sentryBees && sentryBees.length > 0) {
+        sentryBees.forEach(sb => {
+          if (sb.mesh) {
+            updateBeeMeshAppearance(sb.mesh, key);
           }
         });
       }
@@ -3946,6 +4024,7 @@
 
       initThreeJS();
       onSelectSpecies('mandacaia');
+      applyCurrentRealSeason(); // Aplica a estação automática do mês atual
     });
   </script>
 </body>
