@@ -3202,7 +3202,7 @@
     // ========================================================
     // INTEGRAÇÃO DE DADOS REAIS: OPENSTREETMAP / OVERPASS API
     // ========================================================
-    async function fetchRealWorldData(anchorLat, anchorLon) {
+    async function fetchRealMapData(lat, lon, radius = 800) {
       if (isFetchingOsmData) return;
       isFetchingOsmData = true;
 
@@ -3214,26 +3214,28 @@
         badge.innerText = 'Buscando Dados';
         badge.className = 'px-2 py-0.5 rounded-full text-[9px] font-semibold bg-sky-500/15 text-sky-600 dark:text-sky-400 border border-sky-500/30 animate-pulse';
       }
-      if (detail) detail.innerText = `Consultando Overpass API para Lat ${anchorLat.toFixed(4)}, Lon ${anchorLon.toFixed(4)}...`;
+      if (detail) detail.innerText = `Consultando Overpass API para raio de ${radius}m em torno de Lat ${lat.toFixed(4)}, Lon ${lon.toFixed(4)}...`;
 
-      // Raio de busca: ~1.000m (0.009 graus)
-      const radiusDeg = 0.009;
-      const south = anchorLat - radiusDeg;
-      const north = anchorLat + radiusDeg;
-      const west = anchorLon - radiusDeg;
-      const east = anchorLon + radiusDeg;
+      // Conversão do raio de busca de metros para graus: 800m ≈ 0.0072 graus
+      const radiusDeg = radius / 111320;
+      const south = lat - radiusDeg;
+      const north = lat + radiusDeg;
+      const west = lon - radiusDeg;
+      const east = lon + radiusDeg;
       const bbox = `${south},${west},${north},${east}`;
 
-      // Query QL da Overpass API: Busca edifícios, rodovias/ruas, parques e corpos d'água
+      // Query Overpass: 1) building, 2) highway, 3) natural=wood / landuse=forest / natural=tree
       const overpassQuery = `
         [out:json][timeout:25];
         (
           way["highway"](${bbox});
           way["building"](${bbox});
+          way["natural"="wood"](${bbox});
+          way["landuse"="forest"](${bbox});
           way["leisure"="park"](${bbox});
-          way["natural"="water"](${bbox});
-          relation["leisure"="park"](${bbox});
-          relation["natural"="water"](${bbox});
+          node["natural"="tree"](${bbox});
+          relation["natural"="wood"](${bbox});
+          relation["landuse"="forest"](${bbox});
         );
         out body;
         >;
@@ -3246,27 +3248,42 @@
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const data = await response.json();
 
-        if (detail) detail.innerText = `Processando ${data.elements?.length || 0} elementos geográficos reais...`;
-        renderRealWorldScene(data, anchorLat, anchorLon);
+        if (detail) detail.innerText = `Processando elementos geográficos reais...`;
+        renderRealWorldScene(data, lat, lon);
 
         if (badge) {
           badge.innerText = 'Ativo (Real)';
           badge.className = 'px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30';
         }
-        if (detail) detail.innerText = `Geografia real aplicada: Malha viária, quadras e edificações carregadas com sucesso!`;
+        if (detail) detail.innerText = `Maquete 3D montada: Vias, blocos arquitetônicos e manchas de mata realistas carregados!`;
       } catch (err) {
         console.warn('Overpass API indisponível ou limitada, aplicando projeção procedural padrão:', err);
         if (badge) {
           badge.innerText = 'Offline / Simulado';
           badge.className = 'px-2 py-0.5 rounded-full text-[9px] font-semibold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30';
         }
-        if (detail) detail.innerText = `Servidor OSM ocupado. Usando malha topográfica local com árvores nativas preservadas.`;
+        if (detail) detail.innerText = `Servidor OSM temporariamente ocupado. Usando malha base com vegetação padrão.`;
       } finally {
         isFetchingOsmData = false;
       }
     }
 
-    // Renderiza a geografia real (Ruas, Prédios translúcidos e Parques) no Three.js
+    // Alias retrocompatível
+    const fetchRealWorldData = fetchRealMapData;
+
+    // Função utilitária para converter polígonos em teste ponto-em-polígono (Ray casting 2D)
+    function isPointInPolygon(px, pz, polygon) {
+      let inside = false;
+      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+        const xi = polygon[i].x, zi = polygon[i].z;
+        const xj = polygon[j].x, zj = polygon[j].z;
+        const intersect = ((zi > pz) !== (zj > pz)) && (px < (xj - xi) * (pz - zi) / (zj - zi) + xi);
+        if (intersect) inside = !inside;
+      }
+      return inside;
+    }
+
+    // Renderiza a geografia real (Ruas, Prédios translúcidos e Manchas de Mata) no Three.js
     function renderRealWorldScene(osmData, anchorLat, anchorLon) {
       if (!osmData || !osmData.elements) return;
 
@@ -3279,56 +3296,51 @@
 
       // Mapeia os nós por ID para montagem rápida das vias e polígonos
       const nodesMap = new Map();
+      const directTreeNodes = [];
+
       osmData.elements.forEach(el => {
         if (el.type === 'node') {
           nodesMap.set(el.id, { lat: el.lat, lon: el.lon });
+          if (el.tags && (el.tags.natural === 'tree' || el.tags.natural === 'wood')) {
+            directTreeNodes.push(el);
+          }
         }
       });
 
-      // Materiais dos elementos abstratos
-      // 1. Ruas (Chumbo escuro #1A1C23 / #334155 no Light)
+      // Materiais dos elementos da maquete arquitetônica
+      // 1. Estradas/Ruas: Traçado plano com cor Chumbo Escuro (#1A1C23)
       const roadMaterial = new THREE.MeshBasicMaterial({
-        color: isDarkMode ? 0x1A1C23 : 0xCBD5E1,
+        color: isDarkMode ? 0x1A1C23 : 0x334155,
         depthWrite: false,
         side: THREE.DoubleSide
       });
 
-      // 2. Prédios (Holográfico/Arquitetônico: #2A2D35 translúcido + wireframe luminoso)
+      // 2. Prédios/Casas: Maquete translúcida (cinza/gelo #2A2D35, opacity 0.5) com arestas leves
       const buildingMat = new THREE.MeshStandardMaterial({
-        color: isDarkMode ? 0x2A2D35 : 0xE2E8F0,
+        color: isDarkMode ? 0x2A2D35 : 0xCBD5E1,
         transparent: true,
-        opacity: isDarkMode ? 0.42 : 0.48,
-        roughness: 0.3,
-        metalness: 0.1,
+        opacity: 0.50,
+        roughness: 0.25,
+        metalness: 0.05,
         depthWrite: false
       });
       const buildingEdgeMat = new THREE.LineBasicMaterial({
-        color: isDarkMode ? 0x64748B : 0x94A3B8,
+        color: isDarkMode ? 0x475569 : 0x94A3B8,
         transparent: true,
-        opacity: isDarkMode ? 0.65 : 0.55
+        opacity: 0.60
       });
 
-      // 3. Parques e Áreas Verdes (Verde escuro / musgo)
-      const parkMat = new THREE.MeshStandardMaterial({
-        color: isDarkMode ? 0x064E3B : 0xDCFCE7,
+      // 3. Manchas de Mata / Floresta: Verde musgo escuro (#064E3B)
+      const forestMat = new THREE.MeshStandardMaterial({
+        color: isDarkMode ? 0x064E3B : 0x14532D,
         roughness: 0.9,
-        side: THREE.DoubleSide,
-        depthWrite: false
-      });
-
-      // 4. Corpos d'água reais (Azul sutil)
-      const waterMat = new THREE.MeshStandardMaterial({
-        color: isDarkMode ? 0x0369A1 : 0xBAE6FD,
-        roughness: 0.1,
-        transparent: true,
-        opacity: 0.75,
         side: THREE.DoubleSide,
         depthWrite: false
       });
 
       let buildingsCount = 0;
       let roadsCount = 0;
-      let parksCount = 0;
+      let forestsCount = 0;
 
       // Itera sobre as vias (ways) do OSM
       osmData.elements.forEach(el => {
@@ -3339,15 +3351,15 @@
           const n = nodesMap.get(el.nodes[i]);
           if (n) {
             const pt = calculateGpsOffsetMeters(n.lat, n.lon, anchorLat, anchorLon);
-            // Ignora nós excessivamente distantes do raio visível
-            if (Math.abs(pt.x) < 70 && Math.abs(pt.z) < 70) {
+            // Raio de visibilidade útil no Three.js
+            if (Math.abs(pt.x) < 75 && Math.abs(pt.z) < 75) {
               coords.push(pt);
             }
           }
         }
         if (coords.length < 2) return;
 
-        // A. EDIFICAÇÕES (BUILDING) -> THREE.ExtrudeGeometry
+        // A. EDIFICAÇÕES (BUILDING) -> THREE.ExtrudeGeometry translúcida
         if (el.tags && el.tags.building) {
           if (coords.length >= 3) {
             const shape = new THREE.Shape();
@@ -3357,12 +3369,12 @@
             }
             shape.closePath();
 
-            // Altura do prédio procedural baseada nos andares (levels) ou aleatória controlada
-            let height = 1.2; // ~12m de altura padrão
+            // Altura arquitetônica proporcional
+            let height = 1.2;
             if (el.tags['building:levels']) {
-              height = Math.min(8.0, Math.max(0.8, parseInt(el.tags['building:levels']) * 0.35));
+              height = Math.min(7.0, Math.max(0.7, parseInt(el.tags['building:levels']) * 0.35));
             } else {
-              height = 0.8 + (Math.abs(coords[0].x * 11 + coords[0].z * 7) % 2.5);
+              height = 0.8 + (Math.abs(coords[0].x * 13 + coords[0].z * 5) % 2.2);
             }
 
             const extrudeSettings = {
@@ -3370,7 +3382,6 @@
               bevelEnabled: false
             };
             const geom = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-            // Rotaciona a extrusão para erguer no eixo Y
             geom.rotateX(Math.PI / 2);
             geom.translate(0, height, 0);
 
@@ -3379,7 +3390,6 @@
             bMesh.receiveShadow = true;
             realWorldGroup.add(bMesh);
 
-            // Arestas iluminadas arquitetônicas
             const edges = new THREE.EdgesGeometry(geom);
             const edgeLine = new THREE.LineSegments(edges, buildingEdgeMat);
             realWorldGroup.add(edgeLine);
@@ -3387,11 +3397,10 @@
             buildingsCount++;
           }
 
-        // B. RUAS E CAMINHOS (HIGHWAY) -> Faixa de solo com ShapeGeometry
+        // B. RUAS E CAMINHOS (HIGHWAY) -> THREE.ShapeGeometry no nível Y = 0.015
         } else if (el.tags && el.tags.highway) {
-          // Constrói fita viária com largura proporcional
           const isPrimary = el.tags.highway === 'primary' || el.tags.highway === 'secondary' || el.tags.highway === 'trunk';
-          const roadWidth = isPrimary ? 0.6 : 0.35; // 3.5 a 6 metros
+          const roadWidth = isPrimary ? 0.6 : 0.35;
 
           for (let s = 0; s < coords.length - 1; s++) {
             const p1 = coords[s];
@@ -3414,78 +3423,74 @@
             const roadGeom = new THREE.ShapeGeometry(roadShape);
             roadGeom.rotateX(Math.PI / 2);
             const roadMesh = new THREE.Mesh(roadGeom, roadMaterial);
-            roadMesh.position.y = 0.015; // Ligeiramente acima do chão
+            roadMesh.position.y = 0.015;
             realWorldGroup.add(roadMesh);
           }
           roadsCount++;
 
-        // C. PARQUES E ÁREAS VERDES (LEISURE=PARK OU LANDUSE=GRASS)
-        } else if (el.tags && (el.tags.leisure === 'park' || el.tags.landuse === 'grass' || el.tags.landuse === 'recreation_ground')) {
+        // C. MANCHAS DE MATA / FLORESTA (natural=wood, landuse=forest, leisure=park)
+        } else if (el.tags && (el.tags.natural === 'wood' || el.tags.landuse === 'forest' || el.tags.leisure === 'park' || el.tags.landuse === 'grass')) {
           if (coords.length >= 3) {
-            const parkShape = new THREE.Shape();
-            parkShape.moveTo(coords[0].x, coords[0].z);
+            const forestShape = new THREE.Shape();
+            forestShape.moveTo(coords[0].x, coords[0].z);
             for (let c = 1; c < coords.length; c++) {
-              parkShape.lineTo(coords[c].x, coords[c].z);
+              forestShape.lineTo(coords[c].x, coords[c].z);
             }
-            parkShape.closePath();
+            forestShape.closePath();
 
-            const parkGeom = new THREE.ShapeGeometry(parkShape);
-            parkGeom.rotateX(Math.PI / 2);
-            const parkMesh = new THREE.Mesh(parkGeom, parkMat);
-            parkMesh.position.y = 0.012;
-            realWorldGroup.add(parkMesh);
+            const forestGeom = new THREE.ShapeGeometry(forestShape);
+            forestGeom.rotateX(Math.PI / 2);
+            const forestMesh = new THREE.Mesh(forestGeom, forestMat);
+            forestMesh.position.y = 0.012;
+            realWorldGroup.add(forestMesh);
 
             realParksPolygons.push(coords);
-            parksCount++;
-          }
-
-        // D. CORPOS D'ÁGUA REAIS (NATURAL=WATER OU WATERWAY)
-        } else if (el.tags && (el.tags.natural === 'water' || el.tags.waterway)) {
-          if (coords.length >= 3) {
-            const waterShape = new THREE.Shape();
-            waterShape.moveTo(coords[0].x, coords[0].z);
-            for (let c = 1; c < coords.length; c++) {
-              waterShape.lineTo(coords[c].x, coords[c].z);
-            }
-            waterShape.closePath();
-
-            const wGeom = new THREE.ShapeGeometry(waterShape);
-            wGeom.rotateX(Math.PI / 2);
-            const wMesh = new THREE.Mesh(wGeom, waterMat);
-            wMesh.position.y = 0.018;
-            realWorldGroup.add(wMesh);
+            forestsCount++;
           }
         }
       });
 
       scene.add(realWorldGroup);
 
-      // DISTRIBUIÇÃO INTELIGENTE DE ÁRVORES:
-      // Se houver parques mapeados, planta árvores prioritariamente dentro deles!
+      // VEGETAÇÃO RESTRITA: SPAWN DE ÁRVORES APENAS DENTRO DAS MANCHAS DE MATA REAIS
+      // Remove árvores genéricas anteriores
+      treeGroups.forEach(tg => {
+        if (tg.group && tg.group.parent) scene.remove(tg.group);
+      });
+      treeGroups = [];
+
       if (realParksPolygons.length > 0) {
-        // Remove árvores genéricas anteriores
-        treeGroups.forEach(tg => {
-          if (tg.group && tg.group.parent) scene.remove(tg.group);
-        });
-        treeGroups = [];
-
         realParksPolygons.forEach(polygon => {
-          // Calcula centro do parque
-          let avgX = 0, avgZ = 0;
-          polygon.forEach(pt => { avgX += pt.x; avgZ += pt.z; });
-          avgX /= polygon.length;
-          avgZ /= polygon.length;
+          // Bounding box do polígono de mata
+          let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
+          polygon.forEach(pt => {
+            if (pt.x < minX) minX = pt.x;
+            if (pt.x > maxX) maxX = pt.x;
+            if (pt.z < minZ) minZ = pt.z;
+            if (pt.z > maxZ) maxZ = pt.z;
+          });
 
-          // Espalha árvores ao redor do centro do parque
-          for (let t = 0; t < 5; t++) {
-            const rX = avgX + (Math.random() - 0.5) * 6;
-            const rZ = avgZ + (Math.random() - 0.5) * 6;
-            plantSingleTree(rX, rZ, true);
+          // Tenta spawnar árvores testando se estão rigorosamente dentro do polígono
+          const attempts = Math.max(6, Math.floor((maxX - minX) * (maxZ - minZ) * 0.15));
+          for (let a = 0; a < attempts; a++) {
+            const testX = minX + Math.random() * (maxX - minX);
+            const testZ = minZ + Math.random() * (maxZ - minZ);
+            if (isPointInPolygon(testX, testZ, polygon)) {
+              plantSingleTree(testX, testZ, true);
+            }
           }
         });
       }
 
-      console.log(`OSM Real-World gerado: ${buildingsCount} prédios, ${roadsCount} vias, ${parksCount} parques.`);
+      // Adiciona árvores de nós individuais identificados como natural=tree
+      directTreeNodes.forEach(tn => {
+        const pt = calculateGpsOffsetMeters(tn.lat, tn.lon, anchorLat, anchorLon);
+        if (Math.abs(pt.x) < 70 && Math.abs(pt.z) < 70) {
+          plantSingleTree(pt.x, pt.z, true);
+        }
+      });
+
+      console.log(`Maquete OSM 3D gerada: ${buildingsCount} edificações, ${roadsCount} vias e ${forestsCount} manchas de mata.`);
     }
 
     // ========================================================
