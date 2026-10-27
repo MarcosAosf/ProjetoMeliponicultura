@@ -2,8 +2,16 @@
 <html lang="pt-BR" class="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MELIPONA | Inteligência e Ecologia de Abelhas Nativas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>MELIPONA | Gerenciador de Meliponário 3D & PWA</title>
+  
+  <!-- Configurações PWA e Web App Mobile -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#111111">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Melipona3D">
+  <link rel="apple-touch-icon" href="./icon-192.png">
   
   <!-- Fontes Google: Inter & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -4468,6 +4476,15 @@
       initThreeJS();
       onSelectSpecies('mandacaia');
       applyCurrentRealSeason(); // Aplica a estação automática do mês atual
+
+      // Registro do Service Worker PWA para suporte offline e mobile
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js')
+            .then(reg => console.log('ServiceWorker PWA registrado com sucesso:', reg.scope))
+            .catch(err => console.log('Falha ao registrar ServiceWorker:', err));
+        });
+      }
     });
   </script>
 </body>

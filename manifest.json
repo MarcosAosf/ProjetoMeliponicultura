@@ -1,0 +1,21 @@
+{
+  "short_name": "Melipona3D",
+  "name": "Gerenciador de Meliponário 3D",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "./index.html",
+  "background_color": "#111111",
+  "theme_color": "#111111",
+  "display": "standalone",
+  "orientation": "portrait"
+}
