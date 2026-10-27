@@ -65,9 +65,12 @@ ProjetoMeliponicultura/
   - Guia de importância das abelhas sem ferrão (polinização florestal, produção de mel medicinal e função como bioindicadores ecológicos).
   - Acesso direto via botões de ação para os módulos operacionais.
 
-### 2. 🗺️ Aba "Hex-Radar 3D" (Mapeamento de Voo)
-- **Renderizador 3D:** Construído em **Three.js** com iluminação dinâmica, sombras, relevo topográfico procedural e vegetação poligonal (*low-poly*).
-- **Hex-Radar Vetorial:** Em vez de circunferências genéricas, projeta um favo hexagonal com pulso luminoso que corresponde ao raio real de forrageamento da colmeia selecionada:
+### 2. 🗺️ Aba "Hex-Radar 3D" (Mapeamento de Voo & Geografia Real OSM)
+- **Geografia Real Integrada (OpenStreetMap / Overpass API):** Ao fixar a 1ª colmeia via GPS, o motor 3D consulta a Overpass API em um raio de ~1km e reconstrói a malha viária urbana (ruas/caminhos em `ShapeGeometry`), os parques/áreas verdes e as edificações reais através de `THREE.ExtrudeGeometry` translúcido (#2A2D35 com arestas iluminadas), transformando o meliponário em um gêmeo digital arquitetônico.
+- **Árvores em Áreas Verdes Reais:** A vegetação low-poly deixa de ser aleatória e se concentra prioritariamente nos polígonos de parques e praças mapeados no OSM.
+- **Múltiplas Caixas via GPS:** Suporte ao cadastro de vários ninhos com cálculo de distância métrica em relação ao Ponto Zero (1 unidade = 10m reais).
+- **Alerta de Competição:** Se os raios de voo de duas caixas se sobrepuserem, as bordas do radar mudam automaticamente para Vermelho/Laranja de Alerta.
+- **Hex-Radar Vetorial:** Projeta favos hexagonais pulsantes correspondentes ao raio real de forrageamento:
   - 🌸 **Flores Nativas (Rosa):** Pasto meliponícola monitorado.
   - 💧 **Fontes de Água (Azul):** Bebedouros naturais ou artificiais.
   - 🍯 **Iscas-PET 2L (Roxo):** Localização de garrafas-isca para atração de enxames.
