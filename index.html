@@ -1,0 +1,2884 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MELIPONA | Inteligência e Ecologia de Abelhas Nativas</title>
+  
+  <!-- Fontes Google: Inter & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS CDN com darkMode: 'class' -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Chart.js para Data Visualization Profissional -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+  <!-- Three.js, OrbitControls & CSS2DRenderer -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS2DRenderer.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            honey: {
+              400: '#FFD000',
+              500: '#FFC300', // Amarelo Favo Oficial
+              600: '#F4B41A', // Ouro Favo Intenso
+              700: '#D99800',
+            },
+            surface: {
+              pure: '#FFFFFF',
+              subtle: '#F8F9FA',
+              dark: '#0C0E12',
+              darkCard: '#151821',
+              darkBorder: '#232836',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            display: ['"Plus Jakarta Sans"', 'Inter', 'sans-serif'],
+          },
+          boxShadow: {
+            'apple': '0 20px 40px -15px rgba(0, 0, 0, 0.05), 0 0 1px 1px rgba(0, 0, 0, 0.04)',
+            'apple-dark': '0 20px 40px -15px rgba(0, 0, 0, 0.5), 0 0 1px 1px rgba(255, 255, 255, 0.08)',
+            'glow-honey': '0 8px 20px -4px rgba(244, 180, 26, 0.4)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      transition: background-color 0.3s ease, color 0.3s ease;
+      font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+      overflow-x: hidden;
+    }
+
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      transition: all 0.3s ease;
+    }
+    .dark .glass-panel {
+      background: rgba(18, 21, 28, 0.92);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+    }
+
+    .btn-honey {
+      background-color: #FFC300;
+      color: #111827;
+      font-weight: 600;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .btn-honey:hover {
+      background-color: #F4B41A;
+      box-shadow: 0 10px 20px -5px rgba(244, 180, 26, 0.4);
+      transform: translateY(-1px);
+    }
+    .btn-honey:active {
+      transform: translateY(0);
+    }
+
+    #three-canvas-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      outline: none;
+    }
+    #three-canvas-container canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+      touch-action: none;
+      pointer-events: auto;
+    }
+
+    #css2d-container {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 15;
+    }
+
+    /* PLAQUINHAS DE IDENTIFICAÇÃO FLUTUANTES (CSS2D) */
+    .map-floating-pin {
+      position: absolute;
+      pointer-events: auto;
+      cursor: pointer;
+      user-select: none;
+      transform-origin: bottom center;
+      transition: transform 0.16s ease-out;
+      z-index: 25;
+    }
+    .map-floating-pin:hover {
+      transform: translate(-50%, -100%) scale(1.1) !important;
+      z-index: 50;
+    }
+    .map-pin-box {
+      background: #FFFFFF;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      padding: 6px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      border: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    .dark .map-pin-box {
+      background: #1A1E29;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.5);
+    }
+    .map-pin-icon {
+      font-size: 14px;
+      line-height: 1;
+    }
+    .map-pin-text {
+      font-family: 'Inter', Roboto, sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #333333;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+    .dark .map-pin-text {
+      color: #F3F4F6;
+    }
+    .map-pin-arrow {
+      width: 0;
+      height: 0;
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-top: 6px solid #FFFFFF;
+      margin: 0 auto;
+      filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.08));
+    }
+    .dark .map-pin-arrow {
+      border-top-color: #1A1E29;
+    }
+
+    /* Plaquinha de Risco / Ameaça (Vermelho Escuro) */
+    .map-pin-box.threat {
+      background: #7F1D1D !important;
+      border: 1px solid #DC2626 !important;
+      box-shadow: 0 4px 14px rgba(220, 38, 38, 0.4) !important;
+    }
+    .map-pin-box.threat .map-pin-text {
+      color: #FFFFFF !important;
+      font-weight: 800;
+    }
+    .map-pin-arrow.threat {
+      border-top-color: #7F1D1D !important;
+    }
+
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #D1D5DB;
+      border-radius: 9999px;
+    }
+    .dark ::-webkit-scrollbar-thumb {
+      background: #374151;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans antialiased bg-white dark:bg-[#0C0E12] text-gray-900 dark:text-gray-100">
+
+  <!-- ======================================================== -->
+  <!-- BARRA SUPERIOR: ESTILO APPLE / STRIPE                    -->
+  <!-- ======================================================== -->
+  <header class="w-full bg-white/90 dark:bg-[#0E1015]/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800/80 px-6 lg:px-10 py-3 sticky top-0 z-40 transition-colors">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-6">
+      
+      <!-- Logotipo & Nome -->
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-xl bg-honey-500 flex items-center justify-center text-black font-extrabold text-base shadow-sm">
+          🐝
+        </div>
+        <div>
+          <span class="text-base font-display font-extrabold tracking-tight text-gray-900 dark:text-white">
+            Melipona<span class="text-honey-600 font-bold">OS</span>
+          </span>
+          <span class="hidden sm:inline-block ml-2 text-xs text-gray-500 dark:text-gray-400 font-medium">
+            Mapeamento de Voo & Ecologia
+          </span>
+        </div>
+      </div>
+
+      <!-- Navegação Clean -->
+      <nav class="hidden md:flex items-center gap-1 bg-gray-50/80 dark:bg-[#151821] p-1 rounded-2xl border border-gray-200/60 dark:border-gray-800">
+        <button onclick="switchTab('radar')" id="nav-radar" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 bg-white dark:bg-[#1E2330] text-gray-900 dark:text-white shadow-sm border border-gray-200/50 dark:border-gray-700/60">
+          <span class="w-2 h-2 rounded-full bg-honey-500"></span>
+          <span>Hex-Radar 3D</span>
+        </button>
+        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all">
+          Meliponário
+        </button>
+        <button onclick="switchTab('species')" id="nav-species" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all">
+          Espécies Nativas
+        </button>
+        <button onclick="switchTab('management')" id="nav-management" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all">
+          Diário de Manejo
+        </button>
+      </nav>
+
+      <!-- Ações: Chuva + Dark Mode + Status + Novo Manejo -->
+      <div class="flex items-center gap-2.5">
+        
+        <!-- Botão Toggle de Simulação de Chuva -->
+        <button 
+          id="rain-toggle-btn"
+          onclick="toggleRainSimulation()" 
+          class="px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#151821] text-gray-700 dark:text-gray-300 hover:border-sky-400 dark:hover:border-sky-500 transition-all flex items-center gap-1.5 text-xs font-semibold cursor-pointer shadow-sm"
+          title="Simular Chuva (Emergency Override nas Abelhas)"
+        >
+          <span id="rain-btn-icon">🌧️</span>
+          <span id="rain-btn-label">Chuva</span>
+        </button>
+
+        <button 
+          id="theme-toggle-btn"
+          onclick="toggleDarkMode()" 
+          class="p-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#151821] text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all flex items-center justify-center cursor-pointer shadow-sm"
+          title="Alternar Modo Escuro / Claro"
+        >
+          <svg id="theme-icon-sun" class="w-4 h-4 hidden dark:block text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+          </svg>
+          <svg id="theme-icon-moon" class="w-4 h-4 block dark:hidden text-gray-700" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gray-50 dark:bg-[#151821] border border-gray-100 dark:border-gray-800 text-xs">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="font-medium text-gray-700 dark:text-gray-300">26°C • Voo Pleno</span>
+        </div>
+
+        <button onclick="openModal()" class="btn-honey px-3.5 py-1.5 rounded-xl text-xs flex items-center gap-1.5 shadow-sm cursor-pointer">
+          <span class="text-sm font-bold">+</span>
+          <span>Manejo</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- ÁREA DO HEX-RADAR 3D: MAPA COM RELEVO COMPATÍVEL         -->
+  <!-- ======================================================== -->
+  <main class="relative flex-1 w-full overflow-hidden min-h-[calc(100vh-60px)] bg-[#F8F9FA] dark:bg-[#0C0E12] transition-colors">
+    
+    <section id="view-radar" class="tab-view relative w-full h-[calc(100vh-60px)] block">
+      
+      <!-- CANVAS THREE.JS -->
+      <div id="three-canvas-container"></div>
+
+      <!-- PAINEL COMPACTO NO CANTO SUPERIOR ESQUERDO COM MINIMIZAR -->
+      <div id="radar-control-panel" class="absolute top-4 left-4 z-20 w-64 max-w-[calc(100vw-32px)] flex flex-col gap-2 pointer-events-auto transition-all duration-300">
+        
+        <div class="p-3 rounded-2xl glass-panel shadow-apple space-y-2">
+          
+          <!-- Cabeçalho com Botão Minimizar/Expandir -->
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-honey-500 animate-pulse"></span>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                Colmeia Monitorada
+              </span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span id="badge-species-name" class="text-[10px] font-bold text-honey-600 dark:text-honey-400">Mandaçaia</span>
+              <button onclick="togglePanelCollapse()" id="btn-collapse-panel" class="w-5 h-5 rounded-md flex items-center justify-center text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-xs font-bold" title="Minimizar/Expandir painel">
+                −
+              </button>
+            </div>
+          </div>
+
+          <!-- Conteúdo que pode ser recolhido -->
+          <div id="panel-expandable-content" class="space-y-2">
+            <!-- Seletor de Espécie -->
+            <div class="relative">
+              <select id="species-3d-select" onchange="onSelectSpecies(this.value)" class="w-full bg-white dark:bg-[#12151D] border border-gray-200 dark:border-gray-700/80 text-gray-900 dark:text-white text-xs font-bold rounded-xl px-2.5 py-1.5 appearance-none focus:outline-none focus:ring-2 focus:ring-honey-500 cursor-pointer shadow-sm">
+                <option value="mandacaia" selected>Mandaçaia MQA (~1.500m)</option>
+                <option value="jatai">Jataí Dourada (~500m)</option>
+                <option value="urucu">Uruçu Amarela (~2.000m)</option>
+                <option value="tiuba">Tiúba (~2.200m)</option>
+                <option value="mirim">Mirim Droryana (~400m)</option>
+              </select>
+              <div class="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 text-[10px]">
+                ▼
+              </div>
+            </div>
+
+            <!-- Métricas Lado a Lado -->
+            <div class="grid grid-cols-2 gap-1.5">
+              <div class="p-2 rounded-xl bg-gray-50/80 dark:bg-[#12151D] border border-gray-100 dark:border-gray-800">
+                <div class="text-[9px] text-gray-500 dark:text-gray-400 font-medium">Raio Efetivo</div>
+                <div id="stat-radius" class="text-sm font-display font-extrabold text-gray-900 dark:text-white mt-0.5">1.500m</div>
+              </div>
+              <div class="p-2 rounded-xl bg-gray-50/80 dark:bg-[#12151D] border border-gray-100 dark:border-gray-800">
+                <div class="text-[9px] text-gray-500 dark:text-gray-400 font-medium">Área Pasto</div>
+                <div id="stat-area" class="text-sm font-display font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5">5.84 km²</div>
+              </div>
+            </div>
+
+            <!-- Filtros de Recursos -->
+            <div class="pt-1.5 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between gap-1">
+              <button onclick="togglePinLayer('flora')" id="btn-layer-flora" class="px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] text-[10px] font-semibold flex items-center gap-1 shadow-sm" title="Filtrar Floradas">
+                <span>🌸</span> Flores
+              </button>
+              <button onclick="togglePinLayer('water')" id="btn-layer-water" class="px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] text-[10px] font-semibold flex items-center gap-1 shadow-sm" title="Filtrar Água">
+                <span>💧</span> Água
+              </button>
+              <button onclick="togglePinLayer('traps')" id="btn-layer-traps" class="px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] text-[10px] font-semibold flex items-center gap-1 shadow-sm" title="Filtrar Iscas">
+                <span>🍯</span> Iscas
+              </button>
+              <button onclick="togglePinLayer('threat')" id="btn-layer-threat" class="px-2 py-1 rounded-lg border border-red-300 dark:border-red-900 bg-red-50 dark:bg-red-950/40 text-red-700 dark:text-red-300 text-[10px] font-semibold flex items-center gap-1 shadow-sm" title="Filtrar Ameaças">
+                <span>⚠️</span> Risco
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Card de Inspeção Rápida -->
+        <div id="inspector-card" class="hidden p-3 rounded-2xl glass-panel shadow-apple space-y-1 transition-all text-xs">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span id="inspec-icon" class="text-sm">🌸</span>
+              <h4 id="inspec-title" class="font-bold text-gray-900 dark:text-white text-xs">Aroeira</h4>
+            </div>
+            <button onclick="closeInspector()" class="text-gray-400 hover:text-black dark:hover:text-white text-xs">✕</button>
+          </div>
+          <p id="inspec-desc" class="text-[10px] text-gray-600 dark:text-gray-300 leading-snug">
+            Flores ricas em néctar e resina protetora.
+          </p>
+          <div class="pt-1 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-[10px] text-gray-500 dark:text-gray-400">
+            <span>Distância:</span>
+            <span id="inspec-dist" class="font-bold text-honey-600">380m</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CONTROLE SAZONAL: MÁQUINA DO TEMPO FLORAL (INFERIOR CENTRO) -->
+      <div class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 w-[90%] max-w-md p-3.5 rounded-2xl glass-panel shadow-apple flex flex-col gap-2 transition-all">
+        <div class="flex items-center justify-between text-xs">
+          <div class="flex items-center gap-1.5 font-bold text-gray-900 dark:text-white">
+            <span id="season-icon">🌸</span>
+            <span id="season-name">Primavera Floral</span>
+          </div>
+          <span id="season-month" class="font-mono text-[11px] font-semibold text-honey-600 dark:text-honey-400">
+            Outubro (Mês 10)
+          </span>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-[10px] font-bold text-gray-400">JAN</span>
+          <input 
+            type="range" 
+            id="season-slider" 
+            min="1" 
+            max="12" 
+            value="10" 
+            oninput="onSeasonSliderChange(this.value)"
+            class="w-full accent-honey-500 cursor-pointer h-1.5 rounded-lg bg-gray-200 dark:bg-gray-700"
+            title="Arraste para alterar os meses e estações do ano"
+          >
+          <span class="text-[10px] font-bold text-gray-400">DEZ</span>
+        </div>
+        <div class="flex items-center justify-between text-[9px] text-gray-500 dark:text-gray-400 px-0.5">
+          <span>☀️ Verão</span>
+          <span>🍂 Outono</span>
+          <span>❄️ Inverno</span>
+          <span class="text-honey-600 dark:text-honey-400 font-bold">🌸 Primavera</span>
+        </div>
+      </div>
+
+      <!-- CONTROLES DA CÂMERA (CANTO INFERIOR DIREITO) -->
+      <div class="absolute bottom-5 right-5 z-20 flex items-center gap-2">
+        <button onclick="reset3DCamera()" class="px-3 py-1.5 rounded-xl glass-panel shadow-apple hover:bg-white dark:hover:bg-[#1E2330] text-gray-700 dark:text-gray-200 transition-all text-xs font-semibold flex items-center gap-1.5">
+          <span>Padrão 3D</span>
+        </button>
+        <button onclick="toggleTopDownView()" class="px-3 py-1.5 rounded-xl glass-panel shadow-apple hover:bg-white dark:hover:bg-[#1E2330] text-gray-700 dark:text-gray-200 transition-all text-xs font-semibold flex items-center gap-1.5">
+          <span>Vista Aérea</span>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- ABA 2: PAINEL -->
+    <section id="view-dashboard" class="tab-view hidden max-w-7xl mx-auto p-6 lg:p-10 space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-display font-extrabold text-gray-900 dark:text-white">Visão Geral do Meliponário</h2>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Status biométrico, pesagem e monitoramento das caixas racionais em tempo real</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Sensores Ativos
+          </span>
+          <span class="text-xs text-gray-400 font-mono">Atualizado há 2min</span>
+        </div>
+      </div>
+
+      <!-- CARDS DE MÉTRICAS -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+        <div class="p-6 rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple">
+          <div class="flex items-center justify-between text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            <span>Colmeias Ativas</span>
+            <span class="text-base">📦</span>
+          </div>
+          <div class="text-3xl font-display font-extrabold text-gray-900 dark:text-white mt-2">28 Caixas</div>
+          <div class="flex items-center gap-2 mt-2">
+            <span class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold flex items-center">↑ +3 este mês</span>
+            <span class="text-[11px] text-gray-400">100% integridade</span>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple">
+          <div class="flex items-center justify-between text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            <span>Mel Armazenado</span>
+            <span class="text-base">🍯</span>
+          </div>
+          <div class="text-3xl font-display font-extrabold text-gray-900 dark:text-white mt-2">42.6 kg</div>
+          <div class="flex items-center gap-2 mt-2">
+            <span class="text-xs text-honey-600 dark:text-honey-400 font-semibold flex items-center">↑ +4.2kg/semana</span>
+            <span class="text-[11px] text-gray-400">Safra Ouro</span>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple">
+          <div class="flex items-center justify-between text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            <span>Taxa de Voo Médio</span>
+            <span class="text-base">🐝</span>
+          </div>
+          <div class="text-3xl font-display font-extrabold text-honey-600 mt-2">94% Voo</div>
+          <div class="flex items-center gap-2 mt-2">
+            <span class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Pico 11h-14h</span>
+            <span class="text-[11px] text-gray-400">26.5°C ambiente</span>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple">
+          <div class="flex items-center justify-between text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            <span>Iscas em Monitoramento</span>
+            <span class="text-base">🌲</span>
+          </div>
+          <div class="text-3xl font-display font-extrabold text-gray-900 dark:text-white mt-2">14 Iscas</div>
+          <div class="flex items-center gap-2 mt-2">
+            <span class="text-xs text-amber-600 dark:text-amber-400 font-semibold">3 com batedoras</span>
+            <span class="text-[11px] text-gray-400">2 capturas confirmadas</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO DE GRÁFICOS: CHART.JS DATA VIZ -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Gráfico de Área: Atividade de Voo vs Temperatura -->
+        <div class="lg:col-span-2 p-6 rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h3 class="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                <span>📈</span> Atividade de Voo das Campeiras vs Temperatura
+              </h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Correlação entre temperatura ambiente (°C) e taxa de saídas das operárias por minuto</p>
+            </div>
+            <div class="flex items-center gap-3 text-xs">
+              <span class="flex items-center gap-1.5 text-honey-600 font-medium">
+                <span class="w-3 h-3 rounded-full bg-[#FFC300]"></span> Atividade (%)
+              </span>
+              <span class="flex items-center gap-1.5 text-gray-400 font-medium">
+                <span class="w-3 h-3 rounded-full bg-sky-400"></span> Temp (°C)
+              </span>
+            </div>
+          </div>
+          <div class="relative h-72 w-full">
+            <canvas id="chart-flight-activity"></canvas>
+          </div>
+        </div>
+
+        <!-- Gráfico de Barras: Mel Armazenado por Espécie -->
+        <div class="p-6 rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple space-y-4">
+          <div>
+            <h3 class="text-base font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <span>🍯</span> Mel por Espécie
+            </h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Volume estocado em potes de cerume (kg)</p>
+          </div>
+          <div class="relative h-72 w-full">
+            <canvas id="chart-honey-species"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- MINI CARDS COMPLEMENTARES DE SAÚDE BIOMÉTRICA -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div class="p-5 rounded-2xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/10 text-honey-600 flex items-center justify-center text-2xl font-bold">🌡️</div>
+          <div>
+            <span class="text-xs text-gray-400 font-medium">Temperatura no Ninho</span>
+            <h4 class="text-lg font-bold text-gray-900 dark:text-white">34.2 °C <span class="text-xs text-emerald-500 font-normal">Estável</span></h4>
+            <p class="text-[11px] text-gray-500">Termorregulação ideal nas melíponas</p>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-sky-500/10 text-sky-500 flex items-center justify-center text-2xl font-bold">💧</div>
+          <div>
+            <span class="text-xs text-gray-400 font-medium">Umidade Relativa Externa</span>
+            <h4 class="text-lg font-bold text-gray-900 dark:text-white">68% <span class="text-xs text-emerald-500 font-normal">Ideal</span></h4>
+            <p class="text-[11px] text-gray-500">Secagem facilitada do néctar</p>
+          </div>
+        </div>
+
+        <div class="p-5 rounded-2xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 flex items-center gap-4">
+          <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-500 flex items-center justify-center text-2xl font-bold">🛡️</div>
+          <div>
+            <span class="text-xs text-gray-400 font-medium">Índice Sanitário (Forídeos)</span>
+            <h4 class="text-lg font-bold text-gray-900 dark:text-white">Zero Infestação <span class="text-xs text-emerald-500 font-normal">100% Seguro</span></h4>
+            <p class="text-[11px] text-gray-500">Vinagre de maçã em todas as tampas</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABA 3: ESPÉCIES -->
+    <section id="view-species" class="tab-view hidden max-w-7xl mx-auto p-6 lg:p-10 space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-display font-extrabold text-gray-900 dark:text-white">Enciclopédia de Espécies Nativas</h2>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Fichas biológicas completas, atributos ecológicos e raio de forrageamento</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-xs font-semibold text-gray-700 dark:text-gray-300">
+            5 Espécies Mapeadas
+          </span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        
+        <!-- CARD 1: JATAÍ -->
+        <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+          <div>
+            <!-- Banner / Ilustração Estilizada do Pito de Entrada -->
+            <div class="h-44 w-full relative overflow-hidden bg-gradient-to-br from-amber-100 via-amber-50 to-orange-100 dark:from-amber-950/40 dark:via-[#1A1D27] dark:to-yellow-950/30 flex items-center justify-center border-b border-gray-100 dark:border-gray-800">
+              <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#FFC300_1px,transparent_1px)] [background-size:12px_12px]"></div>
+              <!-- Ilustração Visual Vetorial do Pito de Cera da Jataí -->
+              <div class="relative flex flex-col items-center">
+                <div class="w-20 h-20 rounded-full bg-amber-400/20 dark:bg-amber-400/10 flex items-center justify-center border border-amber-400/40 shadow-inner">
+                  <span class="text-4xl filter drop-shadow">🍯</span>
+                </div>
+                <span class="mt-2 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-white/80 dark:bg-black/60 text-amber-800 dark:text-amber-300 backdrop-blur-sm border border-amber-400/20">
+                  Tubo de Cera Translúcido
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-sm">
+                500m Raio
+              </span>
+            </div>
+
+            <!-- Conteúdo -->
+            <div class="p-6 space-y-4">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-honey-600 dark:text-honey-400 uppercase tracking-wider">Tribo Trigonini</span>
+                  <span class="text-xs text-gray-400 font-mono">JTF-12</span>
+                </div>
+                <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">Jataí Dourada</h3>
+                <p class="text-xs italic text-gray-500 dark:text-gray-400">Tetragonisca angustula</p>
+              </div>
+
+              <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                Extremamente dócil e rústica. Constrói tubo de cerume fino na entrada com sentinelas pairadas em voo. Mel fino, límpido e com alto poder antimicrobiano.
+              </p>
+
+              <!-- Progress Bars de Atributos -->
+              <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Nível de Docilidade</span>
+                    <span class="text-honey-600 font-bold">100%</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                    <div class="h-full bg-honey-500 rounded-full" style="width: 100%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Produção de Mel</span>
+                    <span class="text-honey-600 font-bold">60% (1.2 kg/ano)</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                    <div class="h-full bg-honey-500 rounded-full" style="width: 60%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Resistência ao Frio</span>
+                    <span class="text-honey-600 font-bold">85%</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                    <div class="h-full bg-honey-500 rounded-full" style="width: 85%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 pt-0">
+            <button onclick="selectAndGoToRadar('jatai')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+              <span>Mapear no Radar 3D</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD 2: MANDAÇAIA -->
+        <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+          <div>
+            <!-- Banner / Ilustração Estilizada do Pito de Entrada -->
+            <div class="h-44 w-full relative overflow-hidden bg-gradient-to-br from-amber-100 via-stone-100 to-amber-200 dark:from-stone-900 dark:via-[#1A1D27] dark:to-amber-950/40 flex items-center justify-center border-b border-gray-100 dark:border-gray-800">
+              <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#FFC300_1px,transparent_1px)] [background-size:12px_12px]"></div>
+              <div class="relative flex flex-col items-center">
+                <div class="w-20 h-20 rounded-full bg-amber-500/20 dark:bg-amber-500/10 flex items-center justify-center border border-amber-500/40 shadow-inner">
+                  <span class="text-4xl filter drop-shadow">🐝</span>
+                </div>
+                <span class="mt-2 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-white/80 dark:bg-black/60 text-amber-900 dark:text-amber-200 backdrop-blur-sm border border-amber-400/20">
+                  Raios de Geoprópolis
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-sm">
+                1.500m Raio
+              </span>
+            </div>
+
+            <!-- Conteúdo -->
+            <div class="p-6 space-y-4">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-honey-600 dark:text-honey-400 uppercase tracking-wider">Tribo Meliponini</span>
+                  <span class="text-xs text-gray-400 font-mono">MQA-04</span>
+                </div>
+                <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">Mandaçaia MQA</h3>
+                <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona quadrifasciata</p>
+              </div>
+
+              <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                Abelha robusta com listras amarelas no abdômen. Pito de barro com raios convergentes. Mel denso, aromático e de alto valor gastronômico e terapêutico.
+              </p>
+
+              <!-- Progress Bars de Atributos -->
+              <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Nível de Docilidade</span>
+                    <span class="text-honey-600 font-bold">95%</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                    <div class="h-full bg-honey-500 rounded-full" style="width: 95%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Produção de Mel</span>
+                    <span class="text-honey-600 font-bold">85% (3.0 kg/ano)</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                    <div class="h-full bg-honey-500 rounded-full" style="width: 85%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Resistência ao Frio</span>
+                    <span class="text-honey-600 font-bold">90%</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                    <div class="h-full bg-honey-500 rounded-full" style="width: 90%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 pt-0">
+            <button onclick="selectAndGoToRadar('mandacaia')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+              <span>Mapear no Radar 3D</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD 3: URUÇU AMARELA -->
+        <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+          <div>
+            <!-- Banner / Ilustração Estilizada do Pito de Entrada -->
+            <div class="h-44 w-full relative overflow-hidden bg-gradient-to-br from-yellow-100 via-amber-100 to-amber-200 dark:from-yellow-950/40 dark:via-[#1A1D27] dark:to-amber-950/50 flex items-center justify-center border-b border-gray-100 dark:border-gray-800">
+              <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#FFC300_1px,transparent_1px)] [background-size:12px_12px]"></div>
+              <div class="relative flex flex-col items-center">
+                <div class="w-20 h-20 rounded-full bg-yellow-400/20 dark:bg-yellow-400/10 flex items-center justify-center border border-yellow-400/40 shadow-inner">
+                  <span class="text-4xl filter drop-shadow">👑</span>
+                </div>
+                <span class="mt-2 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-white/80 dark:bg-black/60 text-yellow-900 dark:text-yellow-200 backdrop-blur-sm border border-yellow-400/20">
+                  Grande Porte Florestal
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-sm">
+                2.000m Raio
+              </span>
+            </div>
+
+            <!-- Conteúdo -->
+            <div class="p-6 space-y-4">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-honey-600 dark:text-honey-400 uppercase tracking-wider">Tribo Meliponini</span>
+                  <span class="text-xs text-gray-400 font-mono">URA-02</span>
+                </div>
+                <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">Uruçu Amarela</h3>
+                <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona flavolineata</p>
+              </div>
+
+              <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                Grande porte, voa sobre as copas mais altas da mata nativa. Produz expressivas quantidades de mel cítrico, límpido e muito valorizado comercialmente.
+              </p>
+
+              <!-- Progress Bars de Atributos -->
+              <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Nível de Docilidade</span>
+                    <span class="text-honey-600 font-bold">90%</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                    <div class="h-full bg-honey-500 rounded-full" style="width: 90%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Produção de Mel</span>
+                    <span class="text-honey-600 font-bold">95% (4.5 kg/ano)</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                    <div class="h-full bg-honey-500 rounded-full" style="width: 95%"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Resistência ao Frio</span>
+                    <span class="text-honey-600 font-bold">70%</span>
+                  </div>
+                  <div class="w-full h-2 rounded-full bg-gray-100 dark:bg-gray-800 overflow-hidden">
+                    <div class="h-full bg-honey-500 rounded-full" style="width: 70%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="p-6 pt-0">
+            <button onclick="selectAndGoToRadar('urucu')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+              <span>Mapear no Radar 3D</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ABA 4: MANEJO -->
+    <section id="view-management" class="tab-view hidden max-w-7xl mx-auto p-6 lg:p-10 space-y-8">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h2 class="text-2xl font-display font-extrabold text-gray-900 dark:text-white">Diário Técnico de Manejo</h2>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Histórico cronológico detalhado com rastreabilidade sanitária e biometria</p>
+        </div>
+        <button onclick="openModal()" class="btn-honey px-5 py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center gap-2 shadow-glow-honey">
+          <span>+ Novo Registro de Manejo</span>
+        </button>
+      </div>
+
+      <!-- FILTROS DE CATEGORIA DE MANEJO -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <span class="text-xs font-bold text-gray-400 mr-1">Filtrar por:</span>
+        <button class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-honey-500 text-black shadow-sm">Todos</button>
+        <button class="px-3.5 py-1.5 rounded-xl text-xs font-medium bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-honey-500">🍯 Colheita</button>
+        <button class="px-3.5 py-1.5 rounded-xl text-xs font-medium bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-honey-500">💧 Alimentação</button>
+        <button class="px-3.5 py-1.5 rounded-xl text-xs font-medium bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-honey-500">🌱 Divisão de Enxame</button>
+        <button class="px-3.5 py-1.5 rounded-xl text-xs font-medium bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 text-gray-700 dark:text-gray-300 hover:border-honey-500">🛡️ Sanitário</button>
+      </div>
+
+      <!-- VERTICAL TIMELINE CONTAINER -->
+      <div class="p-6 sm:p-8 rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple">
+        <div class="relative pl-6 sm:pl-8 before:content-[''] before:absolute before:left-3 sm:before:left-4 before:top-3 before:bottom-3 before:w-0.5 before:bg-gradient-to-b before:from-honey-500 before:via-gray-200 before:to-gray-100 dark:before:via-gray-800 dark:before:to-gray-800 space-y-8" id="logs-container">
+
+          <!-- ITEM 1 TIMELINE (ALIMENTAÇÃO - AZUL) -->
+          <div class="relative group">
+            <!-- Marcador Circular da Timeline -->
+            <div class="absolute -left-[31px] sm:-left-[37px] top-1.5 w-8 h-8 rounded-full bg-sky-100 dark:bg-sky-950/80 border-2 border-sky-500 text-sky-600 dark:text-sky-300 flex items-center justify-center text-sm shadow-sm group-hover:scale-110 transition-transform">
+              💧
+            </div>
+            <!-- Card de Conteúdo do Nó -->
+            <div class="p-5 rounded-2xl bg-gray-50 dark:bg-[#0E1015] border border-gray-200/80 dark:border-gray-800/80 hover:border-sky-500/50 transition-all">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-gray-200/60 dark:border-gray-800">
+                <div class="flex items-center gap-2.5">
+                  <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-sky-500/10 text-sky-600 dark:text-sky-400 border border-sky-500/20">
+                    Alimentação Energética
+                  </span>
+                  <span class="px-2 py-0.5 rounded-md text-[11px] font-mono font-bold bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700">
+                    MQA-04
+                  </span>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-gray-400 font-mono">
+                  <span>Hoje às 14:30</span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span class="text-emerald-500 font-sans font-semibold">Concluído</span>
+                </div>
+              </div>
+              <p class="text-xs text-gray-700 dark:text-gray-300 mt-3 leading-relaxed">
+                Fornecimento de 150ml de xarope invertido 1:1 com gotas de própolis no alimentador interno tipo Rosso. Colônia forte com consumo imediato pelas operárias.
+              </p>
+              <div class="mt-3 flex items-center gap-4 text-[11px] text-gray-500 dark:text-gray-400">
+                <span>Responsável: <strong>Biólogo Meliponicultor</strong></span>
+                <span>•</span>
+                <span>Clima: <strong>27°C / Ensolarado</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ITEM 2 TIMELINE (COLHEITA - AMARELO) -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] sm:-left-[37px] top-1.5 w-8 h-8 rounded-full bg-honey-100 dark:bg-honey-950/80 border-2 border-honey-500 text-honey-700 dark:text-honey-400 flex items-center justify-center text-sm shadow-sm group-hover:scale-110 transition-transform">
+              🍯
+            </div>
+            <div class="p-5 rounded-2xl bg-gray-50 dark:bg-[#0E1015] border border-gray-200/80 dark:border-gray-800/80 hover:border-honey-500/50 transition-all">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-gray-200/60 dark:border-gray-800">
+                <div class="flex items-center gap-2.5">
+                  <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-honey-500/10 text-honey-700 dark:text-honey-400 border border-honey-500/20">
+                    Colheita Sanitária de Mel
+                  </span>
+                  <span class="px-2 py-0.5 rounded-md text-[11px] font-mono font-bold bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700">
+                    URA-02
+                  </span>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-gray-400 font-mono">
+                  <span>Ontem às 10:15</span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span class="text-emerald-500 font-sans font-semibold">Concluído</span>
+                </div>
+              </div>
+              <p class="text-xs text-gray-700 dark:text-gray-300 mt-3 leading-relaxed">
+                Extração sanitária por sucção a vácuo na melgueira superior. Extraídos 2.4 kg de mel límpido com 26% de umidade natural e aroma floral intenso.
+              </p>
+              <div class="mt-3 flex items-center gap-4 text-[11px] text-gray-500 dark:text-gray-400">
+                <span>Rendimento: <strong>+2.4 kg</strong></span>
+                <span>•</span>
+                <span>Refração: <strong>74° Brix</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ITEM 3 TIMELINE (DIVISÃO - VERDE) -->
+          <div class="relative group">
+            <div class="absolute -left-[31px] sm:-left-[37px] top-1.5 w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-950/80 border-2 border-emerald-500 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-sm shadow-sm group-hover:scale-110 transition-transform">
+              🌱
+            </div>
+            <div class="p-5 rounded-2xl bg-gray-50 dark:bg-[#0E1015] border border-gray-200/80 dark:border-gray-800/80 hover:border-emerald-500/50 transition-all">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-gray-200/60 dark:border-gray-800">
+                <div class="flex items-center gap-2.5">
+                  <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                    Divisão de Enxame (1:1)
+                  </span>
+                  <span class="px-2 py-0.5 rounded-md text-[11px] font-mono font-bold bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700">
+                    JTF-12 → JTF-13
+                  </span>
+                </div>
+                <div class="flex items-center gap-2 text-xs text-gray-400 font-mono">
+                  <span>22 Out às 09:00</span>
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span class="text-emerald-500 font-sans font-semibold">Sucesso</span>
+                </div>
+              </div>
+              <p class="text-xs text-gray-700 dark:text-gray-300 mt-3 leading-relaxed">
+                Transferência de 3 discos de cria maduros e 2 potes de cerume com alimento larval. Introduzida realeira nascente. Caixa filha instalada no local da mãe para receber as campeiras.
+              </p>
+              <div class="mt-3 flex items-center gap-4 text-[11px] text-gray-500 dark:text-gray-400">
+                <span>Nova Colônia: <strong>JTF-13 Ativa</strong></span>
+                <span>•</span>
+                <span>Status da Rainha: <strong>Realeira eclodida</strong></span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL: NOVO REGISTRO -->
+  <div id="quick-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/40 backdrop-blur-sm">
+    <div class="relative w-full max-w-md p-6 rounded-3xl bg-white dark:bg-[#151821] shadow-2xl border border-gray-100 dark:border-gray-800 text-gray-900 dark:text-white">
+      <div class="flex items-center justify-between pb-4 border-b border-gray-100 dark:border-gray-800">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-honey-500 flex items-center justify-center text-black font-bold">🍯</div>
+          <h3 class="text-base font-bold text-gray-900 dark:text-white">Novo Manejo</h3>
+        </div>
+        <button onclick="closeModal()" class="text-gray-400 hover:text-black dark:hover:text-white text-sm">✕</button>
+      </div>
+
+      <form onsubmit="saveLog(event)" class="mt-4 space-y-3.5 text-xs">
+        <div>
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Colmeia Alvo:</label>
+          <select id="modal-hive" class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white focus:outline-none focus:border-honey-500">
+            <option value="MQA-04">MQA-04 (Mandaçaia)</option>
+            <option value="JTF-12">JTF-12 (Jataí)</option>
+            <option value="URA-02">URA-02 (Uruçu Amarela)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Tipo de Ação:</label>
+          <div class="grid grid-cols-3 gap-2">
+            <label class="p-2.5 rounded-xl border border-honey-500 bg-honey-50 dark:bg-honey-950/40 text-gray-900 dark:text-white font-semibold flex items-center justify-center gap-1.5 cursor-pointer">
+              <input type="radio" name="modal-type" value="Alimentação" checked class="accent-honey-600">
+              <span>💧 Alimentação</span>
+            </label>
+            <label class="p-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-700 dark:text-gray-300 flex items-center justify-center gap-1.5 cursor-pointer">
+              <input type="radio" name="modal-type" value="Colheita" class="accent-honey-600">
+              <span>🍯 Colheita</span>
+            </label>
+            <label class="p-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-700 dark:text-gray-300 flex items-center justify-center gap-1.5 cursor-pointer">
+              <input type="radio" name="modal-type" value="Divisão" class="accent-honey-600">
+              <span>🌱 Divisão</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Detalhes:</label>
+          <input type="text" id="modal-details" placeholder="Ex: 150ml xarope 1:1 fornecido" required class="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white focus:outline-none focus:border-honey-500">
+        </div>
+
+        <button type="submit" class="w-full btn-honey py-3 rounded-xl font-bold uppercase tracking-wider text-xs shadow-md mt-2 cursor-pointer">
+          Salvar no Diário
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- SCRIPT THREE.JS: TERRENO NATIVO SUAVE & RADAR 100% LIMPO -->
+  <!-- ======================================================== -->
+  <script>
+    const SPECIES_CONFIG = {
+      mandacaia: {
+        name: 'Mandaçaia MQA',
+        scientific: 'Melipona quadrifasciata',
+        radiusMeters: 1500,
+        areaKm2: '5.84 km²',
+        scale3D: 15.0,
+      },
+      jatai: {
+        name: 'Jataí Dourada',
+        scientific: 'Tetragonisca angustula',
+        radiusMeters: 500,
+        areaKm2: '0.65 km²',
+        scale3D: 6.5,
+      },
+      urucu: {
+        name: 'Uruçu Amarela',
+        scientific: 'Melipona flavolineata',
+        radiusMeters: 2000,
+        areaKm2: '10.39 km²',
+        scale3D: 20.0,
+      },
+      tiuba: {
+        name: 'Tiúba Nordestina',
+        scientific: 'Melipona fasciculata',
+        radiusMeters: 2200,
+        areaKm2: '12.57 km²',
+        scale3D: 22.0,
+      },
+      mirim: {
+        name: 'Mirim Droryana',
+        scientific: 'Plebeia droryana',
+        radiusMeters: 400,
+        areaKm2: '0.41 km²',
+        scale3D: 5.0,
+      }
+    };
+
+    // ========================================================
+    // CSS2D RENDERER & OBJECT (COM SUPORTE OFICIAL & FALLBACK)
+    // ========================================================
+    if (typeof THREE.CSS2DObject === 'undefined') {
+      THREE.CSS2DObject = function ( element ) {
+        THREE.Object3D.call( this );
+        this.element = element || document.createElement( 'div' );
+        this.element.style.position = 'absolute';
+        this.element.style.userSelect = 'none';
+        this.isCSS2DObject = true;
+      };
+      THREE.CSS2DObject.prototype = Object.create( THREE.Object3D.prototype );
+      THREE.CSS2DObject.prototype.constructor = THREE.CSS2DObject;
+
+      THREE.CSS2DRenderer = function () {
+        var _width, _height;
+        var _widthHalf, _heightHalf;
+        var vector = new THREE.Vector3();
+        var viewMatrix = new THREE.Matrix4();
+        var viewProjectionMatrix = new THREE.Matrix4();
+        var domElement = document.createElement( 'div' );
+        domElement.id = 'css2d-container';
+        domElement.style.overflow = 'hidden';
+        domElement.style.position = 'absolute';
+        domElement.style.top = '0';
+        domElement.style.left = '0';
+        domElement.style.width = '100%';
+        domElement.style.height = '100%';
+        domElement.style.pointerEvents = 'none';
+        this.domElement = domElement;
+
+        this.setSize = function ( width, height ) {
+          _width = width;
+          _height = height;
+          _widthHalf = _width / 2;
+          _heightHalf = _height / 2;
+          domElement.style.width = width + 'px';
+          domElement.style.height = height + 'px';
+        };
+
+        var renderObject = function ( object, scene, camera ) {
+          if ( object.visible === false ) {
+            if ( object.element ) object.element.style.display = 'none';
+            return;
+          }
+          if ( object.isCSS2DObject || object instanceof THREE.CSS2DObject ) {
+            if ( object.element.parentNode !== domElement ) {
+              domElement.appendChild( object.element );
+            }
+            vector.setFromMatrixPosition( object.matrixWorld );
+            vector.applyMatrix4( viewProjectionMatrix );
+            var element = object.element;
+            if ( !isNaN( vector.x ) && vector.z >= -1 && vector.z <= 1 ) {
+              element.style.display = 'block';
+              element.style.left = ( vector.x * _widthHalf + _widthHalf ) + 'px';
+              element.style.top = ( - vector.y * _heightHalf + _heightHalf ) + 'px';
+              element.style.transform = 'translate(-50%, -100%)';
+            } else {
+              element.style.display = 'none';
+            }
+          }
+          for ( var i = 0, l = object.children.length; i < l; i ++ ) {
+            renderObject( object.children[ i ], scene, camera );
+          }
+        };
+
+        this.render = function ( scene, camera ) {
+          if ( scene.autoUpdate === true ) scene.updateMatrixWorld();
+          if ( camera.parent === null ) camera.updateMatrixWorld();
+          viewMatrix.copy( camera.matrixWorldInverse );
+          viewProjectionMatrix.multiplyMatrices( camera.projectionMatrix, viewMatrix );
+          renderObject( scene, scene, camera );
+        };
+      };
+    }
+
+    const PINS_DATA = [
+      { id: '1', type: 'flora', name: 'Florada Nativa', sub: 'Aroeira Vermelha', x: 8, yOffset: 2.1, z: -5, dist: '380m', desc: 'Flores nativas ricas em néctar doce e resina curativa para geoprópolis.', icon: '🌸' },
+      { id: '2', type: 'flora', name: 'Florada Nativa', sub: 'Pitangueiras em Flor', x: -9, yOffset: 1.9, z: 7, dist: '490m', desc: 'Pasto de florada branca abundante em pólen proteico para desenvolvimento das crias.', icon: '🌿' },
+      { id: '3', type: 'water', name: 'Fonte de Água', sub: 'Bebedouro Natural', x: 6, yOffset: 1.5, z: 9, dist: '520m', desc: 'Bacia com pedras rasas onde as abelhas bebem água fresca sem risco de afogamento.', icon: '💧' },
+      { id: '4', type: 'traps', name: 'Isca Pet 2L', sub: 'Atrativo Feromonado', x: -11, yOffset: 2.7, z: -8, dist: '610m', desc: 'Garrafa pet coberta com lona preta e atrativo feromonado para captura de enxames.', icon: '📦' },
+      { id: '5', type: 'flora', name: 'Florada Nativa', sub: 'Ipê Amarelo Favo', x: 14, yOffset: 2.7, z: -12, dist: '850m', desc: 'Florada massiva dourada de alto rendimento de néctar e pólen.', icon: '🌼' },
+      { id: '6', type: 'threat', name: 'Área de Risco / Ameaça', sub: 'Formigueiro Predador (Solenopsis)', x: -6, yOffset: 1.6, z: -5, dist: '410m (Perigo)', desc: 'Formigas cortadeiras e lava-pés ativas no solo. Risco de pilhagem ou estresse da colmeia.', icon: '⚠️' }
+    ];
+
+    let currentSpeciesKey = 'mandacaia';
+    let targetHexScale = SPECIES_CONFIG.mandacaia.scale3D;
+    let currentHexScale = targetHexScale;
+    let isDarkMode = false; // PADRÃO CLEAN: LIGHT MODE ATIVO
+
+    // VARIÁVEIS THREE.JS & CSS2D
+    let scene, camera, renderer, labelRenderer, controls;
+    let terrainMesh, hiveMesh, riverMesh;
+    let hexOutline, hexScanLine;
+    let pinMeshes = [];
+    let treeGroups = [];
+    let flyingBees = [];
+    let sentryBees = [];
+    let patrolAnts = [];
+    let pollenParticles;
+    let raycaster, mouse;
+
+    // VARIÁVEIS DE SISTEMA CLIMÁTICO (CHUVA) & SAZONALIDADE
+    let isRaining = false;
+    let rainParticles = null;
+    let currentSeasonMonth = 10; // Outubro por padrão (Primavera)
+    let ambientLightRef = null;
+    let dirLightRef = null;
+
+    // UNIFORMS PARA PROJEÇÃO SHADER DO RADAR DIRETO NO RELEVO
+    const radarUniforms = {
+      uRadarRadius: { value: targetHexScale },
+      uRadarCenter: { value: new THREE.Vector2(0, 0) },
+      uRadarColor: { value: new THREE.Color(0xFFC300) },
+      uRadarEdgeColor: { value: new THREE.Color(0xF59E0B) },
+      uInnerRing1: { value: 0.35 },
+      uInnerRing2: { value: 0.70 },
+      uScanAngle: { value: 0.0 },
+      uTime: { value: 0.0 }
+    };
+
+    // MATEMÁTICA DO TERRENO 100% PLANO (PLANEGEOMETRY)
+    function getTerrainHeight(x, z) {
+      return 0.0;
+    }
+
+    function getSurfaceHeight(x, z) {
+      return 0.0;
+    }
+
+    function getUnitHexagonPoint(theta) {
+      const mod = ((theta % (Math.PI / 3)) + (Math.PI / 3)) % (Math.PI / 3);
+      const alpha = mod - Math.PI / 6;
+      const r = (Math.sqrt(3) / 2) / Math.cos(alpha);
+      return {
+        x: Math.cos(theta) * r,
+        z: Math.sin(theta) * r
+      };
+    }
+
+    // APLICAÇÃO DO CUSTOM SHADER DE PROJEÇÃO DE RADAR NO MATERIAL DO CHÃO
+    function applyRadarShaderProjection(material) {
+      material.onBeforeCompile = (shader) => {
+        shader.uniforms.uRadarRadius = radarUniforms.uRadarRadius;
+        shader.uniforms.uRadarCenter = radarUniforms.uRadarCenter;
+        shader.uniforms.uRadarColor = radarUniforms.uRadarColor;
+        shader.uniforms.uRadarEdgeColor = radarUniforms.uRadarEdgeColor;
+        shader.uniforms.uInnerRing1 = radarUniforms.uInnerRing1;
+        shader.uniforms.uInnerRing2 = radarUniforms.uInnerRing2;
+        shader.uniforms.uScanAngle = radarUniforms.uScanAngle;
+        shader.uniforms.uTime = radarUniforms.uTime;
+
+        shader.vertexShader = `
+          varying vec3 vWorldPos;
+        ` + shader.vertexShader;
+
+        shader.vertexShader = shader.vertexShader.replace(
+          '#include <worldpos_vertex>',
+          `
+          #include <worldpos_vertex>
+          vWorldPos = (modelMatrix * vec4( transformed, 1.0 )).xyz;
+          `
+        );
+
+        shader.fragmentShader = `
+          varying vec3 vWorldPos;
+          uniform float uRadarRadius;
+          uniform vec2 uRadarCenter;
+          uniform vec3 uRadarColor;
+          uniform vec3 uRadarEdgeColor;
+          uniform float uInnerRing1;
+          uniform float uInnerRing2;
+          uniform float uScanAngle;
+          uniform float uTime;
+
+          float sdHexagon( in vec2 p, in float r ) {
+            const vec3 k = vec3(-0.866025404, 0.5, 0.577350269);
+            p = abs(p);
+            p -= 2.0 * min(dot(k.xy, p), 0.0) * k.xy;
+            p -= vec2(clamp(p.x, -k.z * r, k.z * r), r);
+            return length(p) * sign(p.y);
+          }
+        ` + shader.fragmentShader;
+
+        shader.fragmentShader = shader.fragmentShader.replace(
+          '#include <dithering_fragment>',
+          `
+          #include <dithering_fragment>
+
+          vec2 rPos = vWorldPos.xz - uRadarCenter;
+          float d = sdHexagon(rPos.yx, uRadarRadius * 0.8660254);
+
+          if (d <= 0.0) {
+            // 1. Preenchimento Pintado Diretamente sobre o Terreno
+            float pulse = 0.22 + 0.03 * sin(uTime * 2.8);
+            gl_FragColor.rgb = mix(gl_FragColor.rgb, uRadarColor, pulse);
+
+            // 2. Anéis Internos de Voo (35% e 70%)
+            float dRing1 = abs(sdHexagon(rPos.yx, uRadarRadius * 0.8660254 * uInnerRing1));
+            float dRing2 = abs(sdHexagon(rPos.yx, uRadarRadius * 0.8660254 * uInnerRing2));
+            if (dRing1 < 0.22) {
+              float g1 = smoothstep(0.22, 0.02, dRing1);
+              gl_FragColor.rgb = mix(gl_FragColor.rgb, uRadarEdgeColor, g1 * 0.7);
+            }
+            if (dRing2 < 0.22) {
+              float g2 = smoothstep(0.22, 0.02, dRing2);
+              gl_FragColor.rgb = mix(gl_FragColor.rgb, uRadarEdgeColor, g2 * 0.7);
+            }
+
+            // 3. Raios de Favo (6 raios estruturais da colmeia)
+            float pAngle = atan(rPos.y, rPos.x);
+            float spokeMod = abs(mod(pAngle + 0.52359877, 1.04719755) - 0.52359877);
+            float spokeDist = length(rPos) * sin(spokeMod);
+            if (spokeDist < 0.14) {
+              float sGlow = smoothstep(0.14, 0.02, spokeDist);
+              gl_FragColor.rgb = mix(gl_FragColor.rgb, uRadarEdgeColor, sGlow * 0.55);
+            }
+
+            // 4. Raio de Varredura Radar 360° Rotativo
+            float scanDiff = mod(pAngle - uScanAngle + 6.2831853, 6.2831853);
+            if (scanDiff < 0.45) {
+              float scanTrail = (1.0 - scanDiff / 0.45) * 0.35;
+              gl_FragColor.rgb = mix(gl_FragColor.rgb, vec3(1.0, 0.95, 0.35), scanTrail);
+            }
+          }
+
+          // 5. Borda Externa em Glowing Amarelo Ouro
+          float edgeDist = abs(d);
+          if (edgeDist < 0.40) {
+            float edgeGlow = smoothstep(0.40, 0.02, edgeDist);
+            gl_FragColor.rgb = mix(gl_FragColor.rgb, uRadarEdgeColor * 1.35, edgeGlow * 0.95);
+          }
+          `
+        );
+      };
+    }
+
+    function initThreeJS() {
+      const container = document.getElementById('three-canvas-container');
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
+      scene = new THREE.Scene();
+      
+      // ILUMINAÇÃO & FUNDO (ATMOSFERA SUAVE COM THREE.FOG LINEAR)
+      const initialBg = isDarkMode ? 0x0C0E12 : 0xF8F9FA;
+      scene.background = new THREE.Color(initialBg);
+      // THREE.Fog linear fundindo as bordas do chão plano exatamente na cor de fundo
+      scene.fog = new THREE.Fog(initialBg, 25, 75);
+
+      camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 1000);
+      camera.position.set(26, 22, 28);
+
+      // Renderizador WebGL
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.05;
+      container.appendChild(renderer.domElement);
+
+      // Renderizador de Plaquinhas CSS2D
+      labelRenderer = new THREE.CSS2DRenderer();
+      labelRenderer.setSize(width, height);
+      labelRenderer.domElement.id = 'css2d-container';
+      labelRenderer.domElement.style.position = 'absolute';
+      labelRenderer.domElement.style.top = '0';
+      labelRenderer.domElement.style.left = '0';
+      labelRenderer.domElement.style.width = '100%';
+      labelRenderer.domElement.style.height = '100%';
+      labelRenderer.domElement.style.pointerEvents = 'none';
+      container.appendChild(labelRenderer.domElement);
+
+      // Controles de Câmera OrbitControls no Canvas WebGL
+      controls = new THREE.OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.05;
+      controls.maxPolarAngle = Math.PI / 2.18;
+      controls.minDistance = 8;
+      controls.maxDistance = 85;
+      controls.target.set(0, 0, 0);
+
+      // Luzes suaves e limpas (Clean Light)
+      const ambientLight = new THREE.AmbientLight(0xFFFFFF, isDarkMode ? 0.45 : 0.88);
+      ambientLight.name = "ambientLight";
+      scene.add(ambientLight);
+      ambientLightRef = ambientLight;
+
+      const hemiLight = new THREE.HemisphereLight(0xFFFFFF, isDarkMode ? 0x1A202C : 0xEDE9FE, isDarkMode ? 0.35 : 0.55);
+      hemiLight.name = "hemiLight";
+      hemiLight.position.set(0, 50, 0);
+      scene.add(hemiLight);
+
+      const dirLight = new THREE.DirectionalLight(0xFFFBEB, isDarkMode ? 0.75 : 0.95);
+      dirLight.name = "dirLight";
+      dirLight.position.set(25, 40, 20);
+      dirLight.castShadow = true;
+      dirLight.shadow.mapSize.width = 2048;
+      dirLight.shadow.mapSize.height = 2048;
+      dirLight.shadow.camera.left = -45;
+      dirLight.shadow.camera.right = 45;
+      dirLight.shadow.camera.top = 45;
+      dirLight.shadow.camera.bottom = -45;
+      dirLight.shadow.camera.near = 1;
+      dirLight.shadow.camera.far = 130;
+      dirLight.shadow.bias = -0.0003;
+      dirLight.shadow.camera.updateProjectionMatrix();
+      scene.add(dirLight);
+      dirLightRef = dirLight;
+
+      createTerrainWithRiver();
+      createDetailedHive();
+      createColorfulTrees();
+      createGroundDetails(); // Detalhes do solo: pedrinhas e grama low-poly
+      createHexContourGlow(); // Linha vetorial de apoio ao relevo
+      createRealisticResourceModels();
+      createFlyingBees();
+      createFloatingPollenDust();
+      createRainParticleSystem(); // Sistema de partículas de chuva (THREE.Points)
+
+      raycaster = new THREE.Raycaster();
+      mouse = new THREE.Vector2();
+
+      // Registro do evento de clique para o Raycaster interativo
+      renderer.domElement.addEventListener('pointerdown', onPointerDown);
+      window.addEventListener('resize', onWindowResize);
+
+      animate();
+    }
+
+    // 1. TERRENO E RIACHO COM PROJEÇÃO DO RADAR EM TEMPO REAL (CHÃO 100% PLANO)
+    function createTerrainWithRiver() {
+      const geom = new THREE.PlaneGeometry(90, 90, 32, 32);
+      geom.rotateX(-Math.PI / 2);
+
+      const terrainMat = new THREE.MeshStandardMaterial({
+        color: isDarkMode ? 0x161A24 : 0xF9FAFB,
+        roughness: 0.9,
+        metalness: 0.05,
+        flatShading: true
+      });
+
+      // Aplica o Custom Shader de Projeção Direta
+      applyRadarShaderProjection(terrainMat);
+
+      terrainMesh = new THREE.Mesh(geom, terrainMat);
+      terrainMesh.position.y = 0;
+      terrainMesh.receiveShadow = true;
+      scene.add(terrainMesh);
+
+      // Riacho sobre o chão plano
+      const riverGeom = new THREE.PlaneGeometry(90, 3.8, 48, 4);
+      riverGeom.rotateX(-Math.PI / 2);
+
+      const rPos = riverGeom.attributes.position;
+      for (let i = 0; i < rPos.count; i++) {
+        const x = rPos.getX(i);
+        const zOffset = rPos.getZ(i);
+        const targetZ = Math.sin(x * 0.08) * 5 + 10 + zOffset;
+        rPos.setZ(i, targetZ);
+        rPos.setY(i, 0.02); // lâmina d'água milimetricamente acima do chão plano
+      }
+      riverGeom.computeVertexNormals();
+
+      const riverMat = new THREE.MeshStandardMaterial({
+        color: isDarkMode ? 0x0284C7 : 0x7DD3FC,
+        roughness: 0.1,
+        metalness: 0.2,
+        transparent: true,
+        opacity: isDarkMode ? 0.75 : 0.85,
+      });
+
+      // O radar também é projetado sobre a lâmina d'água
+      applyRadarShaderProjection(riverMat);
+
+      riverMesh = new THREE.Mesh(riverGeom, riverMat);
+      riverMesh.receiveShadow = true;
+      scene.add(riverMesh);
+    }
+
+    // ========================================================
+    // GERADOR DE PLAQUINHAS FLUTUANTES HTML (CSS2D)
+    // ========================================================
+    function createMapPinLabel(text, isThreat = false) {
+      const pinDiv = document.createElement('div');
+      pinDiv.className = 'map-floating-pin';
+      pinDiv.innerHTML = `
+        <div class="map-pin-box ${isThreat ? 'threat' : ''}">
+          <span class="map-pin-text">${text}</span>
+        </div>
+        <div class="map-pin-arrow ${isThreat ? 'threat' : ''}"></div>
+      `;
+      pinDiv.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (text.includes('Mandaçaia')) {
+          showPinInspector({ name: 'Colmeia Central', sub: 'Matriz Ativa', dist: '0m (Centro)', desc: 'Caixa racional INPA com colmeia ativa e alvoroço de operárias.', icon: '🐝' });
+          focusCameraOnObject(new THREE.Vector3(0, 1.9, 0));
+        } else if (text.includes('Água')) {
+          showPinInspector({ name: 'Fonte de Água', sub: 'Pedras Rasas', dist: '520m', desc: 'Bacia de água com pedras rasas onde as abelhas bebem sem afogamento.', icon: '💧' });
+          focusCameraOnObject(new THREE.Vector3(6, 0.2, 9));
+        } else if (text.includes('Isca')) {
+          showPinInspector({ name: 'Isca-PET 2L', sub: 'Atrativo Feromonado', dist: '610m', desc: 'Isca para captura ética e autorizada de enxames de abelhas nativas.', icon: '📦' });
+          focusCameraOnObject(new THREE.Vector3(-11, 1.5, -8));
+        } else if (text.includes('Flores')) {
+          showPinInspector({ name: 'Flores Nativas', sub: 'Pasto Meliponícola', dist: '380m', desc: 'Arbustos nativos com florada abundante rica em néctar e pólen.', icon: '🌸' });
+          focusCameraOnObject(new THREE.Vector3(8, 0.45, -5));
+        } else if (isThreat || text.includes('Atenção') || text.includes('Risco')) {
+          showPinInspector({ name: 'Ponto de Risco / Ameaça', sub: 'Formigueiro Predador (Solenopsis)', dist: '410m (Perigo)', desc: 'Ninho ativo de formigas lava-pés com risco iminente de invasão à melgueira.', icon: '⚠️' });
+          focusCameraOnObject(new THREE.Vector3(-6, 0.3, -5));
+        }
+      });
+      const labelObj = new THREE.CSS2DObject(pinDiv);
+      labelObj.isCSS2DObject = true;
+      return labelObj;
+    }
+
+    // 2. COLMEIA DETALHADA NO CENTRO COM PLAQUINHA CSS2D
+    function createDetailedHive() {
+      const hiveGroup = new THREE.Group();
+
+      const standMat = new THREE.MeshStandardMaterial({ color: isDarkMode ? 0x242A38 : 0xD1D5DB, roughness: 0.8 });
+      const leg1 = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.8), standMat);
+      leg1.position.set(-0.7, 0.4, -0.7);
+      const leg2 = leg1.clone(); leg2.position.set(0.7, 0.4, -0.7);
+      const leg3 = leg1.clone(); leg3.position.set(-0.7, 0.4, 0.7);
+      const leg4 = leg1.clone(); leg4.position.set(0.7, 0.4, 0.7);
+      hiveGroup.add(leg1, leg2, leg3, leg4);
+
+      const boxMat = new THREE.MeshStandardMaterial({
+        color: isDarkMode ? 0x3D352E : 0xF5EBE1,
+        roughness: 0.4,
+        metalness: 0.05
+      });
+      const boxGeom = new THREE.BoxGeometry(2, 2.2, 2);
+      hiveMesh = new THREE.Mesh(boxGeom, boxMat);
+      hiveMesh.position.y = 1.9;
+      hiveMesh.castShadow = true;
+      hiveGroup.add(hiveMesh);
+
+      const roofGeom = new THREE.BoxGeometry(2.3, 0.28, 2.3);
+      const roofMat = new THREE.MeshStandardMaterial({ color: 0xFFC300, roughness: 0.25 });
+      const roof = new THREE.Mesh(roofGeom, roofMat);
+      roof.position.y = 3.05;
+      roof.castShadow = true;
+      hiveGroup.add(roof);
+
+      const tubeMat = new THREE.MeshStandardMaterial({ color: 0xD97706, roughness: 0.7 });
+      const tubeGeom = new THREE.CylinderGeometry(0.18, 0.14, 0.6, 12);
+      tubeGeom.rotateX(Math.PI / 2);
+      const tube = new THREE.Mesh(tubeGeom, tubeMat);
+      tube.position.set(0, 1.4, 1.25);
+      hiveGroup.add(tube);
+
+      // 4. NA CAIXA DA COLMEIA CENTRAL (Label: "🐝 Mandaçaia - MQA")
+      const hiveLabel = createMapPinLabel("🐝 Mandaçaia - MQA");
+      hiveLabel.position.set(0, 3.8, 0);
+      hiveMesh.add(hiveLabel);
+
+      scene.add(hiveGroup);
+
+      // Sentinelas na entrada
+      sentryBees = [];
+      for (let i = 0; i < 4; i++) {
+        const sBee = createSingleBeeMesh();
+        sBee.position.set((Math.random() - 0.5) * 0.8, 1.4 + (Math.random() - 0.5) * 0.4, 1.6 + Math.random() * 0.3);
+        scene.add(sBee);
+        sentryBees.push({
+          mesh: sBee,
+          basePos: sBee.position.clone(),
+          phase: Math.random() * Math.PI * 2
+        });
+      }
+    }
+
+    // 3. ÁRVORES LOW-POLY EM CORES PASTÉIS SUAVES (MINIMALISTA)
+    function createColorfulTrees() {
+      treeGroups = [];
+
+      const treeTypes = [
+        { foliageColor: isDarkMode ? 0xEC4899 : 0xF9A8D4, type: 'aroeira_rosa' }, // Rosa Pastel Suave
+        { foliageColor: isDarkMode ? 0xF59E0B : 0xFDE047, type: 'ipe_amarelo' },   // Amarelo Pastel
+        { foliageColor: isDarkMode ? 0x10B981 : 0x86EFAC, type: 'mata_esmeralda' },// Menta Pastel
+        { foliageColor: isDarkMode ? 0x059669 : 0x6EE7B7, type: 'mata_densa' }     // Verde Sálvia Pastel
+      ];
+
+      const trunkMat = new THREE.MeshStandardMaterial({
+        color: isDarkMode ? 0x422B18 : 0xD4A373, // Madeira clara suave
+        roughness: 0.85
+      });
+
+      for (let i = 0; i < 40; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const dist = 7.0 + Math.random() * 32;
+        const tx = Math.cos(angle) * dist;
+        const tz = Math.sin(angle) * dist;
+
+        const riverZ = Math.sin(tx * 0.08) * 6 + 10;
+        if (Math.abs(tz - riverZ) < 3.0) continue;
+
+        const treeType = treeTypes[i % treeTypes.length];
+        const treeGroup = new THREE.Group();
+
+        const trunkHeight = 1.4 + Math.random() * 0.7;
+        const trunkGeom = new THREE.CylinderGeometry(0.12, 0.18, trunkHeight, 6);
+        const trunk = new THREE.Mesh(trunkGeom, trunkMat);
+        trunk.position.y = trunkHeight / 2;
+        trunk.castShadow = true;
+        treeGroup.add(trunk);
+
+        const foliageMat = new THREE.MeshStandardMaterial({
+          color: treeType.foliageColor,
+          roughness: 0.6,
+          metalness: 0.05,
+          flatShading: true
+        });
+
+        const crownSize = 0.9 + Math.random() * 0.6;
+        const crown1 = new THREE.Mesh(new THREE.DodecahedronGeometry(crownSize, 1), foliageMat);
+        crown1.position.y = trunkHeight + crownSize * 0.7;
+        crown1.castShadow = true;
+        treeGroup.add(crown1);
+
+        const crown2 = new THREE.Mesh(new THREE.DodecahedronGeometry(crownSize * 0.75, 1), foliageMat);
+        crown2.position.set(0.3, trunkHeight + crownSize * 1.3, -0.2);
+        crown2.castShadow = true;
+        treeGroup.add(crown2);
+
+        const groundY = getTerrainHeight(tx, tz);
+        treeGroup.position.set(tx, groundY, tz);
+        scene.add(treeGroup);
+        treeGroups.push({ group: treeGroup, foliageMat, treeType });
+      }
+    }
+
+    // 3.1 DETALHES DO SOLO (PEDRINHAS E TUFOS DE GRAMA LOW-POLY)
+    function createGroundDetails() {
+      const rockMat = new THREE.MeshStandardMaterial({
+        color: isDarkMode ? 0x2A303C : 0xCBD5E1,
+        roughness: 0.9,
+        flatShading: true
+      });
+      const grassMat = new THREE.MeshStandardMaterial({
+        color: isDarkMode ? 0x15803D : 0x4ADE80,
+        roughness: 0.7,
+        flatShading: true
+      });
+
+      // Espalhar pedrinhas variadas pelo chão
+      for (let i = 0; i < 45; i++) {
+        const rad = 4.0 + Math.random() * 36.0;
+        const ang = Math.random() * Math.PI * 2;
+        const rx = Math.cos(ang) * rad;
+        const rz = Math.sin(ang) * rad;
+
+        const size = 0.15 + Math.random() * 0.28;
+        const rockGeom = new THREE.DodecahedronGeometry(size, 0);
+        const rock = new THREE.Mesh(rockGeom, rockMat);
+        rock.position.set(rx, size * 0.4, rz);
+        rock.rotation.set(Math.random() * Math.PI, Math.random() * Math.PI, Math.random() * Math.PI);
+        rock.scale.set(1.0, 0.45, 1.2);
+        rock.castShadow = true;
+        scene.add(rock);
+      }
+
+      // Tufos de grama próximos ao rio e ao redor das árvores
+      for (let j = 0; j < 60; j++) {
+        const gx = (Math.random() - 0.5) * 75;
+        // Posição próxima à margem do riacho ou dispersa
+        const riverZ = Math.sin(gx * 0.08) * 5 + 10;
+        const gz = (j % 2 === 0) ? (riverZ + (Math.random() > 0.5 ? 2.5 : -2.5) + (Math.random() - 0.5) * 3) : ((Math.random() - 0.5) * 60);
+
+        const tuftGroup = new THREE.Group();
+        for (let b = 0; b < 3; b++) {
+          const bladeGeom = new THREE.ConeGeometry(0.06, 0.35 + Math.random() * 0.25, 3);
+          const blade = new THREE.Mesh(bladeGeom, grassMat);
+          blade.position.set((Math.random() - 0.5) * 0.15, 0.18, (Math.random() - 0.5) * 0.15);
+          blade.rotation.set((Math.random() - 0.5) * 0.3, Math.random() * Math.PI, (Math.random() - 0.5) * 0.3);
+          tuftGroup.add(blade);
+        }
+        tuftGroup.position.set(gx, 0, gz);
+        scene.add(tuftGroup);
+      }
+    }
+
+    // 4. LINHA VETORIAL DO CONTORNO GLOWING (APOIO DE ALTA NITIDEZ)
+    function createHexContourGlow() {
+      const PERIM_POINTS = 180;
+      const outlineGeom = new THREE.BufferGeometry();
+      outlineGeom.setAttribute('position', new THREE.BufferAttribute(new Float32Array((PERIM_POINTS + 1) * 3), 3));
+      
+      const outlineMat = new THREE.LineBasicMaterial({
+        color: 0xF59E0B,
+        linewidth: 3,
+        transparent: true,
+        opacity: isDarkMode ? 0.95 : 0.88,
+        depthWrite: false
+      });
+      hexOutline = new THREE.Line(outlineGeom, outlineMat);
+      hexOutline.renderOrder = 16;
+      scene.add(hexOutline);
+    }
+
+    // 5. RECURSOS COM DESIGN REALISTA E PLAQUINHAS HTML (CSS2D)
+    function createRealisticResourceModels() {
+      pinMeshes = [];
+
+      PINS_DATA.forEach(data => {
+        const itemGroup = new THREE.Group();
+        itemGroup.userData = data;
+
+        if (data.type === 'traps') {
+          // ISCA-PET 2L REALISTA
+          const trapSubGroup = new THREE.Group();
+
+          const stakeGeom = new THREE.CylinderGeometry(0.06, 0.06, 2.2, 8);
+          const stakeMat = new THREE.MeshStandardMaterial({ color: isDarkMode ? 0x3F2E22 : 0x78350F, roughness: 0.9 });
+          const stake = new THREE.Mesh(stakeGeom, stakeMat);
+          stake.position.y = 1.1;
+          stake.castShadow = true;
+          trapSubGroup.add(stake);
+
+          const petBodyGeom = new THREE.CylinderGeometry(0.3, 0.3, 0.9, 14);
+          const petCoverMat = new THREE.MeshStandardMaterial({ color: isDarkMode ? 0x111827 : 0x1F2937, roughness: 0.4 });
+          const petBody = new THREE.Mesh(petBodyGeom, petCoverMat);
+          petBody.position.set(0.24, 1.5, 0);
+          petBody.castShadow = true;
+          trapSubGroup.add(petBody);
+
+          const petNeckGeom = new THREE.ConeGeometry(0.3, 0.3, 14);
+          petNeckGeom.rotateX(Math.PI);
+          const petNeck = new THREE.Mesh(petNeckGeom, petCoverMat);
+          petNeck.position.set(0.24, 2.1, 0);
+          trapSubGroup.add(petNeck);
+
+          const bicoGeom = new THREE.CylinderGeometry(0.06, 0.06, 0.28, 10);
+          bicoGeom.rotateZ(Math.PI / 2);
+          const bicoMat = new THREE.MeshStandardMaterial({ color: 0xF59E0B, roughness: 0.3 });
+          const bico = new THREE.Mesh(bicoGeom, bicoMat);
+          bico.position.set(0.46, 1.5, 0);
+          trapSubGroup.add(bico);
+
+          // 3. NO MODELO DA ISCA PET NA ÁRVORE (Label: "📦 Isca-PET 2L")
+          const trapLabel = createMapPinLabel("📦 Isca-PET 2L");
+          trapLabel.position.set(0.24, 2.7, 0);
+          petBody.add(trapLabel);
+
+          itemGroup.add(trapSubGroup);
+
+        } else if (data.type === 'water') {
+          // BEBEDOURO NATURAL COM PEDRAS RASAS
+          const waterSubGroup = new THREE.Group();
+
+          const basinGeom = new THREE.CylinderGeometry(1.2, 1.3, 0.25, 14);
+          const basinMat = new THREE.MeshStandardMaterial({ color: isDarkMode ? 0x2A3245 : 0x94A3B8, roughness: 0.8 });
+          const basin = new THREE.Mesh(basinGeom, basinMat);
+          basin.position.y = 0.12;
+          waterSubGroup.add(basin);
+
+          const waterDiskGeom = new THREE.CylinderGeometry(1.1, 1.1, 0.05, 14);
+          const waterDiskMat = new THREE.MeshStandardMaterial({
+            color: 0x38BDF8,
+            roughness: 0.05,
+            metalness: 0.2,
+            transparent: true,
+            opacity: 0.85
+          });
+          const waterDisk = new THREE.Mesh(waterDiskGeom, waterDiskMat);
+          waterDisk.position.y = 0.24;
+          waterSubGroup.add(waterDisk);
+
+          const pebbleMat = new THREE.MeshStandardMaterial({ color: 0xE2E8F0, roughness: 0.4 });
+          for (let p = 0; p < 5; p++) {
+            const pa = (Math.PI * 2 / 5) * p;
+            const pebble = new THREE.Mesh(new THREE.DodecahedronGeometry(0.14, 0), pebbleMat);
+            pebble.position.set(Math.cos(pa) * 0.5, 0.28, Math.sin(pa) * 0.5);
+            waterSubGroup.add(pebble);
+          }
+
+          // 2. NO MODELO DA ÁGUA (Label: "💧 Fonte de Água")
+          const waterLabel = createMapPinLabel("💧 Fonte de Água");
+          waterLabel.position.set(0, 1.4, 0);
+          basin.add(waterLabel);
+
+          itemGroup.add(waterSubGroup);
+
+        } else if (data.type === 'threat') {
+          // MODELO DE AMEAÇA / PONTO DE RISCO (FORMIGUEIRO / TOXINAS)
+          const threatSubGroup = new THREE.Group();
+
+          // Montículo de terra escura avermelhada
+          const moundGeom = new THREE.ConeGeometry(1.2, 0.6, 12);
+          const moundMat = new THREE.MeshStandardMaterial({
+            color: isDarkMode ? 0x450A0A : 0x7F1D1D, // Tom escuro avermelhado de perigo
+            roughness: 0.95,
+            flatShading: true
+          });
+          const mound = new THREE.Mesh(moundGeom, moundMat);
+          mound.position.y = 0.3;
+          mound.castShadow = true;
+          threatSubGroup.add(mound);
+
+          // Cratera central
+          const craterGeom = new THREE.CylinderGeometry(0.3, 0.45, 0.2, 10);
+          const craterMat = new THREE.MeshStandardMaterial({ color: 0x1F2937, roughness: 0.9 });
+          const crater = new THREE.Mesh(craterGeom, craterMat);
+          crater.position.y = 0.52;
+          threatSubGroup.add(crater);
+
+          // MICRO-ANIMAÇÃO DE FORMIGAS PATRULHEIRAS (LOW-POLY EM TORNO DO FORMIGUEIRO)
+          patrolAnts = [];
+          const antMat = new THREE.MeshStandardMaterial({
+            color: 0x111111, // Preto / Marrom Escuro
+            roughness: 0.6,
+            metalness: 0.1
+          });
+
+          const NUM_ANTS = 18;
+          for (let a = 0; a < NUM_ANTS; a++) {
+            const antGroup = new THREE.Group();
+
+            // Modelo Low-Poly de Formiga (Abdomen e Cabeça/Tórax com esferas unidas)
+            const headGeom = new THREE.SphereGeometry(0.045, 6, 6);
+            const head = new THREE.Mesh(headGeom, antMat);
+            head.position.x = 0.05;
+            antGroup.add(head);
+
+            const abdomenGeom = new THREE.SphereGeometry(0.065, 6, 6);
+            abdomenGeom.scale(1.4, 0.9, 0.9);
+            const abdomen = new THREE.Mesh(abdomenGeom, antMat);
+            abdomen.position.x = -0.05;
+            antGroup.add(abdomen);
+
+            // Altura Y fixa no chão (rentinho ao plano Y = 0.04)
+            antGroup.position.y = 0.04;
+            threatSubGroup.add(antGroup);
+
+            // Parâmetros de movimento caótico e acelerado em torno do ninho
+            const baseRadius = 1.3 + Math.random() * 1.5; // Raio restrito de 1.3 a 2.8 unidades
+            const baseAngle = (Math.PI * 2 / NUM_ANTS) * a;
+
+            patrolAnts.push({
+              group: antGroup,
+              baseRadius: baseRadius,
+              angle: baseAngle,
+              speed: (Math.random() > 0.5 ? 1 : -1) * (1.8 + Math.random() * 2.2),
+              wobbleFreq1: 3 + Math.random() * 5,
+              wobbleFreq2: 4 + Math.random() * 6,
+              phase: Math.random() * Math.PI * 2
+            });
+          }
+
+          // Plaquinha Obrigatória com Fundo Vermelho Escuro e Texto Branco
+          const threatLabel = createMapPinLabel("⚠️ Atenção / Risco", true);
+          threatLabel.position.set(0, 1.8, 0);
+          mound.add(threatLabel);
+
+          itemGroup.add(threatSubGroup);
+
+        } else {
+          // CANTEIRO DE FLORES ABERTAS
+          const floraSubGroup = new THREE.Group();
+
+          const bushGeom = new THREE.DodecahedronGeometry(0.8, 1);
+          const bushMat = new THREE.MeshStandardMaterial({ color: 0x16A34A, roughness: 0.7 });
+          const bush = new THREE.Mesh(bushGeom, bushMat);
+          bush.position.y = 0.45;
+          bush.scale.set(1.3, 0.6, 1.3);
+          floraSubGroup.add(bush);
+
+          const petalColor = data.name.includes('Aroeira') ? 0xF472B6 : (data.name.includes('Ipê') ? 0xFBBF24 : 0xFFFFFF);
+          const petalMat = new THREE.MeshStandardMaterial({ color: petalColor, roughness: 0.3 });
+          const centerMat = new THREE.MeshBasicMaterial({ color: 0xF59E0B });
+
+          for (let f = 0; f < 7; f++) {
+            const fa = (Math.PI * 2 / 7) * f;
+            const fr = 0.4 + Math.random() * 0.4;
+            const fx = Math.cos(fa) * fr;
+            const fz = Math.sin(fa) * fr;
+            const fy = 0.7 + Math.random() * 0.3;
+
+            const center = new THREE.Mesh(new THREE.SphereGeometry(0.08, 6, 6), centerMat);
+            center.position.set(fx, fy, fz);
+            floraSubGroup.add(center);
+
+            for (let pet = 0; pet < 4; pet++) {
+              const pa = (Math.PI * 2 / 4) * pet;
+              const petal = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.15, 4), petalMat);
+              petal.rotation.z = Math.PI / 2;
+              petal.rotation.y = pa;
+              petal.position.set(fx + Math.cos(pa) * 0.08, fy, fz + Math.sin(pa) * 0.08);
+              floraSubGroup.add(petal);
+            }
+          }
+
+          // 1. NO MODELO DA FLOR/ARBUSTO (Label: "🌸 Flores Nativas")
+          const floraLabel = createMapPinLabel("🌸 Flores Nativas");
+          floraLabel.position.set(0, 1.8, 0);
+          bush.add(floraLabel);
+
+          itemGroup.add(floraSubGroup);
+        }
+
+        const groundY = getSurfaceHeight(data.x, data.z);
+        itemGroup.position.set(data.x, groundY, data.z);
+        scene.add(itemGroup);
+        pinMeshes.push(itemGroup);
+      });
+    }
+
+    // 6. MODELO DE UMA ABELHA
+    function createSingleBeeMesh() {
+      const beeGroup = new THREE.Group();
+
+      const bodyGeom = new THREE.SphereGeometry(0.16, 10, 8);
+      bodyGeom.scale(1.4, 1.0, 1.0);
+      const bodyMat = new THREE.MeshStandardMaterial({ color: 0xFFC300, roughness: 0.3 });
+      const body = new THREE.Mesh(bodyGeom, bodyMat);
+      beeGroup.add(body);
+
+      const headGeom = new THREE.SphereGeometry(0.09, 8, 8);
+      const headMat = new THREE.MeshBasicMaterial({ color: 0x111827 });
+      const head = new THREE.Mesh(headGeom, headMat);
+      head.position.x = 0.22;
+      beeGroup.add(head);
+
+      const wingGeom = new THREE.PlaneGeometry(0.22, 0.12);
+      wingGeom.rotateX(Math.PI / 2);
+      const wingMat = new THREE.MeshBasicMaterial({
+        color: 0xFFFFFF,
+        transparent: true,
+        opacity: 0.85,
+        side: THREE.DoubleSide
+      });
+
+      const wingL = new THREE.Mesh(wingGeom, wingMat);
+      wingL.position.set(0.04, 0.12, 0.12);
+      wingL.rotation.y = Math.PI / 6;
+      beeGroup.add(wingL);
+
+      const wingR = wingL.clone();
+      wingR.position.set(0.04, 0.12, -0.12);
+      wingR.rotation.y = -Math.PI / 6;
+      beeGroup.add(wingR);
+
+      const pollenGeom = new THREE.SphereGeometry(0.06, 6, 6);
+      const pollenMat = new THREE.MeshBasicMaterial({ color: 0xFDE047 });
+      const pollen = new THREE.Mesh(pollenGeom, pollenMat);
+      pollen.position.set(-0.07, -0.09, 0.08);
+      beeGroup.add(pollen);
+
+      beeGroup.scale.set(1.3, 1.3, 1.3);
+      return beeGroup;
+    }
+
+    // 7. ENXAME DE ABELHAS EM VOO INTELIGENTE (PATHFINDING RECURSOS 70% VS BATEDORAS 30%)
+    const HIVE_ORIGIN = new THREE.Vector3(0, 1.4, 1.3);
+
+    function createFlyingBees() {
+      flyingBees = [];
+      const NUM_FLYING = 20;
+
+      // Alvos de Coleta de Recursos Específicos: Flores Nativas e Fonte de Água
+      const resourceTargets = [
+        new THREE.Vector3(8, 0.6, -5),   // Flores Nativas (Aroeira)
+        new THREE.Vector3(-9, 0.6, 7),   // Flores Nativas (Pitangueira)
+        new THREE.Vector3(6, 0.35, 9),   // Fonte de Água (Bebedouro Natural)
+        new THREE.Vector3(14, 0.8, -12), // Flores Nativas (Ipê Amarelo)
+      ];
+
+      for (let i = 0; i < NUM_FLYING; i++) {
+        const beeMesh = createSingleBeeMesh();
+        beeMesh.position.copy(HIVE_ORIGIN);
+        scene.add(beeMesh);
+
+        // 70% das abelhas são Forrageiras/Coletoras e 30% são Batedoras
+        const isForager = (i / NUM_FLYING) < 0.70;
+
+        let target;
+        if (isForager) {
+          target = resourceTargets[i % resourceTargets.length].clone();
+          target.x += (Math.random() - 0.5) * 0.8;
+          target.z += (Math.random() - 0.5) * 0.8;
+        } else {
+          // Batedoras exploram o limite do radar
+          const angle = Math.random() * Math.PI * 2;
+          const dist = 6.0 + Math.random() * 8.0;
+          target = new THREE.Vector3(Math.cos(angle) * dist, 1.2 + Math.random() * 1.5, Math.sin(angle) * dist);
+        }
+
+        const angle = Math.random() * Math.PI * 2;
+        const initialSpeed = isForager ? (0.09 + Math.random() * 0.04) : (0.07 + Math.random() * 0.05);
+        const velocity = new THREE.Vector3(
+          Math.cos(angle) * initialSpeed,
+          0,
+          Math.sin(angle) * initialSpeed
+        );
+
+        flyingBees.push({
+          mesh: beeMesh,
+          velocity: velocity,
+          target: target,
+          role: isForager ? 'forager' : 'scout',
+          resourceIndex: i % resourceTargets.length,
+          isReturning: false,
+          isCollecting: false,
+          collectTimer: 0,
+          wingSpeed: 28 + Math.random() * 14,
+          wobbleOffset: Math.random() * Math.PI * 2,
+          baseSpeed: initialSpeed
+        });
+      }
+    }
+
+    // 8. PÓLEN ATMOSFÉRICO
+    function createFloatingPollenDust() {
+      const pollenCount = 150;
+      const pollenGeom = new THREE.BufferGeometry();
+      const positions = new Float32Array(pollenCount * 3);
+
+      for (let i = 0; i < pollenCount * 3; i += 3) {
+        positions[i] = (Math.random() - 0.5) * 45;
+        positions[i + 1] = 0.5 + Math.random() * 6;
+        positions[i + 2] = (Math.random() - 0.5) * 45;
+      }
+      pollenGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+      const pollenMat = new THREE.PointsMaterial({
+        color: 0xFFC300,
+        size: 0.22,
+        transparent: true,
+        opacity: isDarkMode ? 0.7 : 0.5
+      });
+
+      pollenParticles = new THREE.Points(pollenGeom, pollenMat);
+      scene.add(pollenParticles);
+    }
+
+    // 8.1 SISTEMA DE PARTÍCULAS DE CHUVA (THREE.POINTS CAINDO VERTICALMENTE)
+    const RAIN_COUNT = 900;
+    let rainGeometry = null;
+    let rainVelocities = [];
+
+    function createRainParticleSystem() {
+      rainGeometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(RAIN_COUNT * 3);
+      rainVelocities = [];
+
+      for (let i = 0; i < RAIN_COUNT; i++) {
+        positions[i * 3] = (Math.random() - 0.5) * 75;
+        positions[i * 3 + 1] = Math.random() * 40 + 2;
+        positions[i * 3 + 2] = (Math.random() - 0.5) * 75;
+        rainVelocities.push(0.75 + Math.random() * 0.45);
+      }
+      rainGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+      const rainMat = new THREE.PointsMaterial({
+        color: 0x93C5FD,
+        size: 0.28,
+        transparent: true,
+        opacity: 0.75,
+        blending: THREE.AdditiveBlending
+      });
+
+      rainParticles = new THREE.Points(rainGeometry, rainMat);
+      rainParticles.visible = false;
+      scene.add(rainParticles);
+    }
+
+    // 9. LOOP DE ANIMAÇÃO (60 FPS)
+    let clock = new THREE.Clock();
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const elapsedTime = clock.getElapsedTime();
+
+      // Interpolação suave do Hex-Radar
+      currentHexScale += (targetHexScale - currentHexScale) * 0.06;
+      const pulse = Math.sin(elapsedTime * 2.8) * 0.015;
+      const scaleVal = currentHexScale + pulse;
+
+      // Atualiza os uniforms da Projeção Shader no Terreno
+      radarUniforms.uRadarRadius.value = scaleVal;
+      radarUniforms.uScanAngle.value = elapsedTime * 0.6;
+      radarUniforms.uTime.value = elapsedTime;
+
+      // Atualiza a Linha Vetorial de Contorno Favo ao longo do Relevo
+      if (hexOutline) {
+        const outlinePos = hexOutline.geometry.attributes.position;
+        const PERIM_POINTS = 180;
+        for (let p = 0; p <= PERIM_POINTS; p++) {
+          const theta = (p / PERIM_POINTS) * Math.PI * 2;
+          const pt = getUnitHexagonPoint(theta);
+          const wx = pt.x * scaleVal;
+          const wz = pt.z * scaleVal;
+          const wy = getSurfaceHeight(wx, wz) + 0.08;
+          outlinePos.setXYZ(p, wx, wy, wz);
+        }
+        outlinePos.needsUpdate = true;
+      }
+
+      // Sentinelas
+      sentryBees.forEach((sb) => {
+        const mesh = sb.mesh;
+        mesh.position.y = sb.basePos.y + Math.sin(elapsedTime * 4 + sb.phase) * 0.1;
+        mesh.position.x = sb.basePos.x + Math.cos(elapsedTime * 3 + sb.phase) * 0.07;
+
+        const wingL = mesh.children[2];
+        const wingR = mesh.children[3];
+        if (wingL && wingR) {
+          wingL.rotation.z = Math.sin(elapsedTime * 35) * 0.6;
+          wingR.rotation.z = -Math.sin(elapsedTime * 35) * 0.6;
+        }
+      });
+
+      // Movimentação Caótica e Acelerada das Formigas Patrulheiras da Área de Risco
+      patrolAnts.forEach(ant => {
+        // Ângulo contínuo com velocidade rápida
+        const currentAngle = ant.angle + elapsedTime * ant.speed * 0.35;
+        // Oscilação radial (wobble) simulando desvios e patrulha rápida
+        const radialWobble = Math.sin(elapsedTime * ant.wobbleFreq1 + ant.phase) * 0.35 +
+                             Math.cos(elapsedTime * ant.wobbleFreq2) * 0.2;
+        const currentR = Math.max(0.9, Math.min(2.8, ant.baseRadius + radialWobble));
+
+        // Posição local X e Z em torno da base do formigueiro
+        const prevX = ant.group.position.x;
+        const prevZ = ant.group.position.z;
+        const nextX = Math.cos(currentAngle) * currentR;
+        const nextZ = Math.sin(currentAngle) * currentR;
+
+        ant.group.position.x = nextX;
+        ant.group.position.z = nextZ;
+        ant.group.position.y = 0.04; // Fixo no chão plano
+
+        // Rotação da formiga apontando para a direção em que está correndo
+        const moveDirX = nextX - prevX;
+        const moveDirZ = nextZ - prevZ;
+        if (Math.hypot(moveDirX, moveDirZ) > 0.001) {
+          ant.group.rotation.y = Math.atan2(moveDirX, moveDirZ) + Math.PI / 2;
+        }
+      });
+
+      // ATUALIZAÇÃO DA CHUVA (QUEDA VERTICAL DE GOTAS)
+      if (isRaining && rainParticles && rainGeometry) {
+        const rPos = rainGeometry.attributes.position;
+        for (let i = 0; i < RAIN_COUNT; i++) {
+          let y = rPos.getY(i) - rainVelocities[i];
+          if (y < 0.05) {
+            y = 35 + Math.random() * 8; // Reset no topo
+          }
+          rPos.setY(i, y);
+        }
+        rPos.needsUpdate = true;
+      }
+
+      // Campeiras com Limitador Dinâmico, Pathfinding Inteligente e Emergency Override de Chuva
+      const currentLimitRadius = Math.max(2.5, currentHexScale * 0.94);
+      const resourceTargets = [
+        new THREE.Vector3(8, 0.6, -5),   // Flores Nativas
+        new THREE.Vector3(-9, 0.6, 7),   // Flores Nativas
+        new THREE.Vector3(6, 0.35, 9),   // Fonte de Água
+        new THREE.Vector3(14, 0.8, -12), // Flores Nativas
+      ];
+
+      flyingBees.forEach(b => {
+        const mesh = b.mesh;
+        const currentDist = Math.hypot(mesh.position.x, mesh.position.z);
+
+        // ========================================================
+        // EMERGENCY OVERRIDE (CHUVA ATIVA: RETORNO URGENTE À CAIXA)
+        // ========================================================
+        if (isRaining) {
+          b.isCollecting = false;
+          b.isReturning = true;
+
+          const toHive = new THREE.Vector3().subVectors(HIVE_ORIGIN, mesh.position);
+          toHive.y = 0;
+          const distToHive = toHive.length();
+
+          // Se a distância for menor que 0.5, abelha se recolhe dentro da caixa (visible = false)
+          if (distToHive < 0.5) {
+            mesh.visible = false;
+            b.velocity.set(0, 0, 0);
+            return;
+          } else {
+            // Voo emergencial direto e acelerado de volta para a colmeia
+            toHive.normalize().multiplyScalar(b.baseSpeed * 1.6);
+            b.velocity.lerp(toHive, 0.22);
+            mesh.position.add(b.velocity);
+            
+            const targetAngle = Math.atan2(b.velocity.x, b.velocity.z) + Math.PI / 2;
+            mesh.rotation.y = THREE.MathUtils.lerp(mesh.rotation.y, targetAngle, 0.25);
+            return;
+          }
+        } else {
+          // Sem chuva: abelhas visíveis e ativas
+          if (!mesh.visible) {
+            mesh.visible = true;
+            mesh.position.copy(HIVE_ORIGIN);
+            b.isReturning = false;
+          }
+        }
+
+        // REGRA DE COLISÃO INVISÍVEL NO LIMITE DO RADAR
+        if (currentDist >= currentLimitRadius) {
+          b.isReturning = true;
+          b.isCollecting = false;
+          const toCenter = new THREE.Vector3(-mesh.position.x, 0, -mesh.position.z).normalize();
+          b.velocity.lerp(toCenter.multiplyScalar(b.baseSpeed * 1.3), 0.18);
+          if (currentDist > currentLimitRadius + 0.3) {
+            const pullBack = currentLimitRadius / currentDist;
+            mesh.position.x *= pullBack;
+            mesh.position.z *= pullBack;
+          }
+        } else if (b.isCollecting) {
+          // PAUSA BREVE SIMULANDO COLETA NO RECURSO
+          b.collectTimer -= 0.016;
+          b.velocity.set(0, 0, 0); // para sobre o ponto
+          // Leve flutuação suave no ar enquanto coleta
+          mesh.position.y = 0.55 + Math.sin(elapsedTime * 6 + b.wobbleOffset) * 0.08;
+
+          if (b.collectTimer <= 0) {
+            b.isCollecting = false;
+            b.isReturning = true; // Inicia retorno em linha reta para a colmeia
+          }
+        } else if (b.isReturning) {
+          // Voo em linha reta voltando para a colmeia
+          const toHive = new THREE.Vector3().subVectors(HIVE_ORIGIN, mesh.position);
+          toHive.y = 0;
+          const distToHive = toHive.length();
+
+          if (distToHive < 1.2) {
+            // Chegou à colmeia: descarrega e parte para nova missão
+            b.isReturning = false;
+            if (b.role === 'forager') {
+              // 70%: escolhe novamente um recurso (Flores Nativas ou Fonte de Água)
+              b.resourceIndex = Math.floor(Math.random() * resourceTargets.length);
+              const nextRes = resourceTargets[b.resourceIndex].clone();
+              nextRes.x += (Math.random() - 0.5) * 1.0;
+              nextRes.z += (Math.random() - 0.5) * 1.0;
+              b.target.copy(nextRes);
+            } else {
+              // 30%: batedora explora uma nova coordenada nos limites do radar
+              const randomAngle = Math.random() * Math.PI * 2;
+              const randomDist = 4.0 + Math.random() * (currentLimitRadius - 4.5);
+              b.target.set(
+                Math.cos(randomAngle) * randomDist,
+                1.2 + Math.random() * 1.8,
+                Math.sin(randomAngle) * randomDist
+              );
+            }
+          } else {
+            toHive.normalize().multiplyScalar(b.baseSpeed * 1.15);
+            b.velocity.lerp(toHive, 0.12);
+          }
+        } else {
+          // Voo em direção ao alvo (Florada, Água ou Exploração)
+          const targetDist = Math.hypot(b.target.x, b.target.z);
+          if (targetDist >= currentLimitRadius) {
+            b.target.x *= (currentLimitRadius * 0.8) / targetDist;
+            b.target.z *= (currentLimitRadius * 0.8) / targetDist;
+          }
+
+          const toTarget = new THREE.Vector3().subVectors(b.target, mesh.position);
+          toTarget.y = 0;
+          const distToTarget = toTarget.length();
+
+          if (distToTarget < 1.2) {
+            if (b.role === 'forager') {
+              // Chegou ao recurso: pausa para coleta (1.5s a 2.5s)
+              b.isCollecting = true;
+              b.collectTimer = 1.5 + Math.random() * 1.0;
+            } else {
+              // Batedora alcançou o ponto de exploração e decide voltar
+              b.isReturning = true;
+            }
+          } else {
+            toTarget.normalize().multiplyScalar(b.baseSpeed);
+            b.velocity.lerp(toTarget, 0.08);
+          }
+        }
+
+        // Aplica o passo de velocidade
+        if (!b.isCollecting) {
+          mesh.position.add(b.velocity);
+          const flightY = Math.max(0.65, 1.2 + Math.sin(elapsedTime * 3.5 + b.wobbleOffset) * 0.35);
+          mesh.position.y = THREE.MathUtils.lerp(mesh.position.y, flightY, 0.1);
+
+          if (b.velocity.lengthSq() > 0.0001) {
+            const targetAngle = Math.atan2(b.velocity.x, b.velocity.z) + Math.PI / 2;
+            mesh.rotation.y = THREE.MathUtils.lerp(mesh.rotation.y, targetAngle, 0.15);
+          }
+        }
+
+        // Batimento realista de asas
+        const wingL = mesh.children[2];
+        const wingR = mesh.children[3];
+        if (wingL && wingR) {
+          wingL.rotation.z = Math.sin(elapsedTime * b.wingSpeed) * 0.7;
+          wingR.rotation.z = -Math.sin(elapsedTime * b.wingSpeed) * 0.7;
+        }
+      });
+
+      controls.update();
+      renderer.render(scene, camera);
+      if (labelRenderer) {
+        labelRenderer.render(scene, camera);
+      }
+    }
+
+    // ALTERNÂNCIA DE TEMA DARK/LIGHT
+    function toggleDarkMode() {
+      isDarkMode = !isDarkMode;
+      const html = document.documentElement;
+
+      if (isDarkMode) {
+        html.classList.add('dark');
+        localStorage.setItem('theme', 'dark');
+      } else {
+        html.classList.remove('dark');
+        localStorage.setItem('theme', 'light');
+      }
+
+      updateEnvironmentAtmosphere();
+      if (document.getElementById('view-dashboard') && !document.getElementById('view-dashboard').classList.contains('hidden')) {
+        initDashboardCharts();
+      }
+    }
+
+    // ========================================================
+    // SISTEMA CLIMÁTICO DINÂMICO (SIMULAR CHUVA & REAÇÃO)
+    // ========================================================
+    function toggleRainSimulation() {
+      isRaining = !isRaining;
+      const btn = document.getElementById('rain-toggle-btn');
+      const icon = document.getElementById('rain-btn-icon');
+      const label = document.getElementById('rain-btn-label');
+
+      if (isRaining) {
+        btn.classList.add('bg-sky-500/20', 'border-sky-500', 'text-sky-600', 'dark:text-sky-400');
+        icon.innerText = '⛈️';
+        label.innerText = 'Chovendo';
+        if (rainParticles) rainParticles.visible = true;
+      } else {
+        btn.classList.remove('bg-sky-500/20', 'border-sky-500', 'text-sky-600', 'dark:text-sky-400');
+        icon.innerText = '🌧️';
+        label.innerText = 'Chuva';
+        if (rainParticles) rainParticles.visible = false;
+      }
+
+      updateEnvironmentAtmosphere();
+    }
+
+    function updateEnvironmentAtmosphere() {
+      if (!scene) return;
+
+      const baseBg = isDarkMode ? 0x0C0E12 : 0xF8F9FA;
+      // Na chuva, mantemos tons suaves e luminosos sem escurecer a cena
+      const rainBg = isDarkMode ? 0x111622 : 0xE2E8F0;
+      const effectiveBg = isRaining ? rainBg : baseBg;
+
+      scene.background.setHex(effectiveBg);
+
+      if (scene.fog) {
+        scene.fog.color.setHex(effectiveBg);
+        if (isRaining) {
+          // Névoa suave na chuva: recuada para 35 a 90, mantendo os modelos perfeitamente iluminados e nítidos
+          scene.fog.near = 35;
+          scene.fog.far = 90;
+        } else {
+          scene.fog.near = 28;
+          scene.fog.far = 80;
+        }
+      }
+
+      // Iluminação permanece clara e com excelente contraste mesmo durante a chuva
+      const baseAmbient = isDarkMode ? 0.55 : 0.88;
+      if (ambientLightRef) {
+        ambientLightRef.intensity = isRaining ? 0.65 : baseAmbient;
+      }
+
+      const baseDir = isDarkMode ? 0.85 : 0.95;
+      if (dirLightRef) {
+        dirLightRef.intensity = isRaining ? 0.80 : baseDir;
+      }
+    }
+
+    // ========================================================
+    // MÁQUINA DO TEMPO FLORAL (SAZONALIDADE & REAÇÃO DO BIOMA)
+    // ========================================================
+    const MONTH_NAMES = [
+      '', 'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    ];
+
+    function onSeasonSliderChange(monthVal) {
+      currentSeasonMonth = parseInt(monthVal);
+      const m = currentSeasonMonth;
+
+      const monthNameEl = document.getElementById('season-month');
+      const seasonNameEl = document.getElementById('season-name');
+      const seasonIconEl = document.getElementById('season-icon');
+
+      let seasonTitle = '';
+      let seasonIcon = '🌸';
+      let seasonType = 'spring'; // 'summer', 'autumn', 'winter', 'spring'
+
+      if (m === 12 || m <= 2) {
+        seasonTitle = 'Verão Tropical (Floração Ativa)';
+        seasonIcon = '☀️';
+        seasonType = 'summer';
+      } else if (m >= 3 && m <= 5) {
+        seasonTitle = 'Outono Dourado (Seca Gradual)';
+        seasonIcon = '🍂';
+        seasonType = 'autumn';
+      } else if (m >= 6 && m <= 8) {
+        seasonTitle = 'Inverno Seco (Escassez de Néctar)';
+        seasonIcon = '❄️';
+        seasonType = 'winter';
+      } else {
+        seasonTitle = 'Primavera Floral (Safra Plena)';
+        seasonIcon = '🌸';
+        seasonType = 'spring';
+      }
+
+      if (monthNameEl) monthNameEl.innerText = `${MONTH_NAMES[m]} (Mês ${m})`;
+      if (seasonNameEl) seasonNameEl.innerText = seasonTitle;
+      if (seasonIconEl) seasonIconEl.innerText = seasonIcon;
+
+      applySeasonalBiomaColors(seasonType, m);
+    }
+
+    function applySeasonalBiomaColors(seasonType, month) {
+      if (!treeGroups || treeGroups.length === 0) return;
+
+      // Paletas Sazonais para as Árvores Low-Poly
+      let pal;
+      if (seasonType === 'spring') {
+        // Primavera: Cores vibrantes frescas
+        pal = {
+          aroeira: isDarkMode ? 0xEC4899 : 0xF472B6, // Rosa vivo
+          ipe: isDarkMode ? 0xF59E0B : 0xFBBF24,     // Amarelo favo
+          esmeralda: isDarkMode ? 0x10B981 : 0x34D399,
+          densa: isDarkMode ? 0x059669 : 0x10B981
+        };
+      } else if (seasonType === 'summer') {
+        // Verão: Folhagens maduras e tons verdes densos
+        pal = {
+          aroeira: isDarkMode ? 0xBE185D : 0xFB7185,
+          ipe: isDarkMode ? 0xD97706 : 0xF59E0B,
+          esmeralda: isDarkMode ? 0x047857 : 0x059669,
+          densa: isDarkMode ? 0x065F46 : 0x047857
+        };
+      } else if (seasonType === 'autumn') {
+        // Outono: Tons ocres, laranjas, âmbar e marrom dourado
+        pal = {
+          aroeira: isDarkMode ? 0xC2410C : 0xFB923C, // Laranja terroso
+          ipe: isDarkMode ? 0xB45309 : 0xD97706,     // Ocre
+          esmeralda: isDarkMode ? 0x854D0E : 0xCA8A04, // Folha seca
+          densa: isDarkMode ? 0x713F12 : 0xA16207
+        };
+      } else {
+        // Inverno: Folhagem seca, marrom acinzentado e verde seco
+        pal = {
+          aroeira: isDarkMode ? 0x57534E : 0x78716C, // Galhos secos
+          ipe: isDarkMode ? 0x78350F : 0x9A3412,
+          esmeralda: isDarkMode ? 0x3F3F46 : 0x71717A, // Acinzentado
+          densa: isDarkMode ? 0x27272A : 0x52525B
+        };
+      }
+
+      // Transição suave nas cores das copas
+      treeGroups.forEach(tg => {
+        let targetHex = pal.esmeralda;
+        if (tg.treeType.type === 'aroeira_rosa') targetHex = pal.aroeira;
+        else if (tg.treeType.type === 'ipe_amarelo') targetHex = pal.ipe;
+        else if (tg.treeType.type === 'mata_densa') targetHex = pal.densa;
+
+        tg.foliageMat.color.lerp(new THREE.Color(targetHex), 0.85);
+      });
+
+      // Dinâmica nos Modelos de Flores Nativas (Escassez no Inverno / Pico na Primavera)
+      pinMeshes.forEach(group => {
+        if (group.userData && group.userData.type === 'flora') {
+          if (seasonType === 'winter') {
+            // Escassez no inverno: flores encolhem suavemente
+            group.scale.lerp(new THREE.Vector3(0.45, 0.45, 0.45), 0.5);
+          } else if (seasonType === 'autumn') {
+            group.scale.lerp(new THREE.Vector3(0.75, 0.75, 0.75), 0.5);
+          } else {
+            // Primavera e Verão: flores com volume e exuberância total
+            group.scale.lerp(new THREE.Vector3(1.0, 1.0, 1.0), 0.5);
+          }
+        }
+      });
+    }
+
+    // MINIMIZAR / EXPANDIR PAINEL SUPERIOR ESQUERDO
+    let isPanelCollapsed = false;
+    function togglePanelCollapse() {
+      isPanelCollapsed = !isPanelCollapsed;
+      const content = document.getElementById('panel-expandable-content');
+      const btn = document.getElementById('btn-collapse-panel');
+      if (isPanelCollapsed) {
+        content.classList.add('hidden');
+        btn.innerText = '+';
+        btn.title = 'Expandir painel';
+      } else {
+        content.classList.remove('hidden');
+        btn.innerText = '−';
+        btn.title = 'Minimizar painel';
+      }
+    }
+
+    // INTERAÇÃO AO CLIQUE NO MODELO (RAYCASTER COM ZOOM / FOCO)
+    function focusCameraOnObject(targetPos) {
+      if (!controls || !camera) return;
+      // Centraliza controles no objeto
+      controls.target.lerp(new THREE.Vector3(targetPos.x, targetPos.y, targetPos.z), 0.8);
+      // Câmera aproxima com leve zoom isométrica
+      const zoomOffset = new THREE.Vector3(12, 11, 13);
+      camera.position.set(targetPos.x + zoomOffset.x, targetPos.y + zoomOffset.y, targetPos.z + zoomOffset.z);
+    }
+
+    function onPointerDown(event) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+
+      const interactiveObjects = [];
+      // Inclui a colmeia central
+      if (hiveMesh) interactiveObjects.push(hiveMesh);
+
+      // Inclui todos os pins visíveis (flores, bebedouros, iscas, ameaças)
+      pinMeshes.forEach(g => {
+        if (g.visible) {
+          g.traverse(child => {
+            if (child.isMesh) interactiveObjects.push(child);
+          });
+        }
+      });
+
+      const intersects = raycaster.intersectObjects(interactiveObjects);
+
+      if (intersects.length > 0) {
+        const hit = intersects[0];
+        let root = hit.object;
+
+        if (root === hiveMesh || root.parent === hiveMesh) {
+          showPinInspector({
+            name: 'Colmeia Central Mandaçaia',
+            sub: 'Caixa INPA Modelo MQA-04',
+            dist: '0m (Origem)',
+            desc: 'Matriz reprodutiva saudável com ninho, sobre-ninho e melgueira ativa com forte postura.',
+            icon: '🐝',
+            type: 'hive'
+          });
+          focusCameraOnObject(new THREE.Vector3(0, 1.9, 0));
+          return;
+        }
+
+        while (root && !root.userData?.name && root.parent) {
+          root = root.parent;
+        }
+
+        if (root && root.userData?.name) {
+          showPinInspector(root.userData);
+          focusCameraOnObject(root.position);
+        }
+      }
+    }
+
+    function showPinInspector(data) {
+      document.getElementById('inspec-title').innerText = data.name;
+      document.getElementById('inspec-desc').innerText = data.desc;
+      document.getElementById('inspec-dist').innerText = data.dist;
+      document.getElementById('inspec-icon').innerText = data.icon || (data.type === 'flora' ? '🌸' : (data.type === 'water' ? '💧' : (data.type === 'threat' ? '⚠️' : '🍯')));
+      document.getElementById('inspector-card').classList.remove('hidden');
+    }
+
+    function closeInspector() {
+      document.getElementById('inspector-card').classList.add('hidden');
+    }
+
+    function reset3DCamera() {
+      camera.position.set(26, 22, 28);
+      controls.target.set(0, 0, 0);
+    }
+
+    function toggleTopDownView() {
+      camera.position.set(0, 52, 0.1);
+      controls.target.set(0, 0, 0);
+    }
+
+    // TROCA DE ESPÉCIE SINCRONIZADA
+    function onSelectSpecies(key) {
+      currentSpeciesKey = key;
+      const config = SPECIES_CONFIG[key];
+
+      targetHexScale = config.scale3D;
+      document.getElementById('species-3d-select').value = key;
+      document.getElementById('stat-radius').innerText = `${config.radiusMeters}m`;
+      document.getElementById('stat-area').innerText = config.areaKm2;
+      document.getElementById('badge-species-name').innerText = config.name.split(' ')[0];
+      closeInspector();
+
+      // REATIVIDADE IMEDIATA: Alerta todas as abelhas sobre o novo limite
+      const newLimit = config.scale3D * 0.94;
+      flyingBees.forEach(b => {
+        const d = Math.hypot(b.mesh.position.x, b.mesh.position.z);
+        if (d >= newLimit) {
+          b.isReturning = true;
+          // Inverte/direciona vetor de velocidade de volta para o centro
+          const toCenter = new THREE.Vector3(-b.mesh.position.x, 0, -b.mesh.position.z).normalize();
+          b.velocity.copy(toCenter.multiplyScalar(b.baseSpeed * 1.5));
+        }
+      });
+    }
+
+    function selectAndGoToRadar(key) {
+      switchTab('radar');
+      onSelectSpecies(key);
+    }
+
+    let layersState = { flora: true, water: true, traps: true, threat: true };
+
+    function togglePinLayer(type) {
+      layersState[type] = !layersState[type];
+      const btn = document.getElementById(`btn-layer-${type}`);
+
+      if (layersState[type]) {
+        btn.classList.add('bg-white', 'dark:bg-[#151821]', 'text-gray-800', 'dark:text-gray-200');
+        btn.classList.remove('bg-gray-100', 'dark:bg-gray-800', 'text-gray-400');
+      } else {
+        btn.classList.remove('bg-white', 'dark:bg-[#151821]', 'text-gray-800', 'dark:text-gray-200');
+        btn.classList.add('bg-gray-100', 'dark:bg-gray-800', 'text-gray-400');
+      }
+
+      pinMeshes.forEach(group => {
+        if (group.userData && group.userData.type === type) {
+          group.visible = layersState[type];
+        }
+      });
+    }
+
+    // ========================================================
+    // CHART.JS: DATA VIZ DOS GRÁFICOS DO DASHBOARD
+    // ========================================================
+    let flightChart = null;
+    let honeyChart = null;
+
+    function initDashboardCharts() {
+      if (typeof Chart === 'undefined') return;
+
+      const isDark = document.documentElement.classList.contains('dark');
+      const textColor = isDark ? '#94A3B8' : '#64748B';
+      const gridColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
+
+      // 1. Gráfico de Área Suave: Atividade de Voo vs Temperatura
+      const flightCtx = document.getElementById('chart-flight-activity')?.getContext('2d');
+      if (flightCtx) {
+        if (flightChart) flightChart.destroy();
+
+        // Gradiente Amarelo Favo translúcido
+        const gradientHoney = flightCtx.createLinearGradient(0, 0, 0, 260);
+        gradientHoney.addColorStop(0, 'rgba(255, 195, 0, 0.45)');
+        gradientHoney.addColorStop(1, 'rgba(255, 195, 0, 0.0)');
+
+        flightChart = new Chart(flightCtx, {
+          type: 'line',
+          data: {
+            labels: ['06h', '08h', '10h', '12h', '14h', '16h', '18h'],
+            datasets: [
+              {
+                label: 'Atividade de Voo (%)',
+                data: [15, 45, 88, 96, 92, 70, 22],
+                borderColor: '#FFC300',
+                backgroundColor: gradientHoney,
+                borderWidth: 3,
+                fill: true,
+                tension: 0.4,
+                pointBackgroundColor: '#FFC300',
+                pointBorderColor: '#FFFFFF',
+                pointHoverRadius: 6,
+                yAxisID: 'y'
+              },
+              {
+                label: 'Temperatura (°C)',
+                data: [18, 21, 25, 28, 27, 24, 20],
+                borderColor: '#38BDF8',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                fill: false,
+                tension: 0.4,
+                pointBackgroundColor: '#38BDF8',
+                yAxisID: 'y1'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: isDark ? '#151821' : '#FFFFFF',
+                titleColor: isDark ? '#FFFFFF' : '#111827',
+                bodyColor: isDark ? '#CBD5E1' : '#4B5563',
+                borderColor: isDark ? '#334155' : '#E2E8F0',
+                borderWidth: 1,
+                padding: 10,
+                boxPadding: 4,
+                usePointStyle: true
+              }
+            },
+            scales: {
+              x: {
+                grid: { color: gridColor },
+                ticks: { color: textColor, font: { family: 'Inter', size: 11 } }
+              },
+              y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                min: 0,
+                max: 100,
+                grid: { color: gridColor },
+                ticks: {
+                  color: textColor,
+                  font: { family: 'Inter', size: 11 },
+                  callback: (v) => v + '%'
+                }
+              },
+              y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                min: 15,
+                max: 35,
+                grid: { drawOnChartArea: false },
+                ticks: {
+                  color: '#38BDF8',
+                  font: { family: 'Inter', size: 11 },
+                  callback: (v) => v + '°C'
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // 2. Gráfico de Barras: Mel Armazenado por Espécie
+      const honeyCtx = document.getElementById('chart-honey-species')?.getContext('2d');
+      if (honeyCtx) {
+        if (honeyChart) honeyChart.destroy();
+
+        honeyChart = new Chart(honeyCtx, {
+          type: 'bar',
+          data: {
+            labels: ['MQA', 'JTF', 'URA', 'TIU', 'MRM'],
+            datasets: [{
+              label: 'Mel (kg)',
+              data: [14.8, 6.2, 12.5, 7.1, 2.0],
+              backgroundColor: [
+                '#FFC300',
+                '#F59E0B',
+                '#D97706',
+                '#B45309',
+                '#FDE68A'
+              ],
+              borderRadius: 8,
+              borderSkipped: false,
+              barThickness: 24
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                backgroundColor: isDark ? '#151821' : '#FFFFFF',
+                titleColor: isDark ? '#FFFFFF' : '#111827',
+                bodyColor: isDark ? '#CBD5E1' : '#4B5563',
+                borderColor: isDark ? '#334155' : '#E2E8F0',
+                borderWidth: 1,
+                padding: 10,
+                callbacks: {
+                  label: (ctx) => `Estoque: ${ctx.parsed.y} kg`
+                }
+              }
+            },
+            scales: {
+              x: {
+                grid: { display: false },
+                ticks: { color: textColor, font: { family: 'Inter', size: 11, weight: 'bold' } }
+              },
+              y: {
+                grid: { color: gridColor },
+                ticks: {
+                  color: textColor,
+                  font: { family: 'Inter', size: 11 },
+                  callback: (v) => v + ' kg'
+                }
+              }
+            }
+          }
+        });
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-view').forEach(v => v.classList.add('hidden'));
+
+      if (tabId === 'radar') {
+        document.getElementById('view-radar').classList.remove('hidden');
+        onWindowResize();
+      } else if (tabId === 'dashboard') {
+        document.getElementById('view-dashboard').classList.remove('hidden');
+        setTimeout(() => {
+          initDashboardCharts();
+        }, 50);
+      } else if (tabId === 'species') {
+        document.getElementById('view-species').classList.remove('hidden');
+      } else if (tabId === 'management') {
+        document.getElementById('view-management').classList.remove('hidden');
+      }
+
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('bg-white', 'dark:bg-[#1E2330]', 'text-gray-900', 'dark:text-white', 'shadow-sm', 'border');
+        b.classList.add('text-gray-600', 'dark:text-gray-400');
+      });
+
+      const activeBtn = document.getElementById(`nav-${tabId}`);
+      if (activeBtn) {
+        activeBtn.classList.add('bg-white', 'dark:bg-[#1E2330]', 'text-gray-900', 'dark:text-white', 'shadow-sm', 'border');
+        activeBtn.classList.remove('text-gray-600', 'dark:text-gray-400');
+      }
+    }
+
+    function openModal() {
+      document.getElementById('quick-modal').classList.remove('hidden');
+    }
+    function closeModal() {
+      document.getElementById('quick-modal').classList.add('hidden');
+    }
+
+    function saveLog(e) {
+      e.preventDefault();
+      const hive = document.getElementById('modal-hive').value;
+      const type = document.querySelector('input[name="modal-type"]:checked').value;
+      const details = document.getElementById('modal-details').value;
+
+      let icon = '💧';
+      let borderClass = 'border-sky-500';
+      let bgClass = 'bg-sky-100 dark:bg-sky-950/80 text-sky-600 dark:text-sky-300';
+      let tagBg = 'bg-sky-500/10 text-sky-600 dark:text-sky-400 border-sky-500/20';
+      let actionTitle = 'Alimentação Suplementar';
+
+      if (type === 'Colheita') {
+        icon = '🍯';
+        borderClass = 'border-honey-500';
+        bgClass = 'bg-honey-100 dark:bg-honey-950/80 text-honey-700 dark:text-honey-400';
+        tagBg = 'bg-honey-500/10 text-honey-700 dark:text-honey-400 border-honey-500/20';
+        actionTitle = 'Colheita Sanitária de Mel';
+      } else if (type === 'Divisão') {
+        icon = '🌱';
+        borderClass = 'border-emerald-500';
+        bgClass = 'bg-emerald-100 dark:bg-emerald-950/80 text-emerald-600 dark:text-emerald-400';
+        tagBg = 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20';
+        actionTitle = 'Divisão de Enxame';
+      }
+
+      const container = document.getElementById('logs-container');
+      const item = document.createElement('div');
+      item.className = 'relative group animate-fade-in';
+      item.innerHTML = `
+        <div class="absolute -left-[31px] sm:-left-[37px] top-1.5 w-8 h-8 rounded-full ${bgClass} border-2 ${borderClass} flex items-center justify-center text-sm shadow-sm group-hover:scale-110 transition-transform">
+          ${icon}
+        </div>
+        <div class="p-5 rounded-2xl bg-gray-50 dark:bg-[#0E1015] border border-gray-200/80 dark:border-gray-800/80 hover:${borderClass} transition-all">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-gray-200/60 dark:border-gray-800">
+            <div class="flex items-center gap-2.5">
+              <span class="px-2.5 py-1 rounded-lg text-xs font-bold ${tagBg} border">
+                ${actionTitle}
+              </span>
+              <span class="px-2 py-0.5 rounded-md text-[11px] font-mono font-bold bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700">
+                ${hive}
+              </span>
+            </div>
+            <div class="flex items-center gap-2 text-xs text-honey-700 dark:text-honey-400 font-mono font-bold">
+              <span>Agora mesmo</span>
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              <span class="text-emerald-500 font-sans font-semibold">Novo</span>
+            </div>
+          </div>
+          <p class="text-xs text-gray-700 dark:text-gray-300 mt-3 leading-relaxed">
+            ${details}
+          </p>
+          <div class="mt-3 flex items-center gap-4 text-[11px] text-gray-500 dark:text-gray-400">
+            <span>Registro: <strong>Técnico Responsável</strong></span>
+            <span>•</span>
+            <span>Status: <strong>Validado no Meliponário</strong></span>
+          </div>
+        </div>
+      `;
+      container.insertBefore(item, container.firstChild);
+      closeModal();
+      switchTab('management');
+    }
+
+    function onWindowResize() {
+      const container = document.getElementById('three-canvas-container');
+      if (!container || !renderer || !camera) return;
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+      if (labelRenderer) {
+        labelRenderer.setSize(width, height);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // Inicia no Clean Light Mode (#FFFFFF / #F8F9FA) conforme solicitado
+      isDarkMode = false;
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('theme', 'light');
+
+      initThreeJS();
+      onSelectSpecies('mandacaia');
+    });
+  </script>
+</body>
+</html>
