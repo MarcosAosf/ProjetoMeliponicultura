@@ -90,6 +90,89 @@
       transform: translateY(0);
     }
 
+    /* PADRÃO DE FUNDO QUENTE: GRADIENTE MEL SUAVE + TEXTURA DE FAVO DOURADA */
+    .honeycomb-pattern {
+      background-color: #FFFDF7;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(255, 195, 0, 0.16) 0px, transparent 55%),
+        radial-gradient(at 100% 15%, rgba(245, 158, 11, 0.12) 0px, transparent 45%),
+        radial-gradient(at 50% 65%, rgba(254, 240, 138, 0.22) 0px, transparent 65%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='56' viewBox='0 0 32 56'%3E%3Cpath fill-rule='evenodd' d='M16 10.66l14.85 8.57v17.14L16 44.94 1.15 36.37V19.23L16 10.66zm-13.7 9.83v14.48L16 43.14l13.7-7.91V20.49L16 12.58 2.3 20.49zM0 0h32v2H0V0zm0 54h32v2H0v-2z' fill='%23D97706' fill-opacity='0.08'/%3E%3C/svg%3E");
+      background-attachment: fixed;
+    }
+    .dark .honeycomb-pattern {
+      background-color: #0C0E12;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(245, 158, 11, 0.08) 0px, transparent 50%),
+        radial-gradient(at 100% 20%, rgba(217, 119, 6, 0.06) 0px, transparent 45%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='56' viewBox='0 0 32 56'%3E%3Cpath fill-rule='evenodd' d='M16 10.66l14.85 8.57v17.14L16 44.94 1.15 36.37V19.23L16 10.66zm-13.7 9.83v14.48L16 43.14l13.7-7.91V20.49L16 12.58 2.3 20.49zM0 0h32v2H0V0zm0 54h32v2H0v-2z' fill='%23FFC300' fill-opacity='0.05'/%3E%3C/svg%3E");
+    }
+
+    /* ONDAS ORGÂNICAS DE MEL ESCORRENDO (HONEY DRIP SVG) */
+    .honey-drip-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 38px;
+      pointer-events: none;
+      z-index: 10;
+      opacity: 0.92;
+      filter: drop-shadow(0 4px 6px rgba(217, 119, 6, 0.15));
+    }
+    .dark .honey-drip-top {
+      opacity: 0.65;
+      filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+    }
+
+    /* TEXTURA DE FAVO DOURADA PARA O HERO ESCURO */
+    .hero-honeycomb-bg {
+      background-color: #111111;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='70' viewBox='0 0 40 70'%3E%3Cpath fill-rule='evenodd' d='M20 13.2l18.5 10.7v21.4L20 56 1.5 45.3V23.9L20 13.2zm-16 12v18.7l16 9.3 16-9.3V25.2L20 16 4 25.2z' fill='%23FFC300' fill-opacity='0.07'/%3E%3C/svg%3E");
+    }
+
+    /* ÍCONE EM FORMA HEXAGONAL / REDONDA PREMIUM COM FUNDO DOURADO */
+    .feature-card-icon-wrapper {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background-color: rgba(255, 195, 0, 0.2);
+      border: 1px solid rgba(255, 195, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .premium-feature-card:hover .feature-card-icon-wrapper {
+      transform: scale(1.12) rotate(6deg);
+      background-color: rgba(255, 195, 0, 0.28);
+      box-shadow: 0 10px 25px -5px rgba(255, 195, 0, 0.45);
+    }
+
+    /* CARD DE PRODUTO PREMIUM (VOLUMETRIC NEUMORPHISM COM BRILHO DOURADO) */
+    .premium-feature-card {
+      background: #FFFFFF !important;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px rgba(255, 195, 0, 0.15), 0 5px 15px rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(255, 195, 0, 0.2);
+      transition: all 0.3s ease;
+    }
+    .premium-feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 45px rgba(255, 195, 0, 0.25), 0 10px 20px rgba(0, 0, 0, 0.08);
+      border-color: rgba(255, 195, 0, 0.45);
+    }
+    .dark .premium-feature-card {
+      background: #14171E !important;
+      box-shadow: 0 15px 35px rgba(255, 195, 0, 0.12), 0 5px 20px rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(255, 195, 0, 0.25);
+    }
+    .dark .premium-feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 45px rgba(255, 195, 0, 0.22), 0 12px 25px rgba(0, 0, 0, 0.7);
+      border-color: rgba(255, 195, 0, 0.5);
+    }
+
     #three-canvas-container {
       position: absolute;
       inset: 0;
@@ -208,7 +291,7 @@
   <!-- ======================================================== -->
   <!-- BARRA SUPERIOR: ESTILO APPLE / STRIPE                    -->
   <!-- ======================================================== -->
-  <header class="w-full bg-white/90 dark:bg-[#0E1015]/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800/80 px-6 lg:px-10 py-3 sticky top-0 z-40 transition-colors">
+  <header class="w-full bg-white/95 dark:bg-[#0E1015]/95 backdrop-blur-md border-b border-gray-100 dark:border-gray-800/80 px-6 lg:px-10 py-3 sticky top-0 z-[9999] transition-colors relative">
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-6">
       
       <!-- Logotipo & Nome -->
@@ -293,36 +376,55 @@
   <!-- ======================================================== -->
   <!-- ÁREA PRINCIPAL: NAVEGAÇÃO DE VIEWS / ABAS                -->
   <!-- ======================================================== -->
-  <main class="relative flex-1 w-full overflow-y-auto min-h-[calc(100vh-60px)] bg-[#F8F9FA] dark:bg-[#0C0E12] transition-colors">
+  <main class="relative flex-1 w-full overflow-y-auto min-h-[calc(100vh-60px)] honeycomb-pattern transition-colors">
     
+    <!-- EFEITO ORGÂNICO: MEL ESCORRENDO NO TOPO DA PÁGINA (HONEY DRIP) -->
+    <div class="honey-drip-top">
+      <svg class="w-full h-full" viewBox="0 0 1440 38" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0,0 L1440,0 L1440,10 C1400,10 1385,28 1360,28 C1335,28 1320,8 1290,8 C1260,8 1245,22 1220,22 C1195,22 1180,6 1150,6 C1120,6 1105,32 1075,32 C1045,32 1030,12 1000,12 C970,12 955,24 930,24 C905,24 890,7 860,7 C830,7 815,35 780,35 C745,35 730,9 695,9 C660,9 645,20 620,20 C595,20 580,5 550,5 C520,5 505,30 470,30 C435,30 420,10 390,10 C360,10 345,26 315,26 C285,26 270,8 240,8 C210,8 195,33 160,33 C125,33 110,14 80,14 C50,14 35,25 0,10 Z" fill="url(#honey-drip-gradient)"/>
+        <defs>
+          <linearGradient id="honey-drip-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.85"/>
+            <stop offset="30%" stop-color="#FFC300" stop-opacity="0.95"/>
+            <stop offset="70%" stop-color="#FBBF24" stop-opacity="0.9"/>
+            <stop offset="100%" stop-color="#D97706" stop-opacity="0.85"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
     <!-- ABA INFORMATIVA: INÍCIO / SOBRE O SISTEMA -->
     <section id="view-home" class="tab-view max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12 block">
       
-      <!-- HERO SECTION INFORMATIVA -->
-      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-500/10 via-amber-400/5 to-transparent dark:from-honey-500/15 dark:via-[#14171E] dark:to-[#0D0F12] border border-amber-500/20 dark:border-amber-400/20 p-8 sm:p-12 shadow-sm">
-        <div class="max-w-3xl space-y-5">
-          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-700 dark:text-honey-400 border border-amber-500/30">
-            <span class="w-2 h-2 rounded-full bg-honey-500 animate-pulse"></span>
+      <!-- HERO SECTION INFORMATIVA: DESIGN TEMÁTICO DE ALTO CONTRASTE (PRETO/CHUMBO + FAVO ILUMINADO) -->
+      <div class="relative overflow-hidden rounded-3xl hero-honeycomb-bg border border-amber-500/30 p-8 sm:p-12 shadow-2xl">
+        <!-- Glow radial dourado sutil no fundo do banner -->
+        <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-honey-500/10 blur-3xl pointer-events-none"></div>
+        <div class="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-amber-600/10 blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-3xl space-y-6">
+          <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold bg-honey-500/15 text-honey-400 border border-honey-500/30 backdrop-blur-sm">
+            <span class="w-2 h-2 rounded-full bg-honey-400 animate-pulse"></span>
             Plataforma 4.0 de Abelhas Sem Ferrão (ASF)
           </div>
           
-          <h1 class="text-3xl sm:text-5xl font-display font-extrabold text-gray-900 dark:text-white leading-tight">
-            Tecnologia e Ecologia para a <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-honey-500 to-amber-400">Meliponicultura do Futuro</span>
+          <h1 class="text-3xl sm:text-5xl font-display font-extrabold text-white leading-tight">
+            Tecnologia e Ecologia para a <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-honey-500 to-yellow-300">Meliponicultura do Futuro</span>
           </h1>
           
-          <p class="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-            O <strong>MeliponaOS</strong> é um ecossistema inteligente de gestão meliponícola que une biologia ancestral e inovação. A plataforma auxilia criadores, pesquisadores e conservacionistas no monitoramento ambiental, georreferenciamento de pasto floral e saúde das colmeias nativas.
+          <p class="text-base sm:text-lg text-gray-300 leading-relaxed font-normal">
+            O <strong class="text-white font-semibold">MeliponaOS</strong> é um ecossistema inteligente de gestão meliponícola que une biologia ancestral e inovação. A plataforma auxilia criadores, pesquisadores e conservacionistas no monitoramento ambiental, georreferenciamento de pasto floral e saúde das colmeias nativas.
           </p>
 
-          <div class="flex flex-wrap items-center gap-4 pt-2">
-            <button onclick="switchTab('radar')" class="inline-flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-honey-500 hover:bg-honey-600 text-gray-950 font-bold text-sm shadow-md transition-all hover:scale-[1.02]">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+          <div class="flex flex-wrap items-center gap-4 pt-3">
+            <button onclick="switchTab('radar')" class="inline-flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-honey-500 hover:bg-honey-400 text-gray-950 font-bold text-sm shadow-glow-honey transition-all hover:scale-[1.02] cursor-pointer">
+              <svg class="w-5 h-5 text-gray-950" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
               <span>Abrir Hex-Radar 3D</span>
             </button>
-            <button onclick="switchTab('dashboard')" class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white dark:bg-[#1E2330] hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-white font-semibold text-sm border border-gray-200 dark:border-gray-700 shadow-sm transition-all">
+            <button onclick="switchTab('dashboard')" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-[#1A1D24] hover:bg-[#232732] text-white font-semibold text-sm border border-gray-700/80 shadow-sm transition-all hover:scale-[1.01] cursor-pointer">
               <span>Acessar Meliponário</span>
             </button>
-            <button onclick="switchTab('species')" class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium text-sm transition-all">
+            <button onclick="switchTab('species')" class="inline-flex items-center gap-2 px-5 py-3.5 rounded-2xl text-honey-400 hover:text-honey-300 font-semibold text-sm transition-all cursor-pointer">
               <span>Catálogo de Espécies →</span>
             </button>
           </div>
@@ -339,65 +441,66 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           
           <!-- Card 1 -->
-          <div class="p-6 rounded-3xl bg-white dark:bg-[#14171E] border border-gray-200/80 dark:border-gray-800 shadow-sm flex flex-col justify-between hover:border-amber-400/50 transition-all">
-            <div class="space-y-3">
-              <div class="w-12 h-12 rounded-2xl bg-amber-500/10 dark:bg-amber-400/10 text-amber-600 dark:text-honey-400 flex items-center justify-center text-2xl font-bold">
+          <div class="premium-feature-card group p-7 flex flex-col justify-between">
+            <div>
+              <!-- Cápsula com Amarelo Translúcido e Ícone Maior -->
+              <div class="feature-card-icon-wrapper text-3xl font-bold shadow-sm">
                 🗺️
               </div>
-              <h3 class="text-lg font-bold text-gray-900 dark:text-white">Hex-Radar de Voo</h3>
-              <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+              <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-5">Hex-Radar de Voo</h3>
+              <p class="text-sm text-[#555555] dark:text-gray-300 leading-relaxed mt-2.5">
                 Mapeia o raio de forrageamento de cada espécie em malha hexagonal 3D, identificando floradas de néctar, bebedouros seguros, ninhos-isca e pontos de risco ambiental.
               </p>
             </div>
-            <button onclick="switchTab('radar')" class="mt-4 text-xs font-bold text-amber-600 dark:text-honey-400 hover:underline inline-flex items-center gap-1">
+            <button onclick="switchTab('radar')" class="mt-6 pt-2 text-sm font-bold text-honey-600 dark:text-honey-400 hover:text-amber-700 dark:hover:text-amber-300 inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-transform cursor-pointer">
               Explorar Mapa 3D →
             </button>
           </div>
 
           <!-- Card 2 -->
-          <div class="p-6 rounded-3xl bg-white dark:bg-[#14171E] border border-gray-200/80 dark:border-gray-800 shadow-sm flex flex-col justify-between hover:border-amber-400/50 transition-all">
-            <div class="space-y-3">
-              <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl font-bold">
+          <div class="premium-feature-card group p-7 flex flex-col justify-between">
+            <div>
+              <div class="feature-card-icon-wrapper text-3xl font-bold shadow-sm">
                 📊
               </div>
-              <h3 class="text-lg font-bold text-gray-900 dark:text-white">Telemetria & Biometria</h3>
-              <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+              <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-5">Telemetria & Biometria</h3>
+              <p class="text-sm text-[#555555] dark:text-gray-300 leading-relaxed mt-2.5">
                 Monitoramento de dados vitais das caixas: temperatura interna de ninho, umidade relativa, pesagem automática e frequência bioacústica do enxame.
               </p>
             </div>
-            <button onclick="switchTab('dashboard')" class="mt-4 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
+            <button onclick="switchTab('dashboard')" class="mt-6 pt-2 text-sm font-bold text-honey-600 dark:text-honey-400 hover:text-amber-700 dark:hover:text-amber-300 inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-transform cursor-pointer">
               Ver Meliponário →
             </button>
           </div>
 
           <!-- Card 3 -->
-          <div class="p-6 rounded-3xl bg-white dark:bg-[#14171E] border border-gray-200/80 dark:border-gray-800 shadow-sm flex flex-col justify-between hover:border-amber-400/50 transition-all">
-            <div class="space-y-3">
-              <div class="w-12 h-12 rounded-2xl bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center text-2xl font-bold">
+          <div class="premium-feature-card group p-7 flex flex-col justify-between">
+            <div>
+              <div class="feature-card-icon-wrapper text-3xl font-bold shadow-sm">
                 🐝
               </div>
-              <h3 class="text-lg font-bold text-gray-900 dark:text-white">Enciclopédia Nativa</h3>
-              <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+              <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-5">Enciclopédia Nativa</h3>
+              <p class="text-sm text-[#555555] dark:text-gray-300 leading-relaxed mt-2.5">
                 Acervo de fichas ecológicas completas das abelhas sem ferrão (Jataí, Mandaçaia, Uruçu, Tiúba e Mirim) com padrão de caixas racionais e medidas.
               </p>
             </div>
-            <button onclick="switchTab('species')" class="mt-4 text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline inline-flex items-center gap-1">
+            <button onclick="switchTab('species')" class="mt-6 pt-2 text-sm font-bold text-honey-600 dark:text-honey-400 hover:text-amber-700 dark:hover:text-amber-300 inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-transform cursor-pointer">
               Consultar Espécies →
             </button>
           </div>
 
           <!-- Card 4 -->
-          <div class="p-6 rounded-3xl bg-white dark:bg-[#14171E] border border-gray-200/80 dark:border-gray-800 shadow-sm flex flex-col justify-between hover:border-amber-400/50 transition-all">
-            <div class="space-y-3">
-              <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center text-2xl font-bold">
+          <div class="premium-feature-card group p-7 flex flex-col justify-between">
+            <div>
+              <div class="feature-card-icon-wrapper text-3xl font-bold shadow-sm">
                 📋
               </div>
-              <h3 class="text-lg font-bold text-gray-900 dark:text-white">Diário de Manejo</h3>
-              <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+              <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-5">Diário de Manejo</h3>
+              <p class="text-sm text-[#555555] dark:text-gray-300 leading-relaxed mt-2.5">
                 Cadastre e acompanhe intervenções de campo em segundos: alimentação suplementar, divisão de ninhos, colheita sustentável e sanidade preventiva.
               </p>
             </div>
-            <button onclick="switchTab('management')" class="mt-4 text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center gap-1">
+            <button onclick="switchTab('management')" class="mt-6 pt-2 text-sm font-bold text-honey-600 dark:text-honey-400 hover:text-amber-700 dark:hover:text-amber-300 inline-flex items-center gap-1.5 group-hover:translate-x-1 transition-transform cursor-pointer">
               Registrar Manejo →
             </button>
           </div>
@@ -406,19 +509,28 @@
       </div>
 
       <!-- SEÇÃO GUIA RÁPIDO DE BOAS PRÁTICAS -->
-      <div class="rounded-3xl bg-gray-50 dark:bg-[#12151C] border border-gray-200/70 dark:border-gray-800 p-8 space-y-6">
-        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Importância da Preservação das Abelhas Sem Ferrão (ASF)</h3>
+      <div class="rounded-3xl bg-white/80 dark:bg-[#12151C]/90 backdrop-blur-sm border border-gray-200/80 dark:border-gray-800 p-8 space-y-6 shadow-sm">
+        <div class="flex items-center gap-2.5">
+          <span class="text-xl">🍯</span>
+          <h3 class="text-xl font-bold text-gray-900 dark:text-white">Importância da Preservação das Abelhas Sem Ferrão (ASF)</h3>
+        </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
-          <div class="p-4 rounded-2xl bg-white dark:bg-[#1A1D26] border border-gray-200/60 dark:border-gray-800">
-            <h4 class="font-bold text-gray-900 dark:text-white text-sm mb-1.5">🌱 Polinização de Matas e Culturas</h4>
+          <div class="p-5 rounded-2xl bg-gray-50/80 dark:bg-[#1A1D26] border border-gray-200/70 dark:border-gray-800">
+            <h4 class="font-bold text-gray-900 dark:text-white text-sm mb-1.5 flex items-center gap-1.5">
+              <span>🌱</span> Polinização de Matas e Culturas
+            </h4>
             Responsáveis por polinizar até 90% das árvores da Mata Atlântica e do Cerrado, essenciais para a regeneração florestal e frutos nativos.
           </div>
-          <div class="p-4 rounded-2xl bg-white dark:bg-[#1A1D26] border border-gray-200/60 dark:border-gray-800">
-            <h4 class="font-bold text-gray-900 dark:text-white text-sm mb-1.5">🍯 Mel Medicinal e Gastronomia</h4>
+          <div class="p-5 rounded-2xl bg-gray-50/80 dark:bg-[#1A1D26] border border-gray-200/70 dark:border-gray-800">
+            <h4 class="font-bold text-gray-900 dark:text-white text-sm mb-1.5 flex items-center gap-1.5">
+              <span>🍯</span> Mel Medicinal e Gastronomia
+            </h4>
             Produzem méis singulares de altíssimo valor biológico, ricos em flavonoides, acidez nobre e propriedades antimicrobianas naturais.
           </div>
-          <div class="p-4 rounded-2xl bg-white dark:bg-[#1A1D26] border border-gray-200/60 dark:border-gray-800">
-            <h4 class="font-bold text-gray-900 dark:text-white text-sm mb-1.5">🛡️ Bioindicadores de Qualidade</h4>
+          <div class="p-5 rounded-2xl bg-gray-50/80 dark:bg-[#1A1D26] border border-gray-200/70 dark:border-gray-800">
+            <h4 class="font-bold text-gray-900 dark:text-white text-sm mb-1.5 flex items-center gap-1.5">
+              <span>🛡️</span> Bioindicadores de Qualidade
+            </h4>
             Extremamente sensíveis a agrotóxicos e desmatamento. O monitoramento pelo Hex-Radar protege colmeias de contaminações fatais.
           </div>
         </div>
@@ -431,6 +543,18 @@
       
       <!-- CANVAS THREE.JS -->
       <div id="three-canvas-container"></div>
+
+      <!-- BANNER SUPERIOR DE MODO DE POSICIONAMENTO COM O MOUSE (MODO CONSTRUTOR) -->
+      <div id="click-placement-banner" class="hidden absolute top-4 left-1/2 -translate-x-1/2 z-30 px-5 py-2.5 rounded-2xl bg-amber-500/95 text-gray-950 shadow-2xl backdrop-blur-md flex items-center gap-3 border border-amber-300 font-sans transition-all animate-bounce-subtle">
+        <span id="placement-banner-icon" class="text-xl">🔨</span>
+        <div>
+          <div id="placement-banner-title" class="text-xs font-black uppercase tracking-wider">Modo Construtor Ativo</div>
+          <div id="placement-banner-desc" class="text-[11px] font-medium text-amber-950/80">Mova o cursor sobre o chão e clique no ponto onde deseja fixar o elemento</div>
+        </div>
+        <button onclick="cancelClickPlacement()" class="ml-2 px-2.5 py-1 rounded-xl bg-gray-950 text-white text-[11px] font-bold hover:bg-gray-800 transition-colors cursor-pointer">
+          Cancelar
+        </button>
+      </div>
 
       <!-- PAINEL COMPACTO NO CANTO SUPERIOR ESQUERDO COM MINIMIZAR -->
       <div id="radar-control-panel" class="absolute top-4 left-4 z-20 w-64 max-w-[calc(100vw-32px)] flex flex-col gap-2 pointer-events-auto transition-all duration-300">
@@ -455,15 +579,10 @@
 
           <!-- Conteúdo que pode ser recolhido -->
           <div id="panel-expandable-content" class="space-y-2">
-            <!-- Botões de Ação para Adicionar Caixas -->
-            <div class="grid grid-cols-2 gap-1.5">
-              <button onclick="openAddHiveModal(false)" class="py-2 px-2 rounded-xl bg-honey-500 hover:bg-honey-600 text-gray-950 font-bold text-[11px] shadow-sm flex items-center justify-center gap-1 transition-all hover:scale-[1.02] cursor-pointer" title="Adicionar caixa com coordenadas no mapa">
-                <span>➕</span> Nova Caixa
-              </button>
-              <button onclick="openAddHiveModal(true)" class="py-2 px-2 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-950 hover:bg-gray-800 dark:hover:bg-gray-100 font-bold text-[11px] shadow-sm flex items-center justify-center gap-1 transition-all hover:scale-[1.02] cursor-pointer" title="Usar sinal de GPS do dispositivo">
-                <span>📍</span> Via GPS
-              </button>
-            </div>
+            <!-- Botão de Ação Rápida para Nova Caixa -->
+            <button onclick="activateBuilderPlacement('hive')" class="w-full py-2 px-3 rounded-xl bg-honey-500 hover:bg-honey-600 text-gray-950 font-bold text-[11px] shadow-sm flex items-center justify-center gap-1.5 transition-all hover:scale-[1.01] cursor-pointer" title="Adicionar colmeia clicando no terreno">
+              <span>➕</span> Adicionar Nova Caixa
+            </button>
 
             <!-- Seletor de Espécie -->
             <div class="relative">
@@ -508,39 +627,65 @@
         </div>
 
         <!-- Card de Inspeção Rápida -->
-        <div id="inspector-card" class="hidden p-3 rounded-2xl glass-panel shadow-apple space-y-1 transition-all text-xs">
+        <div id="inspector-card" class="hidden p-3 rounded-2xl glass-panel shadow-apple space-y-2 transition-all text-xs">
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-1.5">
               <span id="inspec-icon" class="text-sm">🌸</span>
               <h4 id="inspec-title" class="font-bold text-gray-900 dark:text-white text-xs">Aroeira</h4>
             </div>
-            <button onclick="closeInspector()" class="text-gray-400 hover:text-black dark:hover:text-white text-xs">✕</button>
+            <button onclick="closeInspector()" class="text-gray-400 hover:text-black dark:hover:text-white text-xs cursor-pointer">✕</button>
           </div>
           <p id="inspec-desc" class="text-[10px] text-gray-600 dark:text-gray-300 leading-snug">
             Flores ricas em néctar e resina protetora.
           </p>
           <div class="pt-1 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-[10px] text-gray-500 dark:text-gray-400">
-            <span>Distância:</span>
+            <span>Posição:</span>
             <span id="inspec-dist" class="font-bold text-honey-600">380m</span>
           </div>
-        </div>
 
-        <!-- Card de Status do Mapeamento Real OSM -->
-        <div id="osm-status-card" class="hidden p-3 rounded-2xl glass-panel shadow-apple space-y-1 text-xs transition-all border border-sky-500/20">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-1.5 font-bold text-gray-900 dark:text-white text-[11px]">
-              <span id="osm-status-icon">🌐</span>
-              <span id="osm-status-title">Geografia Real (OSM)</span>
-            </div>
-            <span id="osm-status-badge" class="px-2 py-0.5 rounded-full text-[9px] font-semibold bg-sky-500/15 text-sky-600 dark:text-sky-400 border border-sky-500/30">
-              Carregando
-            </span>
+          <!-- BOTÃO DE EXCLUSÃO (CAIXAS, CASAS, ÁRVORES, FONTES OU AMEAÇAS) -->
+          <div id="inspec-delete-container" class="hidden pt-2 border-t border-gray-100 dark:border-gray-800">
+            <button id="btn-delete-inspected" onclick="onDeleteCurrentInspectedItem()" class="w-full py-1.5 px-3 rounded-xl border border-red-500/80 hover:bg-red-500 hover:text-white text-red-600 dark:text-red-400 text-[11px] font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm group">
+              <span class="group-hover:scale-110 transition-transform">🗑️</span>
+              <span id="btn-delete-label">Excluir Item</span>
+            </button>
           </div>
-          <p id="osm-status-detail" class="text-[10px] text-gray-500 dark:text-gray-400 leading-tight">
-            Consultando malha viária, quadras e edificações reais no raio de 1km...
-          </p>
         </div>
 
+      </div>
+
+      <!-- BARRA DE FERRAMENTAS DO CONSTRUTOR 3D (PAINEL ELEGANTE NO TOPO / MEIO) -->
+      <div id="builder-toolbar" class="absolute top-4 right-4 z-20 flex flex-col gap-2 pointer-events-auto">
+        <div class="p-2.5 rounded-2xl glass-panel shadow-apple flex flex-col gap-1.5 text-xs">
+          <div class="flex items-center gap-1.5 px-1 pb-1 border-b border-gray-200/60 dark:border-gray-800 text-[11px] font-bold text-gray-800 dark:text-gray-200">
+            <span>🔨</span>
+            <span>Modo Construtor 3D</span>
+          </div>
+
+          <!-- Grade de Ferramentas / Elementos -->
+          <div class="grid grid-cols-1 gap-1">
+            <button onclick="activateBuilderPlacement('hive')" class="builder-tool-btn flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-honey-500/20 hover:text-honey-700 dark:hover:text-honey-400 text-gray-700 dark:text-gray-200 font-semibold text-[11px] transition-all cursor-pointer">
+              <span class="text-base">📦</span>
+              <span>Nova Colmeia</span>
+            </button>
+            <button onclick="activateBuilderPlacement('house')" class="builder-tool-btn flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-amber-500/20 hover:text-amber-700 dark:hover:text-amber-400 text-gray-700 dark:text-gray-200 font-semibold text-[11px] transition-all cursor-pointer">
+              <span class="text-base">🏠</span>
+              <span>Casa / Galpão</span>
+            </button>
+            <button onclick="activateBuilderPlacement('tree')" class="builder-tool-btn flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-emerald-500/20 hover:text-emerald-700 dark:hover:text-emerald-400 text-gray-700 dark:text-gray-200 font-semibold text-[11px] transition-all cursor-pointer">
+              <span class="text-base">🌸</span>
+              <span>Árvore Frutífera</span>
+            </button>
+            <button onclick="activateBuilderPlacement('water')" class="builder-tool-btn flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-sky-500/20 hover:text-sky-700 dark:hover:text-sky-400 text-gray-700 dark:text-gray-200 font-semibold text-[11px] transition-all cursor-pointer">
+              <span class="text-base">💧</span>
+              <span>Fonte de Água</span>
+            </button>
+            <button onclick="activateBuilderPlacement('threat')" class="builder-tool-btn flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-red-500/20 hover:text-red-700 dark:hover:text-red-400 text-gray-700 dark:text-gray-200 font-semibold text-[11px] transition-all cursor-pointer">
+              <span class="text-base">☠️</span>
+              <span>Área de Risco</span>
+            </button>
+          </div>
+        </div>
       </div>
 
       <!-- MONITOR SAZONAL AUTOMÁTICO (INFERIOR CENTRO) -->
@@ -1151,24 +1296,39 @@
         </div>
 
         <!-- Seletor de Modo de Posicionamento -->
-        <input type="hidden" id="add-hive-mode" value="manual">
+        <input type="hidden" id="add-hive-mode" value="click">
+        <input type="hidden" id="add-hive-click-x" value="12">
+        <input type="hidden" id="add-hive-click-z" value="-8">
 
         <div id="add-hive-gps-box" class="hidden p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-700 dark:text-amber-400 text-[11px] flex items-center gap-2">
           <span>📡</span>
           <span id="add-hive-gps-text">Obtendo coordenadas do dispositivo...</span>
         </div>
 
-        <div id="add-hive-manual-box" class="p-3 rounded-xl bg-gray-50 dark:bg-[#0E1015] border border-gray-200 dark:border-gray-800 text-[11px] space-y-2">
-          <span class="text-gray-500 dark:text-gray-400">Posição no mapa (distância em metros da colmeia central):</span>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <span class="text-[10px] text-gray-400">Deslocamento X (Leste/Oeste):</span>
-              <input type="number" id="add-hive-manual-x" value="12" step="1" class="w-full px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] text-gray-900 dark:text-white">
+        <!-- MODO CLIQUE DIRETO NO TERRENO COM DETECÇÃO AUTOMÁTICA DE COORDENADA -->
+        <div id="add-hive-click-box" class="p-3.5 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-300 dark:border-amber-800/60 text-[11px] space-y-2.5">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-1.5 font-bold text-amber-900 dark:text-amber-300">
+              <span class="text-sm">🎯</span>
+              <span>Posicionamento Direto no Mapa</span>
             </div>
+            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-honey-500/20 text-honey-700 dark:text-honey-400 border border-honey-500/30">
+              Auto-Detecção
+            </span>
+          </div>
+
+          <p class="text-gray-600 dark:text-gray-300 leading-snug">
+            Ao confirmar, clique diretamente no mapa onde deseja fixar a caixa. As coordenadas e a distância serão calculadas automaticamente!
+          </p>
+
+          <div class="p-2.5 rounded-xl bg-white dark:bg-[#12151D] border border-amber-200/80 dark:border-amber-900/40 flex items-center justify-between text-[11px]">
             <div>
-              <span class="text-[10px] text-gray-400">Deslocamento Z (Norte/Sul):</span>
-              <input type="number" id="add-hive-manual-z" value="-8" step="1" class="w-full px-2.5 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] text-gray-900 dark:text-white">
+              <span class="text-gray-400 block text-[10px]">Ponto Selecionado / Estimado:</span>
+              <span id="add-hive-coords-display" class="font-mono font-bold text-gray-900 dark:text-white">X: 12.0m | Z: -8.0m (~14m de distância)</span>
             </div>
+            <button type="button" onclick="startPickPositionOnMap()" class="px-2.5 py-1.5 rounded-lg bg-honey-500 hover:bg-honey-600 text-gray-950 font-bold text-[10px] shadow-sm flex items-center gap-1">
+              <span>🎯 Escolher no Mapa</span>
+            </button>
           </div>
         </div>
 
@@ -1422,6 +1582,20 @@
     // Constante de conversão: 1 unidade no Three.js = 10 metros reais
     const SCALE_METERS_PER_UNIT = 10.0;
 
+    // Converte posição (x, z) do Three.js para latitude/longitude real baseada na âncora GPS
+    function convertThreeCoordsToGps(x, z, anchor) {
+      if (!anchor) return { lat: null, lon: null };
+      const deltaMetersX = x * SCALE_METERS_PER_UNIT;
+      const deltaMetersZ = z * SCALE_METERS_PER_UNIT;
+      const meanLatRad = anchor.lat * (Math.PI / 180);
+      const dLat = - deltaMetersZ / 111320;
+      const dLon = deltaMetersX / (111320 * Math.cos(meanLatRad));
+      return {
+        lat: anchor.lat + dLat,
+        lon: anchor.lon + dLon
+      };
+    }
+
     // Fórmula para calcular delta X (Leste-Oeste) e delta Z (Norte-Sul) em metros
     function calculateGpsOffsetMeters(lat, lon, anchorLat, anchorLon) {
       const dLat = (lat - anchorLat) * (Math.PI / 180);
@@ -1441,11 +1615,11 @@
     }
 
     // ==========================================
-    // ESTADO DO MAPA PROCEDURAL REAL (OSM / OVERPASS)
+    // ESTADO DO MODO CONSTRUTOR 3D (BUILDER)
     // ==========================================
-    let realWorldGroup = null; // Grupo Three.js que armazena ruas, prédios e parques reais
-    let realParksPolygons = []; // Polígonos de parques/áreas verdes para plantio de árvores reais
-    let isFetchingOsmData = false;
+    let builderActiveTool = null; // 'hive' | 'house' | 'tree' | 'water' | 'threat'
+    let builtObjects = [];        // Armazena casas, árvores, bebedouros e áreas de risco criados pelo usuário
+    let currentlyInspectedTarget = null; // { type: 'hive'|'built'|'pin', id: string, object: THREE.Object3D }
     let terrainMesh, hiveMesh, riverMesh;
     let hexOutline, hexScanLine;
     let pinMeshes = [];
@@ -1454,6 +1628,10 @@
     let sentryBees = [];
     let pollenParticles;
     let raycaster, mouse;
+    let isPlacementModeActive = false; // Flag de ativação do modo clique com mouse para posicionar elemento
+    let placementHoverMarker = null;   // Retículo / anel 3D indicador no chão seguindo o cursor do mouse
+    let pendingHiveData = null;        // Dados da caixa aguardando o clique no mapa
+    let currentlyInspectedHiveId = null; // ID da colmeia atualmente aberta no painel de inspeção
 
     // VARIÁVEIS DE SISTEMA CLIMÁTICO (CHUVA) & SAZONALIDADE
     let isRaining = false;
@@ -1680,6 +1858,7 @@
 
       // Registro do evento de clique para o Raycaster interativo
       renderer.domElement.addEventListener('pointerdown', onPointerDown);
+      renderer.domElement.addEventListener('pointermove', onPointerMovePlacement);
       window.addEventListener('resize', onWindowResize);
 
       animate();
@@ -2917,12 +3096,164 @@
       }
     }
 
+    // CRIAÇÃO OU ATUALIZAÇÃO DO MARCADOR VISUAL DE MOUSE (HOLOGRAMA 3D CONFORME FERRAMENTA ATIVA)
+    function getPlacementHoverMarker() {
+      if (placementHoverMarker) return placementHoverMarker;
+      const group = new THREE.Group();
+
+      // Círculo externo pulsante
+      const ringGeom = new THREE.RingGeometry(0.9, 1.15, 32);
+      ringGeom.rotateX(-Math.PI / 2);
+      const ringMat = new THREE.MeshBasicMaterial({
+        color: 0xF59E0B,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.85
+      });
+      const ringMesh = new THREE.Mesh(ringGeom, ringMat);
+      ringMesh.position.y = 0.05;
+      ringMesh.name = "ringMesh";
+      group.add(ringMesh);
+
+      // Ponto central de mira
+      const centerGeom = new THREE.CircleGeometry(0.35, 16);
+      centerGeom.rotateX(-Math.PI / 2);
+      const centerMat = new THREE.MeshBasicMaterial({
+        color: 0xEF4444,
+        side: THREE.DoubleSide
+      });
+      const centerMesh = new THREE.Mesh(centerGeom, centerMat);
+      centerMesh.position.y = 0.06;
+      group.add(centerMesh);
+
+      // Container para o modelo fantasma translúcido do item selecionado
+      const previewContainer = new THREE.Group();
+      previewContainer.name = "previewContainer";
+      group.add(previewContainer);
+
+      group.visible = false;
+      scene.add(group);
+      placementHoverMarker = group;
+      return placementHoverMarker;
+    }
+
+    // Atualiza a maquete fantasma exibida pelo holograma
+    function updatePlacementGhostPreview(toolType) {
+      const marker = getPlacementHoverMarker();
+      const container = marker.getObjectByName("previewContainer");
+      if (!container) return;
+
+      // Limpa prévias anteriores
+      while (container.children.length > 0) {
+        const c = container.children[0];
+        container.remove(c);
+        if (c.geometry) c.geometry.dispose();
+      }
+
+      const ghostMat = new THREE.MeshStandardMaterial({
+        color: toolType === 'threat' ? 0xEF4444 : (toolType === 'water' ? 0x38BDF8 : (toolType === 'tree' ? 0x22C55E : (toolType === 'house' ? 0x94A3B8 : 0xFFC300))),
+        transparent: true,
+        opacity: 0.45,
+        wireframe: false
+      });
+
+      if (toolType === 'house') {
+        const wall = new THREE.Mesh(new THREE.BoxGeometry(4.2, 2.6, 3.4), ghostMat);
+        wall.position.y = 1.3;
+        const roof = new THREE.Mesh(new THREE.ConeGeometry(3.2, 1.6, 4), ghostMat);
+        roof.rotateY(Math.PI / 4);
+        roof.position.y = 3.3;
+        roof.scale.set(1.15, 1, 0.9);
+        container.add(wall, roof);
+      } else if (toolType === 'tree') {
+        const trunk = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.26, 1.8, 7), ghostMat);
+        trunk.position.y = 0.9;
+        const crown = new THREE.Mesh(new THREE.DodecahedronGeometry(1.2, 1), ghostMat);
+        crown.position.y = 2.1;
+        container.add(trunk, crown);
+      } else if (toolType === 'water') {
+        const basin = new THREE.Mesh(new THREE.CylinderGeometry(1.6, 1.4, 0.4, 16), ghostMat);
+        basin.position.y = 0.2;
+        container.add(basin);
+      } else if (toolType === 'threat') {
+        const mound = new THREE.Mesh(new THREE.ConeGeometry(1.6, 0.8, 8), ghostMat);
+        mound.position.y = 0.4;
+        container.add(mound);
+      } else {
+        // Colmeia padrão
+        const box = new THREE.Mesh(new THREE.BoxGeometry(2, 2.2, 2), ghostMat);
+        box.position.y = 1.9;
+        container.add(box);
+      }
+    }
+
+    // Movimentação do mouse quando o modo de posicionamento está ativo
+    function onPointerMovePlacement(event) {
+      if (!isPlacementModeActive) return;
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObject(terrainMesh);
+
+      if (intersects.length > 0) {
+        const pt = intersects[0].point;
+        const marker = getPlacementHoverMarker();
+        marker.visible = true;
+        marker.position.set(pt.x, 0, pt.z);
+
+        // Atualiza leitura de coordenadas no banner
+        const bannerDesc = document.getElementById('placement-banner-desc');
+        if (bannerDesc) {
+          const distOrigemMeters = Math.hypot(pt.x * SCALE_METERS_PER_UNIT, pt.z * SCALE_METERS_PER_UNIT);
+          bannerDesc.innerText = `Posição: X: ${(pt.x * SCALE_METERS_PER_UNIT).toFixed(1)}m | Z: ${(pt.z * SCALE_METERS_PER_UNIT).toFixed(1)}m (~${Math.round(distOrigemMeters)}m do centro) • Clique para fixar!`;
+        }
+      }
+    }
+
+    // Ativação da Ferramenta do Construtor
+    function activateBuilderPlacement(toolType) {
+      builderActiveTool = toolType;
+      switchTab('radar');
+      isPlacementModeActive = true;
+
+      const banner = document.getElementById('click-placement-banner');
+      const bannerTitle = document.getElementById('placement-banner-title');
+      const bannerIcon = document.getElementById('placement-banner-icon');
+
+      const toolInfo = {
+        hive: { icon: '📦', title: 'Plantando Nova Colmeia' },
+        house: { icon: '🏠', title: 'Construindo Casa / Galpão' },
+        tree: { icon: '🌸', title: 'Plantando Árvore Frutífera / Pomar' },
+        water: { icon: '💧', title: 'Instalando Fonte de Água' },
+        threat: { icon: '☠️', title: 'Demarcando Área de Risco' }
+      };
+
+      const info = toolInfo[toolType] || toolInfo.hive;
+      if (bannerTitle) bannerTitle.innerText = info.title;
+      if (bannerIcon) bannerIcon.innerText = info.icon;
+      if (banner) banner.classList.remove('hidden');
+
+      if (renderer) renderer.domElement.style.cursor = 'crosshair';
+      updatePlacementGhostPreview(toolType);
+      getPlacementHoverMarker().visible = true;
+    }
+
+    function cancelClickPlacement() {
+      isPlacementModeActive = false;
+      builderActiveTool = null;
+      pendingHiveData = null;
+      const banner = document.getElementById('click-placement-banner');
+      if (banner) banner.classList.add('hidden');
+      if (renderer) renderer.domElement.style.cursor = 'default';
+      if (placementHoverMarker) placementHoverMarker.visible = false;
+    }
+
     // INTERAÇÃO AO CLIQUE NO MODELO (RAYCASTER COM ZOOM / FOCO)
     function focusCameraOnObject(targetPos) {
       if (!controls || !camera) return;
-      // Centraliza controles no objeto
       controls.target.lerp(new THREE.Vector3(targetPos.x, targetPos.y, targetPos.z), 0.8);
-      // Câmera aproxima com leve zoom isométrica
       const zoomOffset = new THREE.Vector3(12, 11, 13);
       camera.position.set(targetPos.x + zoomOffset.x, targetPos.y + zoomOffset.y, targetPos.z + zoomOffset.z);
     }
@@ -2934,13 +3265,32 @@
 
       raycaster.setFromCamera(mouse, camera);
 
+      // CASO ESPECIAL: MODO CONSTRUTOR ATIVO -> FIXA O ELEMENTO SELECIONADO NO CHÃO
+      if (isPlacementModeActive) {
+        const terrainHits = raycaster.intersectObject(terrainMesh);
+        if (terrainHits.length > 0) {
+          const hitPoint = terrainHits[0].point;
+          handlePlaceBuilderItemAtPoint(hitPoint.x, hitPoint.z);
+          return;
+        }
+      }
+
       const interactiveObjects = [];
       // Inclui todas as caixas de abelha registradas no array
       hivesArray.forEach(h => {
         if (h.boxMesh) interactiveObjects.push(h.boxMesh);
       });
 
-      // Inclui todos os pins visíveis (flores, bebedouros, iscas, ameaças)
+      // Inclui todos os objetos construídos pelo usuário (casas, árvores frutíferas, bebedouros, etc.)
+      builtObjects.forEach(b => {
+        if (b.group && b.group.visible) {
+          b.group.traverse(child => {
+            if (child.isMesh) interactiveObjects.push(child);
+          });
+        }
+      });
+
+      // Inclui todos os pins visíveis (flores, bebedouros, iscas)
       pinMeshes.forEach(g => {
         if (g.visible) {
           g.traverse(child => {
@@ -2955,7 +3305,7 @@
         const hit = intersects[0];
         let root = hit.object;
 
-        // Se clicou em uma das caixas do meliponário
+        // 1. Se clicou em uma das caixas do meliponário
         const matchedHive = hivesArray.find(h => h.boxMesh === root || (root.userData && root.userData.id === h.id));
         if (matchedHive) {
           const cfg = SPECIES_CONFIG[matchedHive.speciesKey] || {};
@@ -2967,15 +3317,41 @@
           showPinInspector({
             name: `${matchedHive.name || cfg.name} (${matchedHive.id})`,
             sub: `${cfg.scientific || ''} • Raio: ${cfg.radiusMeters}m`,
-            dist: matchedHive.lat ? `GPS: ${matchedHive.lat.toFixed(5)}, ${matchedHive.lon.toFixed(5)}` : 'Origem Fixa',
-            desc: `${examInfo}. ${statusOverlap}. Colmeia racional com telemetria ativa e abelhas adaptadas ao fenótipo nativo.`,
+            dist: `Posição: ${(matchedHive.x * SCALE_METERS_PER_UNIT).toFixed(0)}m, ${(matchedHive.z * SCALE_METERS_PER_UNIT).toFixed(0)}m`,
+            desc: `${examInfo}. ${statusOverlap}. Colmeia racional monitorada no mapa interativo.`,
             icon: '🐝',
-            type: 'hive'
+            type: 'hive',
+            targetId: matchedHive.id
           });
           focusCameraOnObject(new THREE.Vector3(matchedHive.x, 1.9, matchedHive.z));
           return;
         }
 
+        // 2. Se clicou em um dos objetos do Construtor (casa, árvore, fonte, risco)
+        const matchedBuilt = builtObjects.find(b => {
+          let current = root;
+          while (current) {
+            if (current === b.group) return true;
+            current = current.parent;
+          }
+          return false;
+        });
+
+        if (matchedBuilt) {
+          showPinInspector({
+            name: matchedBuilt.name,
+            sub: matchedBuilt.sub,
+            dist: `Posição: ${(matchedBuilt.x * SCALE_METERS_PER_UNIT).toFixed(0)}m, ${(matchedBuilt.z * SCALE_METERS_PER_UNIT).toFixed(0)}m`,
+            desc: matchedBuilt.desc,
+            icon: matchedBuilt.icon,
+            type: 'built',
+            targetId: matchedBuilt.id
+          });
+          focusCameraOnObject(new THREE.Vector3(matchedBuilt.x, 1.5, matchedBuilt.z));
+          return;
+        }
+
+        // 3. Demais pins
         while (root && !root.userData?.name && root.parent) {
           root = root.parent;
         }
@@ -2991,12 +3367,255 @@
       document.getElementById('inspec-title').innerText = data.name;
       document.getElementById('inspec-desc').innerText = data.desc;
       document.getElementById('inspec-dist').innerText = data.dist;
-      document.getElementById('inspec-icon').innerText = data.icon || (data.type === 'flora' ? '🌸' : (data.type === 'water' ? '💧' : (data.type === 'threat' ? '⚠️' : '🍯')));
+      document.getElementById('inspec-icon').innerText = data.icon || (data.type === 'flora' ? '🌸' : (data.type === 'water' ? '💧' : (data.type === 'threat' ? '☠️' : '🍯')));
+      
+      const deleteContainer = document.getElementById('inspec-delete-container');
+      const deleteLabel = document.getElementById('btn-delete-label');
+      
+      if (data.type === 'hive' && data.targetId) {
+        currentlyInspectedTarget = { type: 'hive', id: data.targetId };
+        if (deleteLabel) deleteLabel.innerText = "Excluir Caixa";
+        if (deleteContainer) deleteContainer.classList.remove('hidden');
+      } else if (data.type === 'built' && data.targetId) {
+        currentlyInspectedTarget = { type: 'built', id: data.targetId };
+        if (deleteLabel) deleteLabel.innerText = "Excluir Elemento";
+        if (deleteContainer) deleteContainer.classList.remove('hidden');
+      } else {
+        currentlyInspectedTarget = null;
+        if (deleteContainer) deleteContainer.classList.add('hidden');
+      }
+
       document.getElementById('inspector-card').classList.remove('hidden');
     }
 
     function closeInspector() {
+      currentlyInspectedTarget = null;
       document.getElementById('inspector-card').classList.add('hidden');
+    }
+
+    // DISPOSE PROFUNDO DE OBJETOS THREE.JS PARA EVITAR MEMORY LEAK
+    function disposeThreeObject(obj) {
+      if (!obj) return;
+      obj.traverse(child => {
+        if (child.isMesh || child.isLine || child.isPoints) {
+          if (child.geometry) {
+            child.geometry.dispose();
+          }
+          if (child.material) {
+            if (Array.isArray(child.material)) {
+              child.material.forEach(m => m.dispose());
+            } else {
+              child.material.dispose();
+            }
+          }
+        }
+        // Limpeza de CSS2DObject
+        if (child.isCSS2DObject || child instanceof THREE.CSS2DObject) {
+          if (child.element && child.element.parentNode) {
+            child.element.parentNode.removeChild(child.element);
+          }
+        }
+      });
+      if (obj.parent) {
+        obj.parent.remove(obj);
+      }
+    }
+
+    // EXCLUSÃO COMPLETA DE COLMEIA NO MAPA 3D E LIMPEZA DE MEMÓRIA
+    function deleteHive(hiveId) {
+      const hiveIndex = hivesArray.findIndex(h => h.id === hiveId);
+      if (hiveIndex === -1) return;
+
+      const targetHive = hivesArray[hiveIndex];
+
+      // 1. Remove e faz dispose do grupo 3D da caixa de abelha
+      if (targetHive.meshGroup) {
+        scene.remove(targetHive.meshGroup);
+        disposeThreeObject(targetHive.meshGroup);
+      }
+
+      // 2. Remove e faz dispose do Hex-Radar (linha de contorno e preenchimento)
+      if (targetHive.radarLine) {
+        scene.remove(targetHive.radarLine);
+        disposeThreeObject(targetHive.radarLine);
+      }
+      if (targetHive.radarFill) {
+        scene.remove(targetHive.radarFill);
+        disposeThreeObject(targetHive.radarFill);
+      }
+
+      // 3. Remove e faz dispose das abelhas sentinelas da entrada
+      if (targetHive.sentinels) {
+        targetHive.sentinels.forEach(sb => {
+          if (sb.mesh) {
+            scene.remove(sb.mesh);
+            disposeThreeObject(sb.mesh);
+          }
+        });
+        targetHive.sentinels = [];
+      }
+
+      // 4. Se for a primeira caixa que servia de hiveMesh de referência
+      if (hiveMesh === targetHive.boxMesh) {
+        hiveMesh = hivesArray[1] ? hivesArray[1].boxMesh : null;
+      }
+
+      // 5. Remove da lista do estado da aplicação
+      hivesArray.splice(hiveIndex, 1);
+
+      // 6. Remove do select do Diário de Manejo
+      const modalSelect = document.getElementById('modal-hive');
+      if (modalSelect) {
+        for (let i = 0; i < modalSelect.options.length; i++) {
+          if (modalSelect.options[i].value === hiveId) {
+            modalSelect.remove(i);
+            break;
+          }
+        }
+      }
+
+      // 7. Recalcula imediatamente a competição de pasto floral (desfaz alertas de sobreposição)
+      updateHivesCompetitionCheck();
+
+      // 8. Fecha o painel de inspeção
+      closeInspector();
+    }
+
+    // EXCLUSÃO DE ELEMENTO CONSTRUÍDO (CASA, ÁRVORE FRUTÍFERA, FONTE, RISCO)
+    function deleteBuiltItem(builtId) {
+      const idx = builtObjects.findIndex(b => b.id === builtId);
+      if (idx === -1) return;
+
+      const item = builtObjects[idx];
+      if (item.group) {
+        scene.remove(item.group);
+        disposeThreeObject(item.group);
+      }
+
+      builtObjects.splice(idx, 1);
+      closeInspector();
+    }
+
+    // Handler de exclusão unificado
+    function onDeleteCurrentInspectedItem() {
+      if (!currentlyInspectedTarget) return;
+      if (currentlyInspectedTarget.type === 'hive') {
+        deleteHive(currentlyInspectedTarget.id);
+      } else if (currentlyInspectedTarget.type === 'built') {
+        deleteBuiltItem(currentlyInspectedTarget.id);
+      }
+    }
+
+    // POSICIONA QUALQUER ITEM DO CONSTRUTOR NA COORDENADA CLICADA
+    function handlePlaceBuilderItemAtPoint(worldX, worldZ) {
+      if (!isPlacementModeActive) return;
+
+      const tool = builderActiveTool || 'hive';
+
+      if (tool === 'hive') {
+        // Fixa nova colmeia racional
+        handlePlaceHiveAtPoint(worldX, worldZ);
+        return;
+      }
+
+      const nextIndex = builtObjects.length + 1;
+      let newMesh = null;
+      let itemMeta = {};
+
+      if (tool === 'house') {
+        newMesh = createFarmHouseMesh();
+        itemMeta = {
+          id: `HOUSE-${nextIndex}`,
+          type: 'house',
+          name: 'Casa / Galpão da Chácara',
+          sub: 'Instalação Sede • Referência Espacial',
+          icon: '🏠',
+          desc: 'Ponto de referência e base de apoio do meliponário para armazenamento de insumos e caixas.'
+        };
+      } else if (tool === 'tree') {
+        const fruits = ['laranja', 'pitanga', 'limao'];
+        const chosenFruit = fruits[Math.floor(Math.random() * fruits.length)];
+        newMesh = createFruitTreeMesh(chosenFruit);
+        itemMeta = {
+          id: `TREE-${nextIndex}`,
+          type: 'tree',
+          name: `Pomar Frutífero (${chosenFruit.toUpperCase()})`,
+          sub: 'Florada Rica em Néctar & Resina',
+          icon: '🌸',
+          desc: 'Árvore frutífera em florada, servindo como pasto apícola direto e atraindo forrageadoras do meliponário.'
+        };
+
+        // Adiciona nas rotas de forrageamento das abelhas em voo
+        if (typeof addNewResourceTargetToFlight === 'function') {
+          addNewResourceTargetToFlight(new THREE.Vector3(worldX, 0.8, worldZ));
+        }
+      } else if (tool === 'water') {
+        newMesh = createWaterFountainMesh();
+        itemMeta = {
+          id: `WATER-${nextIndex}`,
+          type: 'water',
+          name: 'Bebedouro Natural para Abelhas',
+          sub: 'Ponto Seguro com Pedras Rasas',
+          icon: '💧',
+          desc: 'Fonte limpa onde as operárias bebem água para resfriamento do ninho sem risco de afogamento.'
+        };
+
+        // Adiciona nas rotas de coleta de água
+        if (typeof addNewResourceTargetToFlight === 'function') {
+          addNewResourceTargetToFlight(new THREE.Vector3(worldX, 0.4, worldZ));
+        }
+      } else if (tool === 'threat') {
+        newMesh = createThreatZoneMesh();
+        itemMeta = {
+          id: `RISK-${nextIndex}`,
+          type: 'threat',
+          name: 'Área de Risco Demarcada',
+          sub: 'Alerta Sanitário • Formigas / Agrotóxico',
+          icon: '☠️',
+          desc: 'Zona de atenção no quintal. Mantenha as colmeias afastadas desta área para evitar contaminação ou ataques.'
+        };
+      }
+
+      if (newMesh) {
+        newMesh.position.set(worldX, 0, worldZ);
+        scene.add(newMesh);
+
+        const builtRecord = {
+          ...itemMeta,
+          x: worldX,
+          z: worldZ,
+          group: newMesh
+        };
+        builtObjects.push(builtRecord);
+
+        // Desativa modo construtor
+        cancelClickPlacement();
+
+        // Foca e inspeciona
+        focusCameraOnObject(new THREE.Vector3(worldX, 1.5, worldZ));
+        showPinInspector({
+          name: builtRecord.name,
+          sub: builtRecord.sub,
+          dist: `Posição: ${(worldX * SCALE_METERS_PER_UNIT).toFixed(0)}m, ${(worldZ * SCALE_METERS_PER_UNIT).toFixed(0)}m`,
+          desc: builtRecord.desc,
+          icon: builtRecord.icon,
+          type: 'built',
+          targetId: builtRecord.id
+        });
+      }
+    }
+
+    // Inclusão dinâmica de novos pomares e fontes no pathfinding das abelhas
+    function addNewResourceTargetToFlight(newTargetVec) {
+      if (!flyingBees || flyingBees.length === 0) return;
+      // Direciona algumas abelhas forrageiras para o novo local
+      flyingBees.forEach((b, idx) => {
+        if (b.role === 'forager' && idx % 3 === 0) {
+          b.target.copy(newTargetVec);
+          b.isReturning = false;
+          b.isCollecting = false;
+        }
+      });
     }
 
     function reset3DCamera() {
@@ -3278,428 +3897,223 @@
     }
 
     // ========================================================
-    // INTEGRAÇÃO DE DADOS REAIS: OPENSTREETMAP / OVERPASS API
+    // MODELOS 3D DO MODO CONSTRUTOR: CASA, ÁRVORE FRUTÍFERA, FONTE E RISCO
     // ========================================================
-    async function fetchRealMapData(lat, lon, radius = 800) {
-      if (isFetchingOsmData) return;
-      isFetchingOsmData = true;
 
-      const card = document.getElementById('osm-status-card');
-      const badge = document.getElementById('osm-status-badge');
-      const detail = document.getElementById('osm-status-detail');
-      if (card) card.classList.remove('hidden');
-      if (badge) {
-        badge.innerText = 'Buscando Dados';
-        badge.className = 'px-2 py-0.5 rounded-full text-[9px] font-semibold bg-sky-500/15 text-sky-600 dark:text-sky-400 border border-sky-500/30 animate-pulse';
-      }
-      if (detail) detail.innerText = `Consultando Overpass API para raio de ${radius}m em torno de Lat ${lat.toFixed(4)}, Lon ${lon.toFixed(4)}...`;
+    // 1. Casa / Galpão da Chácara (Sede Clean Low-Poly)
+    function createFarmHouseMesh(customColor = null) {
+      const houseGroup = new THREE.Group();
 
-      // Conversão do raio de busca de metros para graus: 800m ≈ 0.0072 graus
-      const radiusDeg = radius / 111320;
-      const south = lat - radiusDeg;
-      const north = lat + radiusDeg;
-      const west = lon - radiusDeg;
-      const east = lon + radiusDeg;
-      const bbox = `${south},${west},${north},${east}`;
+      // Base / Parede da Casa (Off-White)
+      const wallMat = new THREE.MeshStandardMaterial({
+        color: isDarkMode ? 0x2A2D35 : 0xF1F5F9,
+        roughness: 0.5,
+        metalness: 0.05
+      });
+      const wallGeom = new THREE.BoxGeometry(4.2, 2.6, 3.4);
+      const wallMesh = new THREE.Mesh(wallGeom, wallMat);
+      wallMesh.position.y = 1.3;
+      wallMesh.castShadow = true;
+      wallMesh.receiveShadow = true;
+      houseGroup.add(wallMesh);
 
-      // Query Overpass: 1) building, 2) highway, 3) natural=wood / landuse=forest / natural=tree
-      const overpassQuery = `
-        [out:json][timeout:25];
-        (
-          way["highway"](${bbox});
-          way["building"](${bbox});
-          way["natural"="wood"](${bbox});
-          way["landuse"="forest"](${bbox});
-          way["leisure"="park"](${bbox});
-          node["natural"="tree"](${bbox});
-          relation["natural"="wood"](${bbox});
-          relation["landuse"="forest"](${bbox});
+      // Telhado 2 Águas Estilizado (Cinza Grafite / Terracota)
+      const roofMat = new THREE.MeshStandardMaterial({
+        color: customColor || (isDarkMode ? 0x1E293B : 0x475569),
+        roughness: 0.4
+      });
+      const roofGeom = new THREE.ConeGeometry(3.2, 1.6, 4);
+      roofGeom.rotateY(Math.PI / 4);
+      const roofMesh = new THREE.Mesh(roofGeom, roofMat);
+      roofMesh.position.y = 3.3;
+      roofMesh.scale.set(1.15, 1, 0.9);
+      roofMesh.castShadow = true;
+      houseGroup.add(roofMesh);
+
+      // Porta de Madeira
+      const doorMat = new THREE.MeshStandardMaterial({ color: 0x78350F, roughness: 0.7 });
+      const doorGeom = new THREE.BoxGeometry(0.8, 1.4, 0.1);
+      const door = new THREE.Mesh(doorGeom, doorMat);
+      door.position.set(0, 0.7, 1.72);
+      houseGroup.add(door);
+
+      // Janelas Decorativas
+      const winMat = new THREE.MeshStandardMaterial({ color: 0x38BDF8, roughness: 0.1, metalness: 0.3 });
+      const winGeom = new THREE.BoxGeometry(0.7, 0.7, 0.1);
+      const winL = new THREE.Mesh(winGeom, winMat);
+      winL.position.set(-1.2, 1.4, 1.72);
+      const winR = winL.clone();
+      winR.position.set(1.2, 1.4, 1.72);
+      houseGroup.add(winL, winR);
+
+      // Label flutuante CSS2D
+      const label = createMapPinLabel("🏠 Casa / Sede");
+      label.position.set(0, 4.4, 0);
+      wallMesh.add(label);
+
+      return houseGroup;
+    }
+
+    // 2. Árvore Frutífera / Pomar (com frutinhas coloridas na copa)
+    function createFruitTreeMesh(fruitType = 'laranja') {
+      const treeGroup = new THREE.Group();
+
+      const trunkMat = new THREE.MeshStandardMaterial({
+        color: isDarkMode ? 0x452311 : 0x854D0E,
+        roughness: 0.85
+      });
+      const trunkGeom = new THREE.CylinderGeometry(0.18, 0.26, 1.8, 7);
+      const trunk = new THREE.Mesh(trunkGeom, trunkMat);
+      trunk.position.y = 0.9;
+      trunk.castShadow = true;
+      treeGroup.add(trunk);
+
+      // Copa da Frutífera
+      const foliageMat = new THREE.MeshStandardMaterial({
+        color: isDarkMode ? 0x166534 : 0x22C55E,
+        roughness: 0.55,
+        flatShading: true
+      });
+      const crown1 = new THREE.Mesh(new THREE.DodecahedronGeometry(1.2, 1), foliageMat);
+      crown1.position.y = 2.1;
+      crown1.castShadow = true;
+      treeGroup.add(crown1);
+
+      const crown2 = new THREE.Mesh(new THREE.DodecahedronGeometry(0.9, 1), foliageMat);
+      crown2.position.set(0.3, 2.7, -0.2);
+      crown2.castShadow = true;
+      treeGroup.add(crown2);
+
+      // Frutas / Floradas ricas em néctar salpicadas na copa
+      const fruitColors = {
+        laranja: 0xFB923C, // Laranjeira
+        pitanga: 0xEF4444, // Pitangueira
+        limao: 0xFACC15    // Limoeiro
+      };
+      const fruitColor = fruitColors[fruitType] || 0xFB923C;
+      const fruitMat = new THREE.MeshStandardMaterial({
+        color: fruitColor,
+        roughness: 0.3,
+        emissive: fruitColor,
+        emissiveIntensity: 0.25
+      });
+
+      for (let f = 0; f < 10; f++) {
+        const fa = (Math.PI * 2 / 10) * f + (Math.random() - 0.5) * 0.4;
+        const fr = 0.95 + Math.random() * 0.3;
+        const fruitGeom = new THREE.SphereGeometry(0.12, 6, 6);
+        const fruit = new THREE.Mesh(fruitGeom, fruitMat);
+        const targetCrown = Math.random() > 0.4 ? crown1 : crown2;
+        fruit.position.set(
+          targetCrown.position.x + Math.cos(fa) * fr,
+          targetCrown.position.y + (Math.random() - 0.5) * 0.8,
+          targetCrown.position.z + Math.sin(fa) * fr
         );
-        out body;
-        >;
-        out skel qt;
-      `;
-
-      // Servidores espelhos públicos para redundância
-      const endpoints = [
-        'https://overpass-api.de/api/interpreter',
-        'https://overpass.kumi.systems/api/interpreter',
-        'https://lz4.overpass-api.de/api/interpreter'
-      ];
-
-      let data = null;
-      let usedEndpoint = null;
-
-      for (const endpoint of endpoints) {
-        try {
-          const bodyPayload = 'data=' + encodeURIComponent(overpassQuery);
-          const response = await fetch(endpoint, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: bodyPayload
-          });
-
-          if (response.ok) {
-            data = await response.json();
-            usedEndpoint = endpoint;
-            break;
-          }
-        } catch (fetchErr) {
-          console.warn(`Tentativa em ${endpoint} falhou, tentando espelho...`, fetchErr);
-        }
+        treeGroup.add(fruit);
       }
 
-      if (data && data.elements && data.elements.length > 0) {
-        if (detail) detail.innerText = `Processando ${data.elements.length} elementos geográficos reais...`;
-        renderRealWorldScene(data, lat, lon);
+      const label = createMapPinLabel("🌸 Pomar Frutífero");
+      label.position.set(0, 3.7, 0);
+      crown1.add(label);
 
-        if (badge) {
-          badge.innerText = 'Ativo (Real)';
-          badge.className = 'px-2 py-0.5 rounded-full text-[9px] font-semibold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30';
-        }
-        if (detail) detail.innerText = `Maquete 3D montada: Vias, blocos arquitetônicos e manchas de mata reais carregados!`;
-      } else {
-        // Fallback procedural inteligente com base no relevo local
-        console.warn('Servidores Overpass indisponíveis, gerando maquete arquitetônica simulada com base na coordenada:', lat, lon);
-        generateProceduralUrbanFallback(lat, lon);
-
-        if (badge) {
-          badge.innerText = 'Modo Local Ativo';
-          badge.className = 'px-2 py-0.5 rounded-full text-[9px] font-semibold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30';
-        }
-        if (detail) detail.innerText = `Maquete 3D arquitetônica ativada com blocos translúcidos e alinhamento de ruas no entorno da colmeia.`;
-      }
-
-      isFetchingOsmData = false;
+      return treeGroup;
     }
 
-    // Fallback procedural de alta qualidade para garantir que a maquete NUNCA fique vazia
-    function generateProceduralUrbanFallback(anchorLat, anchorLon) {
-      if (realWorldGroup) {
-        scene.remove(realWorldGroup);
-      }
-      realWorldGroup = new THREE.Group();
+    // 3. Bebedouro / Fonte de Água Artificial
+    function createWaterFountainMesh() {
+      const fountainGroup = new THREE.Group();
 
-      const roadMaterial = new THREE.MeshBasicMaterial({
-        color: isDarkMode ? 0x1A1C23 : 0x334155,
-        depthWrite: false,
-        side: THREE.DoubleSide
+      const basinMat = new THREE.MeshStandardMaterial({
+        color: isDarkMode ? 0x334155 : 0x94A3B8,
+        roughness: 0.4,
+        metalness: 0.1
       });
+      const basinGeom = new THREE.CylinderGeometry(1.6, 1.4, 0.4, 16);
+      const basin = new THREE.Mesh(basinGeom, basinMat);
+      basin.position.y = 0.2;
+      basin.castShadow = true;
+      basin.receiveShadow = true;
+      fountainGroup.add(basin);
 
-      const buildingMat = new THREE.MeshStandardMaterial({
-        color: isDarkMode ? 0x2A2D35 : 0xCBD5E1,
+      // Água cristalina
+      const waterMat = new THREE.MeshStandardMaterial({
+        color: 0x38BDF8,
+        roughness: 0.05,
+        metalness: 0.25,
         transparent: true,
-        opacity: 0.50,
-        roughness: 0.25,
-        metalness: 0.05,
-        depthWrite: false
+        opacity: 0.88
       });
+      const waterGeom = new THREE.CylinderGeometry(1.45, 1.45, 0.1, 16);
+      const water = new THREE.Mesh(waterGeom, waterMat);
+      water.position.y = 0.38;
+      fountainGroup.add(water);
 
-      const buildingEdgeMat = new THREE.LineBasicMaterial({
-        color: isDarkMode ? 0x64748B : 0x94A3B8,
-        transparent: true,
-        opacity: 0.65
-      });
-
-      // 1. Gera malha de vias/ruas cruzadas no entorno
-      const roadOffsets = [-35, -18, 0, 18, 35];
-      roadOffsets.forEach(pos => {
-        // Rua Leste-Oeste (ao longo do eixo X)
-        const rx = new THREE.PlaneGeometry(120, 0.5);
-        rx.rotateX(Math.PI / 2);
-        const mrx = new THREE.Mesh(rx, roadMaterial);
-        mrx.position.set(0, 0.015, pos);
-        realWorldGroup.add(mrx);
-
-        // Rua Norte-Sul (ao longo do eixo Z)
-        const rz = new THREE.PlaneGeometry(0.5, 120);
-        rz.rotateX(Math.PI / 2);
-        const mrz = new THREE.Mesh(rz, roadMaterial);
-        mrz.position.set(pos, 0.015, 0);
-        realWorldGroup.add(mrz);
-      });
-
-      // 2. Gera quadras e blocos de prédios/casas translúcidos nas esquinas
-      for (let bx = -40; bx <= 40; bx += 14) {
-        for (let bz = -40; bz <= 40; bz += 14) {
-          // Deixa livre a clareira central da colmeia (raio de 12m)
-          if (Math.hypot(bx, bz) < 14) continue;
-          // Não sobrepõe as ruas
-          if (roadOffsets.some(r => Math.abs(bx - r) < 2.5 || Math.abs(bz - r) < 2.5)) continue;
-
-          const w = 4.0 + Math.random() * 3.5;
-          const d = 4.0 + Math.random() * 3.5;
-          const h = 1.0 + Math.random() * 2.8;
-
-          const shape = new THREE.Shape();
-          shape.moveTo(-w / 2, -d / 2);
-          shape.lineTo(w / 2, -d / 2);
-          shape.lineTo(w / 2, d / 2);
-          shape.lineTo(-w / 2, d / 2);
-          shape.closePath();
-
-          const extrudeSettings = { depth: h, bevelEnabled: false };
-          const geom = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-          geom.rotateX(Math.PI / 2);
-          geom.translate(0, h, 0);
-
-          const bMesh = new THREE.Mesh(geom, buildingMat);
-          bMesh.position.set(bx, 0, bz);
-          bMesh.castShadow = true;
-          bMesh.receiveShadow = true;
-          realWorldGroup.add(bMesh);
-
-          const edges = new THREE.EdgesGeometry(geom);
-          const edgeLine = new THREE.LineSegments(edges, buildingEdgeMat);
-          edgeLine.position.set(bx, 0, bz);
-          realWorldGroup.add(edgeLine);
-        }
+      // Pedras de pouso no centro
+      const rockMat = new THREE.MeshStandardMaterial({ color: 0xCBD5E1, roughness: 0.7 });
+      for (let r = 0; r < 4; r++) {
+        const ra = (Math.PI * 2 / 4) * r;
+        const stone = new THREE.Mesh(new THREE.DodecahedronGeometry(0.2, 0), rockMat);
+        stone.position.set(Math.cos(ra) * 0.65, 0.45, Math.sin(ra) * 0.65);
+        fountainGroup.add(stone);
       }
 
-      scene.add(realWorldGroup);
+      const label = createMapPinLabel("💧 Bebedouro Seguro");
+      label.position.set(0, 1.5, 0);
+      basin.add(label);
+
+      return fountainGroup;
     }
 
-    // Alias retrocompatível
-    const fetchRealWorldData = fetchRealMapData;
+    // 4. Área de Risco / Ameaça (Formigueiro / Agrotóxico)
+    function createThreatZoneMesh() {
+      const threatGroup = new THREE.Group();
 
-    // Função utilitária para converter polígonos em teste ponto-em-polígono (Ray casting 2D)
-    function isPointInPolygon(px, pz, polygon) {
-      let inside = false;
-      for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-        const xi = polygon[i].x, zi = polygon[i].z;
-        const xj = polygon[j].x, zj = polygon[j].z;
-        const intersect = ((zi > pz) !== (zj > pz)) && (px < (xj - xi) * (pz - zi) / (zj - zi) + xi);
-        if (intersect) inside = !inside;
-      }
-      return inside;
-    }
-
-    // Renderiza a geografia real (Ruas, Prédios translúcidos e Manchas de Mata) no Three.js
-    function renderRealWorldScene(osmData, anchorLat, anchorLon) {
-      if (!osmData || !osmData.elements) return;
-
-      // Se já existir um grupo real anterior, remove-o
-      if (realWorldGroup) {
-        scene.remove(realWorldGroup);
-      }
-      realWorldGroup = new THREE.Group();
-      realParksPolygons = [];
-
-      // Mapeia os nós por ID para montagem rápida das vias e polígonos
-      const nodesMap = new Map();
-      const directTreeNodes = [];
-
-      osmData.elements.forEach(el => {
-        if (el.type === 'node') {
-          nodesMap.set(el.id, { lat: el.lat, lon: el.lon });
-          if (el.tags && (el.tags.natural === 'tree' || el.tags.natural === 'wood')) {
-            directTreeNodes.push(el);
-          }
-        }
-      });
-
-      // Materiais dos elementos da maquete arquitetônica
-      // 1. Estradas/Ruas: Traçado plano com cor Chumbo Escuro (#1A1C23)
-      const roadMaterial = new THREE.MeshBasicMaterial({
-        color: isDarkMode ? 0x1A1C23 : 0x334155,
-        depthWrite: false,
-        side: THREE.DoubleSide
-      });
-
-      // 2. Prédios/Casas: Maquete translúcida (cinza/gelo #2A2D35, opacity 0.5) com arestas leves
-      const buildingMat = new THREE.MeshStandardMaterial({
-        color: isDarkMode ? 0x2A2D35 : 0xCBD5E1,
-        transparent: true,
-        opacity: 0.50,
-        roughness: 0.25,
-        metalness: 0.05,
-        depthWrite: false
-      });
-      const buildingEdgeMat = new THREE.LineBasicMaterial({
-        color: isDarkMode ? 0x475569 : 0x94A3B8,
-        transparent: true,
-        opacity: 0.60
-      });
-
-      // 3. Manchas de Mata / Floresta: Verde musgo escuro (#064E3B)
-      const forestMat = new THREE.MeshStandardMaterial({
-        color: isDarkMode ? 0x064E3B : 0x14532D,
+      // Monte de terra avermelhada
+      const moundMat = new THREE.MeshStandardMaterial({
+        color: isDarkMode ? 0x7F1D1D : 0x991B1B,
         roughness: 0.9,
+        flatShading: true
+      });
+      const moundGeom = new THREE.ConeGeometry(1.6, 0.8, 8);
+      const mound = new THREE.Mesh(moundGeom, moundMat);
+      mound.position.y = 0.4;
+      mound.castShadow = true;
+      threatGroup.add(mound);
+
+      // Círculo de Alerta Vermelho pulsante no chão
+      const alertRingGeom = new THREE.RingGeometry(1.8, 2.1, 24);
+      alertRingGeom.rotateX(-Math.PI / 2);
+      const alertRingMat = new THREE.MeshBasicMaterial({
+        color: 0xEF4444,
         side: THREE.DoubleSide,
-        depthWrite: false
+        transparent: true,
+        opacity: 0.75
       });
+      const ring = new THREE.Mesh(alertRingGeom, alertRingMat);
+      ring.position.y = 0.04;
+      threatGroup.add(ring);
 
-      let buildingsCount = 0;
-      let roadsCount = 0;
-      let forestsCount = 0;
+      const label = createMapPinLabel("☠️ Área de Risco");
+      label.position.set(0, 1.7, 0);
+      mound.add(label);
 
-      // Itera sobre as vias (ways) do OSM
-      osmData.elements.forEach(el => {
-        if (el.type !== 'way' || !el.nodes || el.nodes.length < 2) return;
-
-        const coords = [];
-        for (let i = 0; i < el.nodes.length; i++) {
-          const n = nodesMap.get(el.nodes[i]);
-          if (n) {
-            const pt = calculateGpsOffsetMeters(n.lat, n.lon, anchorLat, anchorLon);
-            // Raio de visibilidade útil no Three.js
-            if (Math.abs(pt.x) < 75 && Math.abs(pt.z) < 75) {
-              coords.push(pt);
-            }
-          }
-        }
-        if (coords.length < 2) return;
-
-        // A. EDIFICAÇÕES (BUILDING) -> THREE.ExtrudeGeometry translúcida
-        if (el.tags && el.tags.building) {
-          if (coords.length >= 3) {
-            const shape = new THREE.Shape();
-            shape.moveTo(coords[0].x, coords[0].z);
-            for (let c = 1; c < coords.length; c++) {
-              shape.lineTo(coords[c].x, coords[c].z);
-            }
-            shape.closePath();
-
-            // Altura arquitetônica proporcional
-            let height = 1.2;
-            if (el.tags['building:levels']) {
-              height = Math.min(7.0, Math.max(0.7, parseInt(el.tags['building:levels']) * 0.35));
-            } else {
-              height = 0.8 + (Math.abs(coords[0].x * 13 + coords[0].z * 5) % 2.2);
-            }
-
-            const extrudeSettings = {
-              depth: height,
-              bevelEnabled: false
-            };
-            const geom = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-            geom.rotateX(Math.PI / 2);
-            geom.translate(0, height, 0);
-
-            const bMesh = new THREE.Mesh(geom, buildingMat);
-            bMesh.castShadow = true;
-            bMesh.receiveShadow = true;
-            realWorldGroup.add(bMesh);
-
-            const edges = new THREE.EdgesGeometry(geom);
-            const edgeLine = new THREE.LineSegments(edges, buildingEdgeMat);
-            realWorldGroup.add(edgeLine);
-
-            buildingsCount++;
-          }
-
-        // B. RUAS E CAMINHOS (HIGHWAY) -> THREE.ShapeGeometry no nível Y = 0.015
-        } else if (el.tags && el.tags.highway) {
-          const isPrimary = el.tags.highway === 'primary' || el.tags.highway === 'secondary' || el.tags.highway === 'trunk';
-          const roadWidth = isPrimary ? 0.6 : 0.35;
-
-          for (let s = 0; s < coords.length - 1; s++) {
-            const p1 = coords[s];
-            const p2 = coords[s + 1];
-            const dx = p2.x - p1.x;
-            const dz = p2.z - p1.z;
-            const len = Math.hypot(dx, dz);
-            if (len < 0.05) continue;
-
-            const nx = (-dz / len) * (roadWidth / 2);
-            const nz = (dx / len) * (roadWidth / 2);
-
-            const roadShape = new THREE.Shape();
-            roadShape.moveTo(p1.x + nx, p1.z + nz);
-            roadShape.lineTo(p2.x + nx, p2.z + nz);
-            roadShape.lineTo(p2.x - nx, p2.z - nz);
-            roadShape.lineTo(p1.x - nx, p1.z - nz);
-            roadShape.closePath();
-
-            const roadGeom = new THREE.ShapeGeometry(roadShape);
-            roadGeom.rotateX(Math.PI / 2);
-            const roadMesh = new THREE.Mesh(roadGeom, roadMaterial);
-            roadMesh.position.y = 0.015;
-            realWorldGroup.add(roadMesh);
-          }
-          roadsCount++;
-
-        // C. MANCHAS DE MATA / FLORESTA (natural=wood, landuse=forest, leisure=park)
-        } else if (el.tags && (el.tags.natural === 'wood' || el.tags.landuse === 'forest' || el.tags.leisure === 'park' || el.tags.landuse === 'grass')) {
-          if (coords.length >= 3) {
-            const forestShape = new THREE.Shape();
-            forestShape.moveTo(coords[0].x, coords[0].z);
-            for (let c = 1; c < coords.length; c++) {
-              forestShape.lineTo(coords[c].x, coords[c].z);
-            }
-            forestShape.closePath();
-
-            const forestGeom = new THREE.ShapeGeometry(forestShape);
-            forestGeom.rotateX(Math.PI / 2);
-            const forestMesh = new THREE.Mesh(forestGeom, forestMat);
-            forestMesh.position.y = 0.012;
-            realWorldGroup.add(forestMesh);
-
-            realParksPolygons.push(coords);
-            forestsCount++;
-          }
-        }
-      });
-
-      scene.add(realWorldGroup);
-
-      // VEGETAÇÃO RESTRITA: SPAWN DE ÁRVORES APENAS DENTRO DAS MANCHAS DE MATA REAIS
-      // Remove árvores genéricas anteriores
-      treeGroups.forEach(tg => {
-        if (tg.group && tg.group.parent) scene.remove(tg.group);
-      });
-      treeGroups = [];
-
-      if (realParksPolygons.length > 0) {
-        realParksPolygons.forEach(polygon => {
-          // Bounding box do polígono de mata
-          let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
-          polygon.forEach(pt => {
-            if (pt.x < minX) minX = pt.x;
-            if (pt.x > maxX) maxX = pt.x;
-            if (pt.z < minZ) minZ = pt.z;
-            if (pt.z > maxZ) maxZ = pt.z;
-          });
-
-          // Tenta spawnar árvores testando se estão rigorosamente dentro do polígono
-          const attempts = Math.max(6, Math.floor((maxX - minX) * (maxZ - minZ) * 0.15));
-          for (let a = 0; a < attempts; a++) {
-            const testX = minX + Math.random() * (maxX - minX);
-            const testZ = minZ + Math.random() * (maxZ - minZ);
-            if (isPointInPolygon(testX, testZ, polygon)) {
-              plantSingleTree(testX, testZ, true);
-            }
-          }
-        });
-      }
-
-      // Adiciona árvores de nós individuais identificados como natural=tree
-      directTreeNodes.forEach(tn => {
-        const pt = calculateGpsOffsetMeters(tn.lat, tn.lon, anchorLat, anchorLon);
-        if (Math.abs(pt.x) < 70 && Math.abs(pt.z) < 70) {
-          plantSingleTree(pt.x, pt.z, true);
-        }
-      });
-
-      console.log(`Maquete OSM 3D gerada: ${buildingsCount} edificações, ${roadsCount} vias e ${forestsCount} manchas de mata.`);
+      return threatGroup;
     }
 
     // ========================================================
-    // MODAL DE CADASTRO E POSICIONAMENTO DE CAIXAS (GPS OU MANUAL)
+    // MODAL DE CADASTRO E POSICIONAMENTO DE CAIXAS (MODO CONSTRUTOR)
     // ========================================================
     let addHiveUseGps = false;
 
     function openAddHiveModal(useGps = false) {
-      addHiveUseGps = useGps;
+      addHiveUseGps = false; // Modo Construtor é 100% interativo local
       document.getElementById('add-hive-modal').classList.remove('hidden');
 
       const title = document.getElementById('add-hive-modal-title');
       const desc = document.getElementById('add-hive-modal-desc');
       const icon = document.getElementById('add-hive-modal-icon');
       const gpsBox = document.getElementById('add-hive-gps-box');
-      const manualBox = document.getElementById('add-hive-manual-box');
+      const clickBox = document.getElementById('add-hive-click-box');
       const nameInput = document.getElementById('add-hive-name');
       const dateInput = document.getElementById('add-hive-exam-date');
 
@@ -3710,23 +4124,11 @@
       const nextId = `CX-0${hivesArray.length + 1}`;
       if (nameInput) nameInput.value = `${nextId}`;
 
-      if (useGps) {
-        icon.innerText = '📍';
-        title.innerText = 'Fixar Caixa via GPS';
-        desc.innerText = 'Captura a coordenada de satélite do seu dispositivo em campo';
-        gpsBox.classList.remove('hidden');
-        manualBox.classList.add('hidden');
-        const statusText = document.getElementById('add-hive-gps-text');
-        statusText.innerText = gpsAnchor 
-          ? `Âncora ativa: Lat ${gpsAnchor.lat.toFixed(4)}, Lon ${gpsAnchor.lon.toFixed(4)}. Pronto para capturar!`
-          : 'A 1ª caixa fixada via GPS definirá o Ponto Zero do seu meliponário!';
-      } else {
-        icon.innerText = '🐝';
-        title.innerText = 'Adicionar Nova Caixa Racional';
-        desc.innerText = 'Posicione a caixa no terreno 3D e defina a espécie e exame';
-        gpsBox.classList.add('hidden');
-        manualBox.classList.remove('hidden');
-      }
+      icon.innerText = '📦';
+      title.innerText = 'Adicionar Nova Caixa no Terreno';
+      desc.innerText = 'Defina a espécie e exame e fixe a caixa clicando onde desejar no mapa 3D';
+      if (gpsBox) gpsBox.classList.add('hidden');
+      if (clickBox) clickBox.classList.remove('hidden');
     }
 
     function closeAddHiveModal() {
@@ -3793,7 +4195,8 @@
                 dist: `Lat: ${userLat.toFixed(5)}, Lon: ${userLon.toFixed(5)}`,
                 desc: `📅 Último Exame: ${examDate} • ${examStatus}. Ponto Zero estabelecido com sucesso!`,
                 icon: '📍',
-                type: 'hive'
+                type: 'hive',
+                hiveId: hivesArray[0].id
               });
               updateHivesCompetitionCheck();
               fetchRealWorldData(userLat, userLon);
@@ -3841,7 +4244,8 @@
               dist: `Lat: ${userLat.toFixed(5)}, Lon: ${userLon.toFixed(5)}`,
               desc: `📅 Exame: ${examDate} • ${examStatus}. ${newHiveData.hasOverlap ? '⚠️ Alerta de Competição de Pasto!' : '✅ Pasto Floral Equilibrado.'}`,
               icon: '📍',
-              type: 'hive'
+              type: 'hive',
+              hiveId: newHiveData.id
             });
           },
           (err) => {
@@ -3852,53 +4256,92 @@
           { enableHighAccuracy: true, timeout: 10000 }
         );
       } else {
-        // MODO MANUAL (Posicionamento relativo em metros)
-        const posX = parseFloat(document.getElementById('add-hive-manual-x').value) || 0;
-        const posZ = parseFloat(document.getElementById('add-hive-manual-z').value) || 0;
-
-        const newHiveData = {
+        // MODO CLIQUE DIRETO NO TERRENO COM DETECÇÃO AUTOMÁTICA DE COORDENADA
+        pendingHiveData = {
           id: hiveId,
           name: customName || `${speciesName} - ${hiveId}`,
           speciesKey: speciesKey,
-          x: posX,
-          z: posZ,
-          lat: null,
-          lon: null,
           examDate: examDate,
           examStatus: examStatus,
-          meshGroup: null,
-          radarLine: null,
-          radarFill: null,
-          baseScale: SPECIES_CONFIG[speciesKey]?.scale3D || 10.0,
-          hasOverlap: false
+          baseScale: SPECIES_CONFIG[speciesKey]?.scale3D || 10.0
         };
 
-        hivesArray.push(newHiveData);
-        createHiveInstance(newHiveData);
-        updateHivesCompetitionCheck();
-
-        // Adiciona no seletor do diário de manejo
-        const modalSelect = document.getElementById('modal-hive');
-        if (modalSelect) {
-          const opt = document.createElement('option');
-          opt.value = hiveId;
-          opt.innerText = `${hiveId} (${newHiveData.name})`;
-          modalSelect.appendChild(opt);
-        }
-
         closeAddHiveModal();
-        focusCameraOnObject(new THREE.Vector3(newHiveData.x, 1.9, newHiveData.z));
+        switchTab('radar');
 
-        const distOrigem = Math.round(Math.hypot(posX * SCALE_METERS_PER_UNIT, posZ * SCALE_METERS_PER_UNIT));
-        showPinInspector({
-          name: newHiveData.name,
-          sub: `${speciesName} • Posição: (${posX}m, ${posZ}m)`,
-          dist: `~${distOrigem}m da Colmeia Central`,
-          desc: `📅 Último Exame: ${examDate} • ${examStatus}. ${newHiveData.hasOverlap ? '⚠️ Alerta: Competição de Pasto Detectada!' : '✅ Pasto Floral Equilibrado.'}`,
-          icon: '🐝',
-          type: 'hive'
-        });
+        // Ativa o modo de posicionamento no mapa
+        isPlacementModeActive = true;
+        const banner = document.getElementById('click-placement-banner');
+        if (banner) banner.classList.remove('hidden');
+        if (renderer) renderer.domElement.style.cursor = 'crosshair';
+        getPlacementHoverMarker().visible = true;
       }
+    }
+
+    // Função executada quando o usuário clica em um ponto do terreno
+    function handlePlaceHiveAtPoint(worldX, worldZ) {
+      if (!isPlacementModeActive) return;
+
+      const hiveDataToUse = pendingHiveData || {
+        id: `CX-0${hivesArray.length + 1}`,
+        name: `Caixa Racional - CX-0${hivesArray.length + 1}`,
+        speciesKey: currentSpeciesKey,
+        examDate: new Date().toISOString().split('T')[0],
+        examStatus: 'Enxame Instalado • Monitoramento Ativo',
+        baseScale: SPECIES_CONFIG[currentSpeciesKey]?.scale3D || 10.0
+      };
+
+      const newHiveData = {
+        id: hiveDataToUse.id,
+        name: hiveDataToUse.name,
+        speciesKey: hiveDataToUse.speciesKey,
+        x: worldX,
+        z: worldZ,
+        lat: null,
+        lon: null,
+        examDate: hiveDataToUse.examDate,
+        examStatus: hiveDataToUse.examStatus,
+        meshGroup: null,
+        radarLine: null,
+        radarFill: null,
+        baseScale: hiveDataToUse.baseScale,
+        hasOverlap: false
+      };
+
+      // Instancia a nova caixa no Three.js
+      hivesArray.push(newHiveData);
+      createHiveInstance(newHiveData);
+      updateHivesCompetitionCheck();
+
+      // Desativa o modo de clique e oculta banner
+      cancelClickPlacement();
+
+      // Atualiza o seletor de caixas no diário de manejo
+      const modalSelect = document.getElementById('modal-hive');
+      if (modalSelect) {
+        const opt = document.createElement('option');
+        opt.value = newHiveData.id;
+        opt.innerText = `${newHiveData.id} (${newHiveData.name})`;
+        modalSelect.appendChild(opt);
+      }
+
+      // Foca a câmera no local da nova caixa com zoom suave
+      focusCameraOnObject(new THREE.Vector3(newHiveData.x, 1.9, newHiveData.z));
+
+      // Exibe imediatamente o inspetor com os dados da colmeia
+      const speciesName = SPECIES_CONFIG[newHiveData.speciesKey]?.name || 'Abelha Nativa';
+      const distOrigemMeters = Math.round(Math.hypot(worldX * SCALE_METERS_PER_UNIT, worldZ * SCALE_METERS_PER_UNIT));
+      const distCoordStr = `Posição: ${(worldX * SCALE_METERS_PER_UNIT).toFixed(0)}m, ${(worldZ * SCALE_METERS_PER_UNIT).toFixed(0)}m (~${distOrigemMeters}m da matriz)`;
+
+      showPinInspector({
+        name: newHiveData.name,
+        sub: `${speciesName} • Fixada no Terreno`,
+        dist: distCoordStr,
+        desc: `📅 Último Exame: ${newHiveData.examDate} • ${newHiveData.examStatus}. Colmeia racional posicionada no seu meliponário! ${newHiveData.hasOverlap ? '⚠️ Alerta: Competição de Pasto Detectada!' : '✅ Pasto Floral Equilibrado.'}`,
+        icon: '🐝',
+        type: 'hive',
+        targetId: newHiveData.id
+      });
     }
 
     function switchTab(tabId) {
