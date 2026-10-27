@@ -228,9 +228,12 @@
 
       <!-- Navegação Clean -->
       <nav class="hidden md:flex items-center gap-1 bg-gray-50/80 dark:bg-[#151821] p-1 rounded-2xl border border-gray-200/60 dark:border-gray-800">
-        <button onclick="switchTab('radar')" id="nav-radar" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 bg-white dark:bg-[#1E2330] text-gray-900 dark:text-white shadow-sm border border-gray-200/50 dark:border-gray-700/60">
+        <button onclick="switchTab('home')" id="nav-home" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all flex items-center gap-2 bg-white dark:bg-[#1E2330] text-gray-900 dark:text-white shadow-sm border border-gray-200/50 dark:border-gray-700/60">
           <span class="w-2 h-2 rounded-full bg-honey-500"></span>
-          <span>Hex-Radar 3D</span>
+          <span>Início / Sobre</span>
+        </button>
+        <button onclick="switchTab('radar')" id="nav-radar" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all">
+          Hex-Radar 3D
         </button>
         <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all">
           Meliponário
@@ -288,11 +291,143 @@
   </header>
 
   <!-- ======================================================== -->
-  <!-- ÁREA DO HEX-RADAR 3D: MAPA COM RELEVO COMPATÍVEL         -->
+  <!-- ÁREA PRINCIPAL: NAVEGAÇÃO DE VIEWS / ABAS                -->
   <!-- ======================================================== -->
-  <main class="relative flex-1 w-full overflow-hidden min-h-[calc(100vh-60px)] bg-[#F8F9FA] dark:bg-[#0C0E12] transition-colors">
+  <main class="relative flex-1 w-full overflow-y-auto min-h-[calc(100vh-60px)] bg-[#F8F9FA] dark:bg-[#0C0E12] transition-colors">
     
-    <section id="view-radar" class="tab-view relative w-full h-[calc(100vh-60px)] block">
+    <!-- ABA INFORMATIVA: INÍCIO / SOBRE O SISTEMA -->
+    <section id="view-home" class="tab-view max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12 block">
+      
+      <!-- HERO SECTION INFORMATIVA -->
+      <div class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-500/10 via-amber-400/5 to-transparent dark:from-honey-500/15 dark:via-[#14171E] dark:to-[#0D0F12] border border-amber-500/20 dark:border-amber-400/20 p-8 sm:p-12 shadow-sm">
+        <div class="max-w-3xl space-y-5">
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-700 dark:text-honey-400 border border-amber-500/30">
+            <span class="w-2 h-2 rounded-full bg-honey-500 animate-pulse"></span>
+            Plataforma 4.0 de Abelhas Sem Ferrão (ASF)
+          </div>
+          
+          <h1 class="text-3xl sm:text-5xl font-display font-extrabold text-gray-900 dark:text-white leading-tight">
+            Tecnologia e Ecologia para a <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-600 via-honey-500 to-amber-400">Meliponicultura do Futuro</span>
+          </h1>
+          
+          <p class="text-base sm:text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+            O <strong>MeliponaOS</strong> é um ecossistema inteligente de gestão meliponícola que une biologia ancestral e inovação. A plataforma auxilia criadores, pesquisadores e conservacionistas no monitoramento ambiental, georreferenciamento de pasto floral e saúde das colmeias nativas.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-4 pt-2">
+            <button onclick="switchTab('radar')" class="inline-flex items-center gap-2.5 px-6 py-3 rounded-2xl bg-honey-500 hover:bg-honey-600 text-gray-950 font-bold text-sm shadow-md transition-all hover:scale-[1.02]">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/></svg>
+              <span>Abrir Hex-Radar 3D</span>
+            </button>
+            <button onclick="switchTab('dashboard')" class="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white dark:bg-[#1E2330] hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-800 dark:text-white font-semibold text-sm border border-gray-200 dark:border-gray-700 shadow-sm transition-all">
+              <span>Acessar Meliponário</span>
+            </button>
+            <button onclick="switchTab('species')" class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white font-medium text-sm transition-all">
+              <span>Catálogo de Espécies →</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARDS DE PILARES E PARA QUE SERVE O SISTEMA -->
+      <div>
+        <div class="text-center max-w-2xl mx-auto space-y-3 mb-8">
+          <h2 class="text-2xl sm:text-3xl font-display font-extrabold text-gray-900 dark:text-white">Para que serve o MeliponaOS?</h2>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Descubra os pilares fundamentais do ecossistema e como cada módulo potencializa seu meliponário.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          
+          <!-- Card 1 -->
+          <div class="p-6 rounded-3xl bg-white dark:bg-[#14171E] border border-gray-200/80 dark:border-gray-800 shadow-sm flex flex-col justify-between hover:border-amber-400/50 transition-all">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-amber-500/10 dark:bg-amber-400/10 text-amber-600 dark:text-honey-400 flex items-center justify-center text-2xl font-bold">
+                🗺️
+              </div>
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white">Hex-Radar de Voo</h3>
+              <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                Mapeia o raio de forrageamento de cada espécie em malha hexagonal 3D, identificando floradas de néctar, bebedouros seguros, ninhos-isca e pontos de risco ambiental.
+              </p>
+            </div>
+            <button onclick="switchTab('radar')" class="mt-4 text-xs font-bold text-amber-600 dark:text-honey-400 hover:underline inline-flex items-center gap-1">
+              Explorar Mapa 3D →
+            </button>
+          </div>
+
+          <!-- Card 2 -->
+          <div class="p-6 rounded-3xl bg-white dark:bg-[#14171E] border border-gray-200/80 dark:border-gray-800 shadow-sm flex flex-col justify-between hover:border-amber-400/50 transition-all">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-2xl font-bold">
+                📊
+              </div>
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white">Telemetria & Biometria</h3>
+              <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                Monitoramento de dados vitais das caixas: temperatura interna de ninho, umidade relativa, pesagem automática e frequência bioacústica do enxame.
+              </p>
+            </div>
+            <button onclick="switchTab('dashboard')" class="mt-4 text-xs font-bold text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1">
+              Ver Meliponário →
+            </button>
+          </div>
+
+          <!-- Card 3 -->
+          <div class="p-6 rounded-3xl bg-white dark:bg-[#14171E] border border-gray-200/80 dark:border-gray-800 shadow-sm flex flex-col justify-between hover:border-amber-400/50 transition-all">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-sky-500/10 text-sky-600 dark:text-sky-400 flex items-center justify-center text-2xl font-bold">
+                🐝
+              </div>
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white">Enciclopédia Nativa</h3>
+              <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                Acervo de fichas ecológicas completas das abelhas sem ferrão (Jataí, Mandaçaia, Uruçu, Tiúba e Mirim) com padrão de caixas racionais e medidas.
+              </p>
+            </div>
+            <button onclick="switchTab('species')" class="mt-4 text-xs font-bold text-sky-600 dark:text-sky-400 hover:underline inline-flex items-center gap-1">
+              Consultar Espécies →
+            </button>
+          </div>
+
+          <!-- Card 4 -->
+          <div class="p-6 rounded-3xl bg-white dark:bg-[#14171E] border border-gray-200/80 dark:border-gray-800 shadow-sm flex flex-col justify-between hover:border-amber-400/50 transition-all">
+            <div class="space-y-3">
+              <div class="w-12 h-12 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 flex items-center justify-center text-2xl font-bold">
+                📋
+              </div>
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white">Diário de Manejo</h3>
+              <p class="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+                Cadastre e acompanhe intervenções de campo em segundos: alimentação suplementar, divisão de ninhos, colheita sustentável e sanidade preventiva.
+              </p>
+            </div>
+            <button onclick="switchTab('management')" class="mt-4 text-xs font-bold text-purple-600 dark:text-purple-400 hover:underline inline-flex items-center gap-1">
+              Registrar Manejo →
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- SEÇÃO GUIA RÁPIDO DE BOAS PRÁTICAS -->
+      <div class="rounded-3xl bg-gray-50 dark:bg-[#12151C] border border-gray-200/70 dark:border-gray-800 p-8 space-y-6">
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white">Importância da Preservação das Abelhas Sem Ferrão (ASF)</h3>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs text-gray-600 dark:text-gray-400 leading-relaxed">
+          <div class="p-4 rounded-2xl bg-white dark:bg-[#1A1D26] border border-gray-200/60 dark:border-gray-800">
+            <h4 class="font-bold text-gray-900 dark:text-white text-sm mb-1.5">🌱 Polinização de Matas e Culturas</h4>
+            Responsáveis por polinizar até 90% das árvores da Mata Atlântica e do Cerrado, essenciais para a regeneração florestal e frutos nativos.
+          </div>
+          <div class="p-4 rounded-2xl bg-white dark:bg-[#1A1D26] border border-gray-200/60 dark:border-gray-800">
+            <h4 class="font-bold text-gray-900 dark:text-white text-sm mb-1.5">🍯 Mel Medicinal e Gastronomia</h4>
+            Produzem méis singulares de altíssimo valor biológico, ricos em flavonoides, acidez nobre e propriedades antimicrobianas naturais.
+          </div>
+          <div class="p-4 rounded-2xl bg-white dark:bg-[#1A1D26] border border-gray-200/60 dark:border-gray-800">
+            <h4 class="font-bold text-gray-900 dark:text-white text-sm mb-1.5">🛡️ Bioindicadores de Qualidade</h4>
+            Extremamente sensíveis a agrotóxicos e desmatamento. O monitoramento pelo Hex-Radar protege colmeias de contaminações fatais.
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ABA HEX-RADAR 3D -->
+    <section id="view-radar" class="tab-view relative w-full h-[calc(100vh-60px)] hidden">
       
       <!-- CANVAS THREE.JS -->
       <div id="three-canvas-container"></div>
@@ -2760,7 +2895,9 @@
     function switchTab(tabId) {
       document.querySelectorAll('.tab-view').forEach(v => v.classList.add('hidden'));
 
-      if (tabId === 'radar') {
+      if (tabId === 'home') {
+        document.getElementById('view-home').classList.remove('hidden');
+      } else if (tabId === 'radar') {
         document.getElementById('view-radar').classList.remove('hidden');
         onWindowResize();
       } else if (tabId === 'dashboard') {

@@ -1,79 +1,59 @@
-# 🐝 MELIPONA HEX — Ecossistema Digital de Meliponicultura 4.0
+# 🐝 MELIPONA OS — Mapeamento de Voo & Ecologia das Abelhas Nativas
 
 <p align="center">
-  <img src="assets/dashboard-real.png" alt="MELIPONA HEX - Interface Real do Sistema" width="100%" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.6);" />
+  <img src="assets/sistema-real-meliponaos.png" alt="MeliponaOS - Interface Real 3D" width="100%" style="border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.4);" />
 </p>
 
 <p align="center">
-  <strong>Ecossistema inteligente para criação técnica, telemetria bio-IoT e preservação das Abelhas Nativas Sem Ferrão (ASF).</strong>
+  <strong>Ecossistema inteligente para criação técnica, mapeamento ecológico 3D e preservação das Abelhas Nativas Sem Ferrão (ASF).</strong>
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Ativo-FFC300?style=for-the-badge&logoColor=0D0F12" alt="Status Ativo" />
-  <img src="https://img.shields.io/badge/Design_System-HexaBio-F4B41A?style=for-the-badge" alt="Design System HexaBio" />
-  <img src="https://img.shields.io/badge/Tecnologia-HTML5%20%7C%20CSS3%20%7C%20JS-38BDF8?style=for-the-badge" alt="Tecnologias" />
+  <img src="https://img.shields.io/badge/Interface-3D%20Three.js-F4B41A?style=for-the-badge" alt="Interface 3D" />
+  <img src="https://img.shields.io/badge/Tecnologias-HTML5%20%7C%20TailwindCSS%20%7C%20JS-38BDF8?style=for-the-badge" alt="Tecnologias" />
   <img src="https://img.shields.io/badge/Licen%C3%A7a-MIT-A855F7?style=for-the-badge" alt="Licença" />
 </p>
 
 ---
 
-## 🍯 Sobre o Projeto
+## 🍯 Sobre o MeliponaOS
 
-O **MELIPONA HEX** une o conhecimento biológico ancestral das florestas brasileiras à tecnologia de ponta (Georreferenciamento Vetorial, Telemetria IoT e Simulação de Enxames). 
+O **MeliponaOS** une biologia comportamental e tecnologia espacial interativa para a Meliponicultura 4.0. Dedicado ao manejo racional de espécies de Abelhas Nativas Sem Ferrão (ASF) brasileiras, tais como **Mandaçaia (MQA)**, **Jataí**, **Uruçu**, **Tiúba** e **Mirim**.
 
-Dedicado à conservação e manejo racional de espécies como **Mandaçaia**, **Jataí**, **Uruçu**, **Tiúba** e **Mirim**, o ecossistema transforma dados de campo e telemetria em ações assertivas para o meliponicultor.
-
-<p align="center">
-  <img src="assets/radar-foco.png" alt="Hex-Radar Georreferenciado em Detalhe" width="70%" style="border-radius: 10px; box-shadow: 0 4px 20px rgba(255, 195, 0, 0.15);" />
-</p>
-
----
-
-## ✨ Principais Funcionalidades
-
-### 🌐 1. Hex-Radar Georreferenciado
-- **Área de Cobertura Hexagonal:** Abandono de círculos de GPS convencionais por favos hexagonais pulsantes calculados dinamicamente com base no raio real de forrageamento da espécie selecionada.
-- **Mapeamento de Bio-Recursos:**
-  - 🌸 **Floradas (Néctar e Pólen):** Identificação de pasto meliponícola e rotas de campeiras.
-  - 💧 **Fontes de Água Segura:** Mapeamento de bebedouros e áreas limpas.
-  - 🍯 **Iscas-PET e Ninhos:** Monitoramento geolocalizado de captura de enxames.
-  - ⚠️ **Zonas de Risco:** Alertas contra aplicação de agrotóxicos e controle de forídeos.
-
-### 📊 2. Telemetria Bio-IoT em Tempo Real
-- Sensores de temperatura de ninho e ambiente (`34.2 °C`).
-- Umidade relativa interna (`67%`).
-- Analisador de espectro de frequência bioacústica da colmeia e rainha (`248 Hz`).
-- Índice de atividade de fluxo da colmeia (*Hive Activity Index*).
-
-### 📚 3. Catálogo Nativo e Manejo Racional
-- Enciclopédia técnica de espécies nativas do Brasil com especificações de caixas racionais (Padrão INPA, Baiano, etc.).
-- Registro de manejos rápidos em menos de 10 segundos (alimentação, divisões 1:1 e 2:1, trocas de campeiras e controle sanitário).
+A plataforma integra:
+1. **Aba Inicial Informativa:** Apresentação completa dos propósitos do sistema, pilares ecológicos e benefícios da criação de abelhas nativas para a conservação da biodiversidade.
+2. **Hex-Radar 3D Interativo:** Simulação tridimensional do ninho, malha poligonal com raios de forrageamento, marcadores botânicos de floradas nativas, fontes de água, iscas-PET e alertas de risco sanitário.
+3. **Visão do Meliponário:** Biometria, pesagem contínua e status ambiental das caixas racionais.
+4. **Espécies Nativas:** Catálogo com fichas biológicas e especificações técnicas de caixas padrão INPA.
+5. **Diário de Manejo:** Registro rápido de alimentação, divisões, colheitas sustentáveis e revisões sanitárias.
 
 ---
 
-## 🎨 Design System "HexaBio"
+## ✨ Recursos da Aplicação
 
-Interface desenvolvida com foco em alta visibilidade para condições de campo e contraste científico:
+### 🌐 1. Hex-Radar 3D & Mapeamento Ecológico
+- **Relevo 3D Interativo:** Visualização em perspectiva do terreno, árvores e entorno do meliponário.
+- **Raio de Voo Racional:** Projeção da área de cobertura em favo poligonal ajustada automaticamente para a espécie monitorada.
+- **Pinos de Campo:**
+  - 🌸 **Flores Nativas:** Mapeamento botânico de pasto meliponícola.
+  - 💧 **Fontes de Água:** Pontos de hidratação e umidade seguros.
+  - 🍯 **Iscas-PET 2L:** Acompanhamento de ninhos-isca e captura ética.
+  - ⚠️ **Atenção / Risco:** Zonas de perigo químico (agrotóxicos) ou ataques biológicos (forídeos).
 
-| Token de Cor | Hex Code | Função |
-| :--- | :--- | :--- |
-| **Golden Honeycomb** | `#FFC300` | Ações principais, contornos pulsantes do radar e status ativo |
-| **Favo Âmbar Dourado** | `#F4B41A` | Gradientes, cartões em destaque e métricas |
-| **Dark Canvas** | `#0D0F12` | Fundo principal da aplicação em Dark Mode |
-| **Grafite Biológico** | `#14171E` | Superfícies flutuantes e cards de telemetria |
-| **Florada Néctar / Pólen** | `#FF5C8A` | Marcadores botânicos |
-| **Água Mineral** | `#38BDF8` | Marcadores hídricos |
-| **Iscas & Atrativos** | `#A855F7` | Ninhos-isca e pontos de captura |
+### ☀️ 2. Linha do Tempo e Condições Climáticas
+- Slider sazonal (Janeiro a Dezembro) com transição de estações (*Verão, Outono, Inverno, Primavera Floral*).
+- Simulação de clima dinâmico com alternância de chuvas e monitoramento de temperatura ambiente.
 
 ---
 
-## 🚀 Como Executar o Projeto Localmente
+## 🚀 Como Executar Localmente
 
 ### Pré-requisitos
-- Navegador moderno (Google Chrome, Firefox, Safari ou Microsoft Edge).
-- PowerShell (Windows) ou qualquer terminal compatível.
+- Qualquer navegador web atualizado (Chrome, Edge, Firefox, Safari).
+- PowerShell no Windows ou terminal Unix.
 
-### Passos de Instalação e Execução
+### Inicialização Rápida
 
 1. **Clone o repositório:**
    ```bash
@@ -81,34 +61,19 @@ Interface desenvolvida com foco em alta visibilidade para condições de campo e
    cd ProjetoMeliponicultura
    ```
 
-2. **Inicie o servidor local:**
-   - No Windows, execute o script auxiliar:
+2. **Inicie o servidor HTTP:**
+   - Execute o script PowerShell incluído:
      ```powershell
      powershell -ExecutionPolicy Bypass -File .\serve.ps1
      ```
-   - Ou abra diretamente o arquivo `index.html` em seu navegador.
+   - Ou abra o arquivo `index.html` diretamente no navegador.
 
-3. **Acesse no navegador:**
-   - Acesse [http://localhost:8080/](http://localhost:8080/) para testar a experiência completa do sistema.
-
----
-
-## 📂 Estrutura de Arquivos
-
-```text
-ProjetoMeliponicultura/
-├── assets/
-│   ├── dashboard-real.png     # Interface real completa do sistema
-│   └── radar-foco.png         # Detalhe real do Hex-Radar com marcadores
-├── index.html                 # Aplicação Web SPA e Interface HexaBio
-├── MELIPONA_HEX_ARCHITECTURE.md # Documentação técnica detalhada
-├── serve.ps1                  # Servidor local HTTP rápido em PowerShell
-└── README.md                  # Apresentação do repositório no GitHub
-```
+3. **Acesse:**
+   - Abra [http://localhost:8080/](http://localhost:8080/) no seu navegador.
 
 ---
 
-## 🐝 Espécies Contempladas (Raio de Forrageamento)
+## 🐝 Espécies e Raios de Forrageamento
 
 | Espécie | Nome Científico | Raio Médio | Área de Cobertura |
 | :--- | :--- | :--- | :--- |
@@ -121,5 +86,5 @@ ProjetoMeliponicultura/
 ---
 
 <p align="center">
-  Feito com 💛 e dedicação à preservação das abelhas nativas brasileiras.
+  Feito com 💛 e dedicação à preservação das abelhas nativas do Brasil.
 </p>
