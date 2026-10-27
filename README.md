@@ -1,7 +1,7 @@
 # 🐝 MELIPONA HEX — Ecossistema Digital de Meliponicultura 4.0
 
 <p align="center">
-  <img src="assets/banner.png" alt="MELIPONA HEX Interface Real" width="100%" style="border-radius: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.5);" />
+  <img src="assets/dashboard-real.png" alt="MELIPONA HEX - Interface Real do Sistema" width="100%" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.6);" />
 </p>
 
 <p align="center">
@@ -24,7 +24,7 @@ O **MELIPONA HEX** une o conhecimento biológico ancestral das florestas brasile
 Dedicado à conservação e manejo racional de espécies como **Mandaçaia**, **Jataí**, **Uruçu**, **Tiúba** e **Mirim**, o ecossistema transforma dados de campo e telemetria em ações assertivas para o meliponicultor.
 
 <p align="center">
-  <img src="assets/radar-preview.png" alt="Visão do Hex-Radar e Telemetria em Tempo Real" width="95%" style="border-radius: 10px;" />
+  <img src="assets/radar-foco.png" alt="Hex-Radar Georreferenciado em Detalhe" width="70%" style="border-radius: 10px; box-shadow: 0 4px 20px rgba(255, 195, 0, 0.15);" />
 </p>
 
 ---
@@ -42,7 +42,7 @@ Dedicado à conservação e manejo racional de espécies como **Mandaçaia**, **
 ### 📊 2. Telemetria Bio-IoT em Tempo Real
 - Sensores de temperatura de ninho e ambiente (`34.2 °C`).
 - Umidade relativa interna (`67%`).
-- Analisador de espectro de frequência bioacústica das abelhas rainha e campeiras (`248 Hz`).
+- Analisador de espectro de frequência bioacústica da colmeia e rainha (`248 Hz`).
 - Índice de atividade de fluxo da colmeia (*Hive Activity Index*).
 
 ### 📚 3. Catálogo Nativo e Manejo Racional
@@ -53,7 +53,7 @@ Dedicado à conservação e manejo racional de espécies como **Mandaçaia**, **
 
 ## 🎨 Design System "HexaBio"
 
-Interface construída sob a identidade visual biológica com alta legibilidade em campo:
+Interface desenvolvida com foco em alta visibilidade para condições de campo e contraste científico:
 
 | Token de Cor | Hex Code | Função |
 | :--- | :--- | :--- |
@@ -98,8 +98,8 @@ Interface construída sob a identidade visual biológica com alta legibilidade e
 ```text
 ProjetoMeliponicultura/
 ├── assets/
-│   ├── banner.png             # Imagem da interface real do sistema
-│   └── radar-preview.png      # Demonstração real do Hex-Radar & Telemetria
+│   ├── dashboard-real.png     # Interface real completa do sistema
+│   └── radar-foco.png         # Detalhe real do Hex-Radar com marcadores
 ├── index.html                 # Aplicação Web SPA e Interface HexaBio
 ├── MELIPONA_HEX_ARCHITECTURE.md # Documentação técnica detalhada
 ├── serve.ps1                  # Servidor local HTTP rápido em PowerShell
