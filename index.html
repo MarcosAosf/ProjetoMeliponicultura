@@ -3,15 +3,36 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>MELIPONA | Gerenciador de Meliponário 3D & PWA</title>
+  <title>MeliponaOS</title>
+
+  <!-- Favicon Oficial -->
+  <link rel="icon" type="image/png" href="./assets/logo.png">
+  <link rel="shortcut icon" type="image/png" href="./assets/logo.png">
+  <link rel="apple-touch-icon" href="./assets/logo.png">
+
+  <!-- Metadados de Compartilhamento (WhatsApp, Telegram e Redes Sociais - Open Graph) -->
+  <meta property="og:title" content="MeliponaOS - Plataforma de Gestão e Ecologia para Meliponicultura">
+  <meta property="og:description" content="Sistema inteligente de mapeamento via satélite, controle de enxames e telemetria para abelhas sem ferrão (ASF).">
+  <meta property="og:image" content="https://marcosaosf.github.io/ProjetoMeliponicultura/assets/logo.png">
+  <meta property="og:image:secure_url" content="https://marcosaosf.github.io/ProjetoMeliponicultura/assets/logo.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1024">
+  <meta property="og:image:height" content="1024">
+  <meta property="og:url" content="https://marcosaosf.github.io/ProjetoMeliponicultura/">
+  <meta property="og:type" content="website">
+
+  <!-- Meta Tags Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MeliponaOS - Gestão para Meliponicultores">
+  <meta name="twitter:description" content="Mapeamento via satélite, controle de enxames e ecologia de abelhas nativas sem ferrão.">
+  <meta name="twitter:image" content="https://marcosaosf.github.io/ProjetoMeliponicultura/assets/logo.png">
   
   <!-- Configurações PWA e Web App Mobile -->
   <link rel="manifest" href="./manifest.json">
   <meta name="theme-color" content="#111111">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Melipona3D">
-  <link rel="apple-touch-icon" href="./icon-192.png">
+  <meta name="apple-mobile-web-app-title" content="MeliponaOS">
   
   <!-- Fontes Google: Inter & Plus Jakarta Sans -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -386,16 +407,14 @@
     <div class="max-w-7xl mx-auto flex items-center justify-between gap-6">
       
       <!-- Logotipo & Nome -->
-      <div class="flex items-center gap-2.5">
-        <div class="w-8 h-8 rounded-xl bg-honey-500 flex items-center justify-center text-black font-extrabold text-base shadow-sm">
-          🐝
-        </div>
+      <div class="flex items-center gap-2.5 cursor-pointer" onclick="switchTab('home')">
+        <img src="./assets/logo.png" alt="MeliponaOS Logo" class="w-9 h-9 rounded-xl object-contain shadow-sm border border-amber-500/20 bg-gray-950">
         <div>
           <span class="text-base font-display font-extrabold tracking-tight text-gray-900 dark:text-white">
             Melipona<span class="text-honey-600 font-bold">OS</span>
           </span>
           <span class="hidden sm:inline-block ml-2 text-xs text-gray-500 dark:text-gray-400 font-medium">
-            Mapeamento de Voo & Ecologia
+            Gestão para Meliponicultores
           </span>
         </div>
       </div>
@@ -1061,12 +1080,8 @@
               <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 500m Raio
               </span>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-jatai', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
-                â®
-              </button>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-jatai', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto">
-                â¯
-              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-jatai', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior"><span class="carousel-prev select-none font-sans leading-none">&#10094;</span></button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-jatai', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto"><span class="carousel-next select-none font-sans leading-none">&#10095;</span></button>
               <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-jatai', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-jatai', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
@@ -1137,12 +1152,8 @@
               <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 1.500m Raio
               </span>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mandacaia', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
-                â®
-              </button>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mandacaia', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto">
-                â¯
-              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mandacaia', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior"><span class="carousel-prev select-none font-sans leading-none">&#10094;</span></button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mandacaia', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto"><span class="carousel-next select-none font-sans leading-none">&#10095;</span></button>
               <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-mandacaia', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-mandacaia', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
@@ -1213,12 +1224,8 @@
               <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 2.000m Raio
               </span>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-urucu', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
-                â®
-              </button>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-urucu', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto">
-                â¯
-              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-urucu', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior"><span class="carousel-prev select-none font-sans leading-none">&#10094;</span></button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-urucu', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto"><span class="carousel-next select-none font-sans leading-none">&#10095;</span></button>
               <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-urucu', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-urucu', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
@@ -1289,12 +1296,8 @@
               <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 2.000m Raio
               </span>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-urucu_nordestina', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
-                â®
-              </button>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-urucu_nordestina', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto">
-                â¯
-              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-urucu_nordestina', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior"><span class="carousel-prev select-none font-sans leading-none">&#10094;</span></button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-urucu_nordestina', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto"><span class="carousel-next select-none font-sans leading-none">&#10095;</span></button>
               <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-urucu_nordestina', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-urucu_nordestina', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
@@ -1365,12 +1368,8 @@
               <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 2.200m Raio
               </span>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-tiuba', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
-                â®
-              </button>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-tiuba', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto">
-                â¯
-              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-tiuba', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior"><span class="carousel-prev select-none font-sans leading-none">&#10094;</span></button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-tiuba', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto"><span class="carousel-next select-none font-sans leading-none">&#10095;</span></button>
               <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-tiuba', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-tiuba', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
@@ -1441,12 +1440,8 @@
               <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 400m Raio
               </span>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mirim', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
-                â®
-              </button>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mirim', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto">
-                â¯
-              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mirim', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior"><span class="carousel-prev select-none font-sans leading-none">&#10094;</span></button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mirim', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto"><span class="carousel-next select-none font-sans leading-none">&#10095;</span></button>
               <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-mirim', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-mirim', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
@@ -1517,12 +1512,8 @@
               <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 600m Raio
               </span>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-irai', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
-                â®
-              </button>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-irai', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto">
-                â¯
-              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-irai', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior"><span class="carousel-prev select-none font-sans leading-none">&#10094;</span></button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-irai', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto"><span class="carousel-next select-none font-sans leading-none">&#10095;</span></button>
               <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-irai', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-irai', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
@@ -1593,12 +1584,8 @@
               <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 1.200m Raio
               </span>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-bora', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
-                â®
-              </button>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-bora', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto">
-                â¯
-              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-bora', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior"><span class="carousel-prev select-none font-sans leading-none">&#10094;</span></button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-bora', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto"><span class="carousel-next select-none font-sans leading-none">&#10095;</span></button>
               <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-bora', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-bora', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
@@ -1669,12 +1656,8 @@
               <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 1.000m Raio
               </span>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-manduri', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
-                â®
-              </button>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-manduri', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto">
-                â¯
-              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-manduri', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior"><span class="carousel-prev select-none font-sans leading-none">&#10094;</span></button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-manduri', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto"><span class="carousel-next select-none font-sans leading-none">&#10095;</span></button>
               <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-manduri', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-manduri', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
@@ -1745,12 +1728,8 @@
               <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
                 1.800m Raio
               </span>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-bugia', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior">
-                â®
-              </button>
-              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-bugia', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto">
-                â¯
-              </button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-bugia', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior"><span class="carousel-prev select-none font-sans leading-none">&#10094;</span></button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-bugia', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto"><span class="carousel-next select-none font-sans leading-none">&#10095;</span></button>
               <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-bugia', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
                 <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-bugia', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
