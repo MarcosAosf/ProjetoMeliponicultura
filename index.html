@@ -796,6 +796,29 @@
             </div>
           </div>
 
+          <!-- SELETOR DINÂMICO PARA ALTERAR A ESPÉCIE DA CAIXA (RECÁLCULO IMEDIATO) -->
+          <div id="sat-inspec-species-editor" class="p-3 rounded-2xl bg-amber-500/10 border border-amber-500/25 space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label class="block text-[11px] font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+                <span>🐝</span>
+                <span>Alterar Espécie (Atualiza Raio no Satélite):</span>
+              </label>
+              <span id="sat-inspec-radius-badge" class="px-2 py-0.5 rounded-full text-[9px] font-mono font-extrabold bg-amber-500 text-gray-950">1500m</span>
+            </div>
+            <select id="sat-inspec-species-select" onchange="handleChangeInspectedPointSpecies(this.value)" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0E1015] text-gray-900 dark:text-white font-bold text-xs focus:outline-none focus:border-honey-500 shadow-sm cursor-pointer">
+              <option value="mirim">1. Mirim Droryana (Raio: 400m • Área: ~0.5 km²)</option>
+              <option value="jatai">2. Jataí Dourada (Raio: 500m • Área: ~0.8 km²)</option>
+              <option value="irai">3. Iraí (Raio: 600m • Área: ~1.1 km²)</option>
+              <option value="manduri">4. Manduri (Raio: 1.000m • Área: ~3.1 km²)</option>
+              <option value="bora">5. Borá (Raio: 1.200m • Área: ~4.5 km²)</option>
+              <option value="mandacaia">6. Mandaçaia MQA (Raio: 1.500m • Área: ~7.1 km²)</option>
+              <option value="bugia">7. Bugia (Raio: 1.800m • Área: ~10.2 km²)</option>
+              <option value="urucu">8. Uruçu Amarela (Raio: 2.000m • Área: ~12.6 km²)</option>
+              <option value="urucu_nordestina">9. Uruçu Nordestina (Raio: 2.000m • Área: ~12.6 km²)</option>
+              <option value="tiuba">10. Tiúba / Uruçu-Cinzenta (Raio: 2.200m • Área: ~15.2 km²)</option>
+            </select>
+          </div>
+
           <!-- Botões de Ação Rápida (Google Maps + QR Code) -->
           <div class="flex items-center gap-2">
             <a id="sat-inspec-maps-link" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 px-3 rounded-xl bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/15 text-gray-800 dark:text-white font-semibold flex items-center justify-center gap-1.5 transition-all text-xs">
@@ -1084,7 +1107,7 @@
             </div>
           </div>
           <div class="p-6 pt-0">
-            <button onclick="selectAndGoToRadar('jatai')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+            <button onclick="window.mapSpeciesInRadar3D('jatai')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
               <span>Mapear no Radar 3D</span>
               <span>→</span>
             </button>
@@ -1160,7 +1183,7 @@
             </div>
           </div>
           <div class="p-6 pt-0">
-            <button onclick="selectAndGoToRadar('mandacaia')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+            <button onclick="window.mapSpeciesInRadar3D('mandacaia')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
               <span>Mapear no Radar 3D</span>
               <span>→</span>
             </button>
@@ -1236,7 +1259,7 @@
             </div>
           </div>
           <div class="p-6 pt-0">
-            <button onclick="selectAndGoToRadar('urucu')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+            <button onclick="window.mapSpeciesInRadar3D('urucu')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
               <span>Mapear no Radar 3D</span>
               <span>→</span>
             </button>
@@ -1312,7 +1335,7 @@
             </div>
           </div>
           <div class="p-6 pt-0">
-            <button onclick="selectAndGoToRadar('urucu_nordestina')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+            <button onclick="window.mapSpeciesInRadar3D('urucu_nordestina')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
               <span>Mapear no Radar 3D</span>
               <span>→</span>
             </button>
@@ -1388,7 +1411,7 @@
             </div>
           </div>
           <div class="p-6 pt-0">
-            <button onclick="selectAndGoToRadar('tiuba')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+            <button onclick="window.mapSpeciesInRadar3D('tiuba')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
               <span>Mapear no Radar 3D</span>
               <span>→</span>
             </button>
@@ -1464,7 +1487,7 @@
             </div>
           </div>
           <div class="p-6 pt-0">
-            <button onclick="selectAndGoToRadar('mirim')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+            <button onclick="window.mapSpeciesInRadar3D('mirim')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
               <span>Mapear no Radar 3D</span>
               <span>→</span>
             </button>
@@ -1540,7 +1563,7 @@
             </div>
           </div>
           <div class="p-6 pt-0">
-            <button onclick="selectAndGoToRadar('irai')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+            <button onclick="window.mapSpeciesInRadar3D('irai')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
               <span>Mapear no Radar 3D</span>
               <span>→</span>
             </button>
@@ -1616,7 +1639,7 @@
             </div>
           </div>
           <div class="p-6 pt-0">
-            <button onclick="selectAndGoToRadar('bora')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+            <button onclick="window.mapSpeciesInRadar3D('bora')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
               <span>Mapear no Radar 3D</span>
               <span>→</span>
             </button>
@@ -1692,7 +1715,7 @@
             </div>
           </div>
           <div class="p-6 pt-0">
-            <button onclick="selectAndGoToRadar('manduri')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+            <button onclick="window.mapSpeciesInRadar3D('manduri')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
               <span>Mapear no Radar 3D</span>
               <span>→</span>
             </button>
@@ -1768,7 +1791,7 @@
             </div>
           </div>
           <div class="p-6 pt-0">
-            <button onclick="selectAndGoToRadar('bugia')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+            <button onclick="window.mapSpeciesInRadar3D('bugia')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
               <span>Mapear no Radar 3D</span>
               <span>→</span>
             </button>
@@ -1780,7 +1803,7 @@
       <!-- ======================================================== -->
       <!-- 🔬 SIMULADOR 3D DE ALCANCE DE VOO & ECOLOGIA (THREE.JS)  -->
       <!-- ======================================================== -->
-      <div id="species-3d-simulator-section" class="pt-10 border-t border-gray-200 dark:border-gray-800 space-y-4">
+      <div id="species-3d-simulator-section" class="pt-10 border-t-2 border-gray-200 dark:border-gray-800 space-y-4 rounded-3xl transition-all duration-700">
         <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
             <div class="flex items-center gap-2">
@@ -5294,25 +5317,47 @@
       }
     }
 
-    function selectAndGoToRadar(key) {
-      // 1. Garante que a aba 'Espécies Nativas' está visível
-      switchTab('species');
 
-      // 2. Aplica a espécie no modelo 3D, Hex-Radar e estatísticas
-      onSelectSpecies(key);
+    // =========================================================
+    // 🔬 SIMULADOR 3D: MAPEAMENTO DIRETO DA ENCICLOPÉDIA DE ESPÉCIES
+    // =========================================================
+    window.mapSpeciesInRadar3D = function(speciesKey) {
+      // 1. Alterna para a aba 'Espécies Nativas' se não estiver nela
+      if (typeof switchTab === 'function') {
+        switchTab('species');
+      }
 
-      // 3. Atualiza o dropdown no simulador
-      const simSel = document.getElementById('simulator-species-select') || document.getElementById('species-3d-select');
-      if (simSel) simSel.value = key;
+      // 2. Dispara a configuração da espécie no modelo 3D (cor, porte, listras, voo)
+      if (typeof onSelectSpecies === 'function') {
+        onSelectSpecies(speciesKey);
+      }
 
-      // 4. Smooth scroll até o simulador 3D no centro da tela
+      // 3. Atualiza o dropdown do Simulador 3D e dispara o evento change
+      const simSelect = document.getElementById('simulator-species-select');
+      if (simSelect) {
+        simSelect.value = speciesKey;
+        simSelect.dispatchEvent(new Event('change'));
+      }
+
+      // 4. Smooth scroll até o Simulador 3D centralizado na tela
       setTimeout(() => {
         const simSection = document.getElementById('species-3d-simulator-section');
         if (simSection) {
           simSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Efeito visual de destaque (Flash na borda amarela)
+          simSection.classList.add('ring-4', 'ring-amber-500', 'ring-offset-4', 'dark:ring-offset-slate-900');
+          setTimeout(() => {
+            simSection.classList.remove('ring-4', 'ring-amber-500', 'ring-offset-4', 'dark:ring-offset-slate-900');
+          }, 1800);
         }
-      }, 50);
+      }, 60);
+    };
+
+    // Mantém compatibilidade com selectAndGoToRadar
+    function selectAndGoToRadar(key) {
+      window.mapSpeciesInRadar3D(key);
     }
+
 
     let layersState = { flora: true, water: true, traps: true, threat: true };
 
@@ -6367,12 +6412,50 @@
       }
     }
 
+    // DICIONÁRIO OFICIAL DE RAIO REAL BIOLÓGICO EM METROS
+    const BIOLOGICAL_SPECIES_RADIUS = {
+      mirim: 400,
+      jatai: 500,
+      irai: 600,
+      manduri: 1000,
+      bora: 1200,
+      mandacaia: 1500,
+      bugia: 1800,
+      urucu: 2000,
+      urucu_nordestina: 2000,
+      tiuba: 2200
+    };
+
+    // Mapa de referência para instâncias de círculos por ID de ponto
+    const pointCircleInstances = new Map();
+
     // RENDERIZAR PINOS E PERÍMETROS BIOLÓGICOS REAIS NO SATÉLITE
     function renderAllSatellitePoints() {
-      if (!satelliteMap || !satMarkersLayer || !satCirclesLayer) return;
+      if (!satelliteMap) return;
 
-      satMarkersLayer.clearLayers();
-      satCirclesLayer.clearLayers();
+      // GARANTIR QUE OS LAYERGROUPS EXISTEM E ESTÃO 100% LIMPOS (ZERO DUPLICATAS)
+      if (!satCirclesLayer) {
+        satCirclesLayer = L.layerGroup().addTo(satelliteMap);
+      } else {
+        satCirclesLayer.clearLayers();
+      }
+
+      if (!satMarkersLayer) {
+        satMarkersLayer = L.layerGroup().addTo(satelliteMap);
+      } else {
+        satMarkersLayer.clearLayers();
+      }
+
+      pointCircleInstances.clear();
+
+      // Deduplicação estrita de pontos por ID antes de renderizar
+      const uniquePointsMap = new Map();
+      satPoints.forEach(p => {
+        if (p && p.id) {
+          uniquePointsMap.set(p.id, p);
+        }
+      });
+      satPoints = Array.from(uniquePointsMap.values());
 
       satPoints.forEach(point => {
         if (currentSatPointFilter !== 'all' && point.type !== currentSatPointFilter) {
@@ -6381,11 +6464,12 @@
 
         const isHive = point.type === 'hive';
         const spec = SPECIES_CONFIG[point.species] || SPECIES_CONFIG.mandacaia;
-        const flightRadiusMeters = spec.radiusMeters || 1500;
+        const flightRadiusMeters = Number(BIOLOGICAL_SPECIES_RADIUS[point.species] || spec.radiusMeters || 1500);
 
-        // CÍRCULO GEOGRÁFICO DE ALCANCE REAL EM METROS NO MAPA DE SATÉLITE
+        let circle = null;
+        // CÍRCULO GEOGRÁFICO DE ALCANCE REAL EM METROS NO MAPA DE SATÉLITE (NUNCA circleMarker)
         if (isHive) {
-          const circle = L.circle([point.lat, point.lon], {
+          circle = L.circle([point.lat, point.lon], {
             radius: flightRadiusMeters,
             color: '#FFC300',
             weight: 2,
@@ -6400,7 +6484,7 @@
           });
         } else {
           // Ninho-Isca PET: Alcance do atrativo feromonado (~120m)
-          const circle = L.circle([point.lat, point.lon], {
+          circle = L.circle([point.lat, point.lon], {
             radius: 120,
             color: '#10B981',
             weight: 2,
@@ -6413,6 +6497,10 @@
             sticky: true,
             className: 'glass-panel text-xs text-gray-900 font-bold p-1 rounded-lg'
           });
+        }
+
+        if (circle) {
+          pointCircleInstances.set(point.id, circle);
         }
 
         // BADGE E ÍCONE DO PINO COM DETALHE DE RAIO REAL
@@ -6456,6 +6544,11 @@
           openSatelliteInspector(point);
         });
       });
+
+      // Se os círculos estiverem desativados pelo botão toggle, remove do mapa
+      if (!areFlightCirclesVisible && satCirclesLayer) {
+        satelliteMap.removeLayer(satCirclesLayer);
+      }
     }
 
     function toggleMapPointFilter(filterType) {
@@ -6481,6 +6574,7 @@
 
       const isHive = point.type === 'hive';
       const spec = SPECIES_CONFIG[point.species] || SPECIES_CONFIG.mandacaia;
+      const flightRadiusMeters = Number(BIOLOGICAL_SPECIES_RADIUS[point.species] || spec.radiusMeters || 1500);
 
       document.getElementById('sat-inspec-code').innerText = point.id;
       document.getElementById('sat-inspec-species').innerText = `${spec.name} (${spec.scientific || ''})`;
@@ -6488,15 +6582,24 @@
 
       const typeBadge = document.getElementById('sat-inspec-type-badge');
       const iconBadge = document.getElementById('sat-inspec-icon-badge');
+      const speciesEditor = document.getElementById('sat-inspec-species-editor');
+      const speciesSelect = document.getElementById('sat-inspec-species-select');
+      const radiusBadge = document.getElementById('sat-inspec-radius-badge');
+
       if (isHive) {
         typeBadge.innerText = 'Colmeia Racional';
         typeBadge.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-amber-500/15 text-amber-600 dark:text-amber-400';
         iconBadge.innerHTML = '📦';
         iconBadge.className = 'w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-xl font-bold';
         document.getElementById('sat-inspec-metric-label').innerText = 'Raio Real de Voo';
-        document.getElementById('sat-inspec-metric-val').innerText = `~${(spec.radiusMeters || 1500).toLocaleString('pt-BR')}m (${spec.areaKm2 || '5.8 km²'})`;
+        document.getElementById('sat-inspec-metric-val').innerText = `~${flightRadiusMeters.toLocaleString('pt-BR')}m (${spec.areaKm2 || '5.8 km²'})`;
         document.getElementById('sat-inspec-transfer-container').classList.add('hidden');
         document.getElementById('sat-inspec-qr-btn').classList.remove('hidden');
+
+        // Exibe o seletor de espécies para edição em tempo real
+        if (speciesEditor) speciesEditor.classList.remove('hidden');
+        if (speciesSelect) speciesSelect.value = point.species;
+        if (radiusBadge) radiusBadge.innerText = `${flightRadiusMeters}m`;
       } else {
         typeBadge.innerText = 'Ninho-Isca PET';
         typeBadge.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-emerald-500/15 text-emerald-600 dark:text-emerald-400';
@@ -6512,6 +6615,7 @@
         document.getElementById('sat-inspec-metric-val').innerText = `${daysInstalled} dias`;
         document.getElementById('sat-inspec-transfer-container').classList.remove('hidden');
         document.getElementById('sat-inspec-qr-btn').classList.add('hidden');
+        if (speciesEditor) speciesEditor.classList.add('hidden');
       }
 
       // Link Google Maps
@@ -6522,6 +6626,45 @@
       renderSatPointPhotos(point);
 
       drawer.classList.remove('hidden');
+
+      // AJUSTE AUTOMÁTICO DE ZOOM (fitBounds): Garante que todo o círculo amarelo caiba perfeitamente na tela
+      if (satelliteMap) {
+        const circle = pointCircleInstances.get(point.id);
+        if (circle) {
+          satelliteMap.fitBounds(circle.getBounds(), { padding: [40, 40], maxZoom: 17, animate: true });
+        } else {
+          satelliteMap.flyTo([point.lat, point.lon], 16, { animate: true });
+        }
+      }
+    }
+
+    // ALTERAÇÃO DINÂMICA DA ESPÉCIE DA CAIXA COM RECÁLCULO IMEDIATO DO CÍRCULO
+    function handleChangeInspectedPointSpecies(newSpecies) {
+      if (!currentInspectedSatPoint) return;
+
+      currentInspectedSatPoint.species = newSpecies;
+      const spec = SPECIES_CONFIG[newSpecies] || SPECIES_CONFIG.mandacaia;
+      const newRadius = Number(BIOLOGICAL_SPECIES_RADIUS[newSpecies] || spec.radiusMeters || 1500);
+
+      // Atualiza os textos no painel lateral
+      document.getElementById('sat-inspec-species').innerText = `${spec.name} (${spec.scientific || ''})`;
+      document.getElementById('sat-inspec-metric-val').innerText = `~${newRadius.toLocaleString('pt-BR')}m (${spec.areaKm2 || ''})`;
+      const radiusBadge = document.getElementById('sat-inspec-radius-badge');
+      if (radiusBadge) radiusBadge.innerText = `${newRadius}m`;
+
+      // Salva no LocalStorage e Firebase
+      saveSatPointsLocalAndCloud();
+
+      // Redesenha todos os pinos e círculos no satélite de forma limpa
+      renderAllSatellitePoints();
+
+      // Ajusta o zoom do mapa automaticamente com fitBounds para enquadrar o novo diâmetro
+      const updatedCircle = pointCircleInstances.get(currentInspectedSatPoint.id);
+      if (satelliteMap && updatedCircle) {
+        satelliteMap.fitBounds(updatedCircle.getBounds(), { padding: [40, 40], maxZoom: 17, animate: true });
+      }
+
+      showGpsToast(`Raio atualizado para ${spec.name}: ${newRadius}m`, true, 3000);
     }
 
     function closeSatelliteInspector() {
