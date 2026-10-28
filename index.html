@@ -6680,26 +6680,30 @@
     let fbAuth = null;
     let fbDb = null;
 
-    const DEFAULT_FB_CONFIG = {
-      apiKey: "AIzaSyD-DEMO_KEY_CONFIGURAVEL",
-      authDomain: "meliponaos-demo.firebaseapp.com",
-      projectId: "meliponaos-demo",
-      storageBucket: "meliponaos-demo.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef"
-    };
-
     function getActiveFirebaseConfig() {
       try {
         const saved = localStorage.getItem('melipona_firebase_config');
-        if (saved) return JSON.parse(saved);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (parsed && parsed.apiKey && !parsed.apiKey.includes('DEMO_KEY') && parsed.apiKey.startsWith('AIzaSy')) {
+            return parsed;
+          }
+        }
       } catch (e) {}
-      return DEFAULT_FB_CONFIG;
+      return null;
+    }
+
+    function isFirebaseConfigured() {
+      return getActiveFirebaseConfig() !== null;
     }
 
     window.initFirebaseApplication = function() {
       if (!window.fbService) return;
       const cfg = getActiveFirebaseConfig();
+      if (!cfg) {
+        console.log("ℹ️ Nenhuma chave Firebase pessoal configurada ainda. O app opera no Modo Local / Offline.");
+        return;
+      }
       try {
         fbApp = window.fbService.initializeApp(cfg);
         fbAuth = window.fbService.getAuth(fbApp);
@@ -6712,9 +6716,9 @@
             handleUserSignedOut();
           }
         });
-        console.log("🔥 Firebase inicializado com sucesso!");
+        console.log("🔥 Firebase inicializado com credenciais ativas do usuário!");
       } catch (e) {
-        console.log("Firebase aguardando credenciais válidas do usuário ou operando offline:", e.message);
+        console.log("Firebase aguardando credenciais válidas:", e.message);
       }
     };
 
@@ -6740,13 +6744,22 @@
       if (modal) modal.classList.add('hidden');
     }
 
-    function toggleFirebaseConfigPanel() {
+    function toggleFirebaseConfigPanel(forceOpen = false) {
       const p = document.getElementById('firebase-config-panel');
       if (p) {
-        p.classList.toggle('hidden');
+        if (forceOpen) {
+          p.classList.remove('hidden');
+        } else {
+          p.classList.toggle('hidden');
+        }
         if (!p.classList.contains('hidden')) {
           const area = document.getElementById('firebase-config-textarea');
-          area.value = JSON.stringify(getActiveFirebaseConfig(), null, 2);
+          const current = getActiveFirebaseConfig();
+          if (current) {
+            area.value = JSON.stringify(current, null, 2);
+          } else {
+            area.placeholder = '{\n  "apiKey": "AIzaSy...",\n  "authDomain": "seu-projeto.firebaseapp.com",\n  "projectId": "seu-projeto",\n  "storageBucket": "seu-projeto.appspot.com",\n  "messagingSenderId": "...",\n  "appId": "..."\n}';
+          }
         }
       }
     }
@@ -6764,8 +6777,18 @@
     }
 
     async function loginWithGoogle() {
-      if (!window.fbService || !fbAuth) {
-        alert("Configuração Firebase necessária para login Google real. Você pode usar o 'Modo Demonstração' para testar agora!");
+      if (!isFirebaseConfigured() || !fbAuth) {
+        const wantsDemo = confirm(
+          "⚠️ Chaves do Firebase ainda não configuradas!\n\n" +
+          "O Login com Google real exige conectar ao seu próprio projeto no console.firebase.google.com.\n\n" +
+          "• Clique em 'OK' para entrar imediatamente no 'Modo Demonstração' (completamente funcional e gratuito no navegador).\n" +
+          "• Ou clique em 'Cancelar' para abrir o campo e colar o seu objeto firebaseConfig."
+        );
+        if (wantsDemo) {
+          activateDemoMode();
+        } else {
+          toggleFirebaseConfigPanel(true);
+        }
         return;
       }
       try {
@@ -6774,7 +6797,7 @@
         handleUserSignedIn(result.user);
         closeAuthModal();
       } catch (err) {
-        alert("Erro no Login Google: " + err.message + "\nDica: Você pode ativar o 'Modo Demonstração' logo abaixo para testar de imediato.");
+        alert("Erro no Login Google: " + err.message + "\n\nSe desejar testar de imediato sem chaves, utilize o botão 'Modo Demonstração'!");
       }
     }
 
