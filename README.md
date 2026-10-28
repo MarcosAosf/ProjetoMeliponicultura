@@ -17,7 +17,21 @@
 
 ---
 
-## 📌 Visão Geral do Projeto
+## 📸 Interface e Demonstração do Sistema
+
+Abaixo a demonstração da interface principal com o **Mapeamento via Satélite Real (Esri WorldImagery)**, anéis dinâmicos de forrageamento biológico georreferenciados e a gaveta lateral de inspeção e biometria em ação:
+
+<p align="center">
+  <img src="./assets/sistema-real-meliponaos.png" alt="Visão Geral do MeliponaOS em Campo" width="100%" style="border-radius: 16px; border: 1px solid rgba(255, 195, 0, 0.3); box-shadow: 0 12px 35px rgba(0,0,0,0.4);">
+</p>
+
+<p align="center">
+  <em>Mapeamento de colmeias em alta definição com alcance real em metros, controle de ninhos-isca e fotos georreferenciadas.</em>
+</p>
+
+---
+
+## 🌿 Visão Geral do Projeto
 
 O **MeliponaOS** é uma aplicação web progressiva (PWA) de alta performance projetada para apoiar meliponicultores, biólogos e entusiastas da conservação ambiental no manejo científico de abelhas nativas brasileiras sem ferrão. 
 
@@ -47,78 +61,89 @@ A plataforma divide de forma limpa o uso **prático de campo** (satélite de alt
   - **Enquadramento Dinâmico com `fitBounds`**: Ao trocar a espécie de uma caixa (ex: de Jataí para Uruçu), o raio cresce em tempo real e a câmera se afasta automaticamente para mostrar o diâmetro inteiro do pasto.
   - **Botão Liga/Desliga de Raios**: Oculte ou mostre os perímetros amarelos com 1 clique para manter o mapa limpo quando houver muitos enxames concentrados.
 
-### 📷 2. Rastreabilidade Física e Bilhete de Identidade com Câmera
+### 📋 2. Diário Técnico de Manejo com Persistência Permanente
+- **Registro de Manejos em Campo**: Cadastro ágil de manutenções com seleção da colmeia alvo (`MQA-04`, `JTF-12`, `URA-02` ou qualquer caixa ativa no mapa).
+- **Categorias Técnicas**:
+  - 💧 *Alimentação Suplementar*: Xarope 1:1, bombom de pólen e reforço proteico.
+  - 🍯 *Colheita Sanitária de Mel*: Registro de pesagem, umidade e uso de sugador a vácuo.
+  - 🐝 *Divisão de Enxame*: Multiplicação por módulos, discos maduros e realeiras.
+  - 🔍 *Revisão Geral e Biometria*: Vigor da rainha, espaço útil e postura.
+  - 📦 *Transferência de Ninho-Isca*: Conversão de garrafa PET para caixa racional INPA.
+- **Persistência Imediata no Navegador (`LocalStorage`)**: Os registros permanecem salvos mesmo ao recarregar ou fechar a página.
+- **Espelho Automático na Nuvem (`Firebase Firestore`)**: Sincronização em tempo real quando o meliponicultor estiver autenticado.
+
+### 📷 3. Rastreabilidade Física e Bilhete de Identidade com Câmera
 - **Fotos Reais Comprimidas**: Fotografe caixas e árvores com a câmera do celular (`capture="environment"`). As imagens são otimizadas via `<canvas>` (700px, JPEG 0.7) para economizar dados e funcionar rápido até no 3G/4G rural.
 - **Categorias de Foto**: Organize fotos por *"Local/Árvore"*, *"Entrada/Pito"* e *"Disco de Cria/Interno"*.
 - **Etiqueta QR Code**: Gere códigos QR individuais de alta resolução prontos para imprimir e colar nas caixas físicas em campo.
 - **Rota GPS Automática**: Botão que abre a rota passo a passo até a caixa direto no Google Maps.
-- **Transferência de Ninho-Isca para Caixa**: Fluxo guiado que transforma a isca PET em caixa racional de madeira, preservando o histórico de fotos e substituindo o perímetro verde pelo alcance de voo amarelo.
-- **Gestão de Força & Revisão (>90 dias)**:
-  - Avaliação de enxame: **🟢 Forte**, **🟡 Médio** ou **🔴 Fraco**.
+- **Gestão de Vigor & Revisão (>90 dias)**:
+  - Avaliação de força: **🟢 Forte**, **🟡 Médio** ou **🔴 Fraco**.
   - Alerta automático em vermelho caso uma colmeia esteja há mais de 90 dias sem revisão.
   - Botão *"✍️ Revisar Hoje"* que registra o manejo instantaneamente no diário.
 
-### 🔬 3. Simulador 3D de Voo & Ecologia (Three.js WebGL)
+### 🎮 4. Simulador 3D de Voo & Ecologia (Three.js WebGL)
 - Localizado na aba **"Espécies Nativas"**, sob a enciclopédia biológica.
-- **Botão "Mapear no Radar 3D →"**: Presente em todos os 10 cards das abelhas. Ao clicar, a página rola suavemente até o simulador, seleciona a abelha e dá um flash luminoso na borda.
+- **Botão "Mapear no Radar 3D 🎯"**: Presente em todos os 10 cards das abelhas. Ao clicar, a página rola suavemente até o simulador, seleciona a abelha e dá um flash luminoso na borda.
 - **Dinâmica Procedural**: Movimentação individual de campeiras, oscilação de asas, bebedouro de água e árvores nativas.
 - **Controle de Chuva & Clima**: Botão integrado de simulação de chuva/tempestade e ciclo de estações do ano (*Primavera Floral*, *Verão*, *Outono*, *Inverno*).
 
-### ⚖️ 4. Comparador Biológico de Espécies
-- Modal interativo para comparar lado a lado quaisquer 2 espécies do catálogo.
-- Métricas analisadas: Tribo taxonômica, Raio de forrageamento, Área de pasto em km², Produção média anual de mel, Docilidade (%), Tolerância a baixas temperaturas e Características de ninho/geoprópolis.
-
-### 📋 5. Diário Técnico de Manejo com Persistência
-- Histórico cronológico permanente salvo no navegador e na nuvem.
-- Categorias: *Colheita de Mel*, *Alimentação Suplementar*, *Divisão de Enxame*, *Revisão Geral* e *Transferência de Ninho-Isca*.
+### ⚖️ 5. Comparador Biológico de Espécies
+- Modal interativo para comparar lado a lado quaisquer 2 espécies das 10 catalogadas.
+- Métricas analisadas: Nome científico, raio de voo no satélite, área de pasto em km², produção anual de mel, modelo de caixa ideal (INPA), docilidade/defesa e grau de dificuldade.
 
 ### 🌦️ 6. Alertas Climáticos Preventivos
-- Análise meteorológica preventiva no topo da aba Meliponário para proteger colmeias contra frentes frias bruscas, tempestades e risco de forídeos.
+- Análise meteorológica dinâmica no topo da Dashboard para proteger colmeias contra frentes frias bruscas, tempestades e risco de forídeos.
 
-### 📊 7. Relatório Visual em Canvas & Compartilhamento no WhatsApp
-- **Gerador de Imagem (PNG)**: Cria dinamicamente um card institucional elegante em 1200x680 contendo o logotipo oficial, total de colmeias ativas, ninhos-isca e inventário por espécie.
+### 🎨 7. Relatório Visual em Canvas & Compartilhamento no WhatsApp
+- **Gerador de Imagem (PNG 1200x680)**: Cria dinamicamente um card institucional elegante contendo o logotipo oficial, total de colmeias ativas, ninhos-isca e inventário por espécie.
 - **Compartilhamento WhatsApp**: Dispara uma mensagem pronta formatada com o balanço do meliponário e convite para outros criadores.
 
-### ☁️ 8. Login Seguro e Nuvem (Firebase Auth + Cloud Firestore)
-- **Login com Google** oficial (`signInWithPopup`).
-- **Login com E-mail e Senha**.
-- **Modo Demonstração (1 Clique)**: Permite testar todos os recursos imediatamente sem precisar de chaves.
-- **Regras de Segurança de Produção**: Cada meliponicultor só lê e edita seus próprios dados (`/users/{uid}/meliponario_data`).
+### ✉️ 8. Canal de Contato Integrado com Conta Logada
+- Modal rápido de contato acessível tanto no menu desktop quanto no mobile.
+- Detecta automaticamente a conta do usuário logado (Google / E-mail / Modo Demo) e envia diretamente para o desenvolvedor (`marcosaosf2010@gmail.com`).
+- Dispara via **Webmail Gmail** para dispensar clientes de e-mail de desktop (como Outlook do Windows), com fallback universal.
+
+### 🔐 9. Login Seguro e Nuvem (Firebase Auth + Cloud Firestore)
+- **Login com Google com 1 clique** ou via e-mail e senha.
+- **Modo Demonstração Instantâneo**: Permite testar todos os recursos na nuvem sem precisar cadastrar senhas.
+- **Sincronização Bidirecional**: Colmeias, coordenadas, fotos e diário de manejo espelhados no Firestore.
+
+---
+
+## 🐝 Espécies Catalogadas no Sistema
+
+| Espécie | Nome Científico | Raio de Voo | Modelo de Caixa | Produção Anual |
+| :--- | :--- | :---: | :---: | :---: |
+| **Mirim Droryana** | *Plebeia droryana* | 400m | INPA 10x10 cm | 0.2 a 0.5 kg |
+| **Jataí Dourada** | *Tetragonisca angustula* | 500m | INPA 12x12 cm | 0.5 a 1.2 kg |
+| **Iraí** | *Nannotrigona testaceicornis* | 600m | INPA 12x12 cm | 0.3 a 0.8 kg |
+| **Manduri** | *Melipona marginata* | 1.000m | INPA 15x15 cm | 1.0 a 2.0 kg |
+| **Borá** | *Tetragona clavipes* | 1.200m | INPA 18x18 cm | 2.0 a 4.0 kg |
+| **Mandaçaia MQA** | *Melipona quadrifasciata* | 1.500m | INPA 20x20 cm | 1.5 a 2.5 kg |
+| **Bugia** | *Melipona mandacaia* | 1.800m | INPA 20x20 cm | 1.5 a 3.0 kg |
+| **Uruçu Amarela** | *Melipona flavolineata* | 2.000m | INPA 20x20 cm | 3.0 a 6.0 kg |
+| **Uruçu Nordestina** | *Melipona scutellaris* | 2.000m | INPA 20x20 cm | 4.0 a 10.0 kg |
+| **Tiúba / Cinzenta** | *Melipona compressipes* | 2.200m | INPA 22x22 cm | 5.0 a 12.0 kg |
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Frontend & UI**: HTML5 Semântico, Tailwind CSS, Google Fonts (*Plus Jakarta Sans* e *Inter*), CSS Animations.
-- **Mapeamento Satélite**: Leaflet.js v1.9, Esri WorldImagery, OpenStreetMap Nominatim API, ipwho.is Geolocation.
-- **Renderização 3D**: Three.js r128, OrbitControls, Custom Shaders, CSS2DRenderer.
-- **Data Visualization**: Chart.js v4.4.
-- **Autenticação & Nuvem**: Firebase SDK v10 (Auth + Firestore).
-- **Processamento de Mídia**: HTML5 Canvas API para compressão de imagens em Base64 e renderização gráfica do relatório.
-- **PWA & Mobile**: Service Worker nativo (`sw.js`), Web App Manifest (`manifest.json`), meta tags para iOS/Android.
-- **Open Graph**: Integração com WhatsApp, Telegram e redes sociais (`og:image`, `og:title`, `og:description`).
+- **Frontend Core**: HTML5 Semântico, CSS3 Moderno, JavaScript ES6+ Vanilla.
+- **Estilização & Design**: Tailwind CSS (via CDN) com suporte total a **Dark Mode** e paleta **Mel & Favo**.
+- **Cartografia & Satélite**: Leaflet.js v1.9.4 com tilesets Esri WorldImagery e OpenStreetMap Nominatim.
+- **Gráficos 3D & Simulação**: Three.js r128 com WebGL, iluminação dinâmica e shaders de relevo.
+- **Visualização de Dados**: Chart.js para telemetria de sensores e pesagem de colmeias.
+- **Backend & Nuvem**: Firebase Auth, Firebase Firestore (SDK v10 Modular).
+- **PWA & Offline**: Web App Manifest e Service Worker com cache-first.
 
 ---
 
-## 📲 Instalação no Celular (PWA)
+## 👨‍💻 Autor & Direitos
 
-1. Abra o link **[https://marcosaosf.github.io/ProjetoMeliponicultura/](https://marcosaosf.github.io/ProjetoMeliponicultura/)** no navegador do seu celular (Safari no iPhone ou Chrome no Android).
-2. Toque no botão de **Compartilhar** (iOS) ou nos **três pontinhos** (Android).
-3. Selecione **"Adicionar à Tela de Início"** (ou *"Instalar Aplicativo"*).
-4. O MeliponaOS será instalado com o ícone oficial da abelha no seu celular e abrirá em tela cheia como um app nativo.
+Desenvolvido por **Marcos Aosf**  
+📧 Contato: [marcosaosf2010@gmail.com](mailto:marcosaosf2010@gmail.com)  
+🌐 Repositório: [https://github.com/MarcosAosf/ProjetoMeliponicultura](https://github.com/MarcosAosf/ProjetoMeliponicultura)  
 
----
-
-## ✉️ Suporte e Contato
-
-Dúvidas, sugestões de novos recursos ou parcerias:
-- **Desenvolvedor**: Marcos Aosf
-- **E-mail de Contato**: [marcosaosf2010@gmail.com](mailto:marcosaosf2010@gmail.com)
-- **Repositório**: [github.com/MarcosAosf/ProjetoMeliponicultura](https://github.com/MarcosAosf/ProjetoMeliponicultura)
-
----
-
-<p align="center">
-  &copy; 2026 MeliponaOS. Todos os direitos reservados.<br>
-  Desenvolvido por <strong>Marcos Aosf</strong>.
-</p>
+© 2026 **MeliponaOS**. Todos os direitos reservados.
