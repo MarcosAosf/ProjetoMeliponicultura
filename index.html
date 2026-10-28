@@ -717,25 +717,25 @@
 
       <!-- BANNER DE MODO DE POSICIONAMENTO POR CLIQUE NO MAPA -->
       <!-- PAINEL MINIMIZÁVEL "CAIXAS REGISTRADAS" NO CANTO SUPERIOR ESQUERDO DO MAPA -->
-      <div id="sat-boxes-quick-panel" class="absolute top-20 sm:top-24 left-4 z-20 w-64 max-w-[calc(100%-32px)] glass-panel rounded-2xl shadow-2xl border border-gray-200/60 dark:border-white/10 overflow-hidden transition-all duration-300 pointer-events-auto">
+      <div id="sat-boxes-quick-panel" class="absolute top-14 sm:top-16 left-3 sm:left-4 z-20 w-56 sm:w-64 max-w-[calc(100vw-24px)] glass-panel rounded-2xl shadow-2xl border border-gray-200/60 dark:border-white/10 overflow-hidden transition-all duration-300 pointer-events-auto">
         <!-- Cabeçalho do Painel (Sempre visível / Clicável para alternar) -->
-        <div onclick="toggleSatBoxesQuickPanel()" class="p-3 bg-white/70 dark:bg-[#151821]/80 backdrop-blur-md flex items-center justify-between cursor-pointer select-none border-b border-gray-100 dark:border-white/5 hover:bg-white/90 dark:hover:bg-[#1a1f2c] transition-colors">
-          <div class="flex items-center gap-2">
-            <span class="text-base">📦</span>
+        <div onclick="toggleSatBoxesQuickPanel()" class="px-3 py-2 sm:p-2.5 bg-white/80 dark:bg-[#151821]/90 backdrop-blur-md flex items-center justify-between cursor-pointer select-none border-b border-gray-100 dark:border-white/5 hover:bg-white dark:hover:bg-[#1a1f2c] transition-colors">
+          <div class="flex items-center gap-1.5">
+            <span class="text-sm">📦</span>
             <div>
-              <h4 class="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
-                <span>Caixas Registradas</span>
-                <span id="quick-panel-count-badge" class="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-extrabold bg-amber-500 text-gray-950">0</span>
+              <h4 class="text-[11px] sm:text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1">
+                <span>Caixas</span>
+                <span id="quick-panel-count-badge" class="px-1.5 py-0.2 rounded-full text-[9px] font-mono font-extrabold bg-amber-500 text-gray-950">0</span>
               </h4>
             </div>
           </div>
-          <button type="button" id="quick-panel-toggle-btn" class="w-6 h-6 rounded-lg bg-gray-100 dark:bg-white/10 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300 transition-transform">
-            ▼
+          <button type="button" id="quick-panel-toggle-btn" class="w-5 h-5 rounded-md bg-gray-100 dark:bg-white/10 flex items-center justify-center text-[10px] font-bold text-gray-600 dark:text-gray-300 transition-transform">
+            ▲
           </button>
         </div>
 
-        <!-- Lista Rolável de Caixas e Iscas (Expansível / Minimizável) -->
-        <div id="sat-boxes-quick-list" class="max-h-64 overflow-y-auto p-2 space-y-1.5 bg-white/40 dark:bg-[#0E1015]/60 backdrop-blur-sm divide-y divide-gray-100/50 dark:divide-white/5">
+        <!-- Lista Rolável de Caixas e Iscas (Inicia minimizada no mobile para não obstruir o mapa) -->
+        <div id="sat-boxes-quick-list" class="hidden max-h-48 sm:max-h-60 overflow-y-auto p-1.5 space-y-1 bg-white/60 dark:bg-[#0E1015]/80 backdrop-blur-sm divide-y divide-gray-100/50 dark:divide-white/5">
           <!-- Itens renderizados dinamicamente via renderSatBoxesQuickPanel() -->
         </div>
       </div>
@@ -748,7 +748,7 @@
       </div>
 
       <!-- BARRA DE CONTROLE SUPERIOR FLUTUANTE DO SATÉLITE -->
-      <div class="absolute top-6 sm:top-7 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-2 pointer-events-auto mt-1">
+      <div class="absolute top-3 sm:top-5 left-3 sm:left-4 right-3 sm:right-4 z-20 flex flex-wrap items-center justify-between gap-1.5 sm:gap-2 pointer-events-auto">
         <div class="flex flex-wrap items-center gap-2">
           <!-- Botão GPS Minha Posição -->
           <button 
@@ -789,24 +789,7 @@
           </button>
         </div>
 
-        <!-- Barra de Busca de Cidade / Bairro / Endereço (OpenStreetMap Nominatim) -->
-        <div class="relative w-full sm:w-64 max-w-full">
-          <div class="relative flex items-center">
-            <input 
-              type="text" 
-              id="map-search-input" 
-              placeholder="🔍 Buscar cidade ou local..." 
-              onkeydown="if(event.key==='Enter') searchCityAddressOnMap()"
-              class="w-full px-3.5 py-1.5 pr-8 rounded-2xl glass-panel shadow-apple border border-gray-200/60 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-honey-500"
-            >
-            <button onclick="searchCityAddressOnMap()" class="absolute right-2 text-gray-400 hover:text-honey-600 dark:hover:text-honey-400 text-xs" title="Buscar">
-              ➔
-            </button>
-          </div>
-          <div id="map-search-spinner" class="hidden absolute top-1.5 right-6 text-honey-500 text-[11px] animate-spin">
-            ⏳
-          </div>
-        </div>
+
       </div>
 
       <!-- AVISO / TOAST DE GPS AMIGÁVEL (NUNCA ALERT INTRUSIVO) -->
@@ -821,9 +804,9 @@
       </div>
 
       <!-- PAINEL LATERAL DE INSPEÇÃO DE PONTO NO SATÉLITE (DESLIZANTE / MODAL RESPONSIVO) -->
-      <div id="satellite-inspector-drawer" class="hidden absolute top-4 bottom-4 right-4 z-30 w-full max-w-sm glass-panel rounded-3xl shadow-2xl border border-gray-200 dark:border-white/10 flex flex-col overflow-hidden animate-fade-in pointer-events-auto">
+      <div id="satellite-inspector-drawer" class="hidden absolute inset-x-2 bottom-2 sm:inset-y-4 sm:right-4 sm:left-auto z-30 w-auto sm:w-full sm:max-w-sm max-h-[85vh] sm:max-h-none glass-panel rounded-3xl shadow-2xl border border-gray-200/80 dark:border-white/10 flex flex-col overflow-hidden animate-fade-in pointer-events-auto">
         <!-- FOTO EM DESTAQUE NO TOPO (OU HERO PLACEHOLDER) -->
-        <div class="relative w-full h-44 bg-gray-900 shrink-0 overflow-hidden group">
+        <div class="relative w-full h-32 sm:h-40 bg-gray-900 shrink-0 overflow-hidden group">
           <img id="sat-inspec-top-photo" src="assets/logo.png" alt="Foto da Caixa" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
           <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/20"></div>
 
@@ -1328,12 +1311,6 @@
               </div>
             </div>
           </div>
-          <div class="p-6 pt-0">
-            <button onclick="window.mapSpeciesInRadar3D('jatai')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
-              <span>Mapear no Radar 3D</span>
-              <span>→</span>
-            </button>
-          </div>
         </div>
 
         <!-- CARD: MANDAÇAIA -->
@@ -1403,12 +1380,6 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="p-6 pt-0">
-            <button onclick="window.mapSpeciesInRadar3D('mandacaia')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
-              <span>Mapear no Radar 3D</span>
-              <span>→</span>
-            </button>
           </div>
         </div>
 
@@ -1480,12 +1451,6 @@
               </div>
             </div>
           </div>
-          <div class="p-6 pt-0">
-            <button onclick="window.mapSpeciesInRadar3D('urucu')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
-              <span>Mapear no Radar 3D</span>
-              <span>→</span>
-            </button>
-          </div>
         </div>
 
         <!-- CARD: URUÇU NORDESTINA -->
@@ -1555,12 +1520,6 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="p-6 pt-0">
-            <button onclick="window.mapSpeciesInRadar3D('urucu_nordestina')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
-              <span>Mapear no Radar 3D</span>
-              <span>→</span>
-            </button>
           </div>
         </div>
 
@@ -1632,12 +1591,6 @@
               </div>
             </div>
           </div>
-          <div class="p-6 pt-0">
-            <button onclick="window.mapSpeciesInRadar3D('tiuba')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
-              <span>Mapear no Radar 3D</span>
-              <span>→</span>
-            </button>
-          </div>
         </div>
 
         <!-- CARD: MIRIM DRORYANA -->
@@ -1707,12 +1660,6 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="p-6 pt-0">
-            <button onclick="window.mapSpeciesInRadar3D('mirim')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
-              <span>Mapear no Radar 3D</span>
-              <span>→</span>
-            </button>
           </div>
         </div>
 
@@ -1784,12 +1731,6 @@
               </div>
             </div>
           </div>
-          <div class="p-6 pt-0">
-            <button onclick="window.mapSpeciesInRadar3D('irai')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
-              <span>Mapear no Radar 3D</span>
-              <span>→</span>
-            </button>
-          </div>
         </div>
 
         <!-- CARD: BORÁ -->
@@ -1859,12 +1800,6 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="p-6 pt-0">
-            <button onclick="window.mapSpeciesInRadar3D('bora')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
-              <span>Mapear no Radar 3D</span>
-              <span>→</span>
-            </button>
           </div>
         </div>
 
@@ -1936,12 +1871,6 @@
               </div>
             </div>
           </div>
-          <div class="p-6 pt-0">
-            <button onclick="window.mapSpeciesInRadar3D('manduri')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
-              <span>Mapear no Radar 3D</span>
-              <span>→</span>
-            </button>
-          </div>
         </div>
 
         <!-- CARD: BUGIA -->
@@ -2011,12 +1940,6 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="p-6 pt-0">
-            <button onclick="window.mapSpeciesInRadar3D('bugia')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
-              <span>Mapear no Radar 3D</span>
-              <span>→</span>
-            </button>
           </div>
         </div>
 
@@ -2088,12 +2011,6 @@
               </div>
             </div>
           </div>
-          <div class="p-6 pt-0">
-            <button onclick="window.mapSpeciesInRadar3D('mambucao')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
-              <span>Mapear no Radar 3D</span>
-              <span>→</span>
-            </button>
-          </div>
         </div>
 
         <!-- CARD: TUBUNA (Scaptotrigona depilis) -->
@@ -2163,12 +2080,6 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="p-6 pt-0">
-            <button onclick="window.mapSpeciesInRadar3D('tubuna')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
-              <span>Mapear no Radar 3D</span>
-              <span>→</span>
-            </button>
           </div>
         </div>
 
@@ -2240,12 +2151,6 @@
               </div>
             </div>
           </div>
-          <div class="p-6 pt-0">
-            <button onclick="window.mapSpeciesInRadar3D('guaraipo')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
-              <span>Mapear no Radar 3D</span>
-              <span>→</span>
-            </button>
-          </div>
         </div>
 
         <!-- CARD: MANDAGUARI (Scaptotrigona postica) -->
@@ -2315,12 +2220,6 @@
                 </div>
               </div>
             </div>
-          </div>
-          <div class="p-6 pt-0">
-            <button onclick="window.mapSpeciesInRadar3D('mandaguari')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
-              <span>Mapear no Radar 3D</span>
-              <span>→</span>
-            </button>
           </div>
         </div>
 
@@ -8006,10 +7905,15 @@
     // =========================================================================
     // 📦 PAINEL MINIMIZÁVEL DE CAIXAS (CANTO SUPERIOR ESQUERDO) & DETALHES
     // =========================================================================
-    let isSatBoxesQuickPanelOpen = true;
+    // No mobile, inicia minimizado para não cobrir a tela; no desktop, inicia compacto
+    let isSatBoxesQuickPanelOpen = false;
 
-    function toggleSatBoxesQuickPanel() {
-      isSatBoxesQuickPanelOpen = !isSatBoxesQuickPanelOpen;
+    function toggleSatBoxesQuickPanel(forceState) {
+      if (typeof forceState === 'boolean') {
+        isSatBoxesQuickPanelOpen = forceState;
+      } else {
+        isSatBoxesQuickPanelOpen = !isSatBoxesQuickPanelOpen;
+      }
       const listEl = document.getElementById('sat-boxes-quick-list');
       const toggleBtn = document.getElementById('quick-panel-toggle-btn');
       if (listEl) {
@@ -8092,6 +7996,10 @@
 
     // Abertura Centralizada do Card Completo de Informações da Caixa
     window.openBoxDetailCard = function(boxIdOrPoint) {
+      // No mobile, fecha automaticamente a lista para visualizar o terreno e o card
+      if (window.innerWidth < 640) {
+        toggleSatBoxesQuickPanel(false);
+      }
       let point = null;
       if (typeof boxIdOrPoint === 'object' && boxIdOrPoint !== null) {
         point = boxIdOrPoint;
