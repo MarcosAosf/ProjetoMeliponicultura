@@ -423,16 +423,7 @@
       <!-- Ações: Chuva + Dark Mode + Status + Novo Manejo + Botão Hambúrguer Mobile -->
       <div class="flex items-center gap-2">
         
-        <!-- Botão Toggle de Simulação de Chuva (Texto oculto no mobile, apenas ícone) -->
-        <button 
-          id="rain-toggle-btn"
-          onclick="toggleRainSimulation()" 
-          class="px-2.5 sm:px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#151821] text-gray-700 dark:text-gray-300 hover:border-sky-400 dark:hover:border-sky-500 transition-all flex items-center gap-1.5 text-xs font-semibold cursor-pointer shadow-sm"
-          title="Simular Chuva (Emergency Override nas Abelhas)"
-        >
-          <span id="rain-btn-icon">🌧️</span>
-          <span id="rain-btn-label" class="hidden sm:inline">Chuva</span>
-        </button>
+
 
         <button 
           id="theme-toggle-btn"
@@ -492,31 +483,31 @@
     </div>
 
     <!-- DRAWER / MENU DROPDOWN MOBILE (TELA CHEIA OU GAVETA DESLIZANTE) -->
-    <div id="mobile-nav-drawer" class="md:hidden drawer-closed fixed top-[57px] left-0 right-0 bg-white/95 dark:bg-[#0E1015]/98 backdrop-blur-xl border-b border-gray-200 dark:border-gray-800 shadow-2xl z-[9998] p-4 space-y-2">
+    <div id="mobile-nav-drawer" class="md:hidden drawer-closed fixed top-[57px] left-0 right-0 bg-white dark:bg-slate-900 border-b border-gray-200 dark:border-slate-800 shadow-2xl z-[99999] p-4 space-y-2">
       <div class="space-y-1">
-        <button onclick="mobileSwitchTab('home')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-gray-900 dark:text-white hover:bg-amber-500/15 flex items-center justify-between">
+        <button onclick="mobileSwitchTab('home')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-gray-900 dark:text-slate-100 hover:bg-amber-500/15 dark:hover:bg-amber-500/20 hover:text-honey-600 dark:hover:text-honey-400 flex items-center justify-between transition-colors">
           <span class="flex items-center gap-2.5"><span>🏠</span> Início / Sobre</span>
           <span class="text-gray-400 text-xs">→</span>
         </button>
-        <button onclick="mobileSwitchTab('radar')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-gray-900 dark:text-white hover:bg-amber-500/15 flex items-center justify-between">
+        <button onclick="mobileSwitchTab('radar')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-gray-900 dark:text-slate-100 hover:bg-amber-500/15 dark:hover:bg-amber-500/20 hover:text-honey-600 dark:hover:text-honey-400 flex items-center justify-between transition-colors">
           <span class="flex items-center gap-2.5"><span>🛰️</span> Mapa do Meliponário</span>
-          <span class="text-honey-500 font-bold text-xs">Satélite Real</span>
+          <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold bg-amber-500/20 text-honey-600 dark:text-honey-400 border border-honey-500/30">Satélite Real</span>
         </button>
-        <button onclick="mobileSwitchTab('dashboard')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-gray-900 dark:text-white hover:bg-amber-500/15 flex items-center justify-between">
+        <button onclick="mobileSwitchTab('dashboard')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-gray-900 dark:text-slate-100 hover:bg-amber-500/15 dark:hover:bg-amber-500/20 hover:text-honey-600 dark:hover:text-honey-400 flex items-center justify-between transition-colors">
           <span class="flex items-center gap-2.5"><span>📊</span> Meliponário & Sensores</span>
           <span class="text-gray-400 text-xs">→</span>
         </button>
-        <button onclick="mobileSwitchTab('species')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-gray-900 dark:text-white hover:bg-amber-500/15 flex items-center justify-between">
+        <button onclick="mobileSwitchTab('species')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-gray-900 dark:text-slate-100 hover:bg-amber-500/15 dark:hover:bg-amber-500/20 hover:text-honey-600 dark:hover:text-honey-400 flex items-center justify-between transition-colors">
           <span class="flex items-center gap-2.5"><span>🐝</span> Espécies Nativas</span>
           <span class="text-gray-400 text-xs">→</span>
         </button>
-        <button onclick="mobileSwitchTab('management')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-gray-900 dark:text-white hover:bg-amber-500/15 flex items-center justify-between">
+        <button onclick="mobileSwitchTab('management')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-gray-900 dark:text-slate-100 hover:bg-amber-500/15 dark:hover:bg-amber-500/20 hover:text-honey-600 dark:hover:text-honey-400 flex items-center justify-between transition-colors">
           <span class="flex items-center gap-2.5"><span>📋</span> Diário de Manejo</span>
           <span class="text-gray-400 text-xs">→</span>
         </button>
       </div>
 
-      <div class="pt-3 border-t border-gray-200 dark:border-gray-800 flex items-center gap-2">
+      <div class="pt-3 border-t border-gray-200 dark:border-slate-800 flex items-center gap-2">
         <button onclick="openModal(); closeMobileMenu();" class="flex-1 btn-honey py-2.5 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-sm">
           <span>+</span>
           <span>Novo Manejo</span>
@@ -698,39 +689,76 @@
       <div id="satellite-map-container" class="w-full h-full relative z-0"></div>
 
       <!-- BARRA DE CONTROLE SUPERIOR FLUTUANTE DO SATÉLITE -->
-      <div class="absolute top-4 left-4 right-4 sm:right-auto z-20 flex flex-wrap items-center gap-2 pointer-events-auto">
-        <!-- Badge Indicador de Modo Satélite -->
-        <div class="px-3 py-1.5 rounded-2xl glass-panel shadow-apple flex items-center gap-2 text-xs font-bold text-gray-800 dark:text-gray-200 border border-gray-200/50 dark:border-white/10">
-          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span>Satélite Esri WorldImagery</span>
+      <div class="absolute top-4 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-2 pointer-events-auto">
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Botão GPS Minha Posição -->
+          <button 
+            onclick="centerMapOnUserGps(true)" 
+            class="px-3.5 py-1.5 rounded-2xl glass-panel shadow-apple hover:bg-white dark:hover:bg-[#1E2330] text-gray-800 dark:text-gray-200 hover:text-honey-600 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer border border-gray-200/50 dark:border-white/10"
+            title="Centralizar no GPS Real"
+          >
+            <span>📍</span>
+            <span>Minha Posição GPS</span>
+          </button>
+
+          <!-- Botão Cadastrar Ponto -->
+          <button 
+            onclick="openAddPointModal()" 
+            class="btn-honey px-3.5 py-1.5 rounded-2xl font-bold text-xs shadow-apple flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105"
+            title="Cadastrar Colmeia ou Ninho-Isca"
+          >
+            <span>➕</span>
+            <span>Cadastrar Ponto</span>
+          </button>
+
+          <!-- Filtros de Ponto (Todos / Colmeias / Iscas) -->
+          <div class="hidden sm:flex items-center gap-1 px-2 py-1 rounded-2xl glass-panel shadow-apple border border-gray-200/50 dark:border-white/10 text-xs">
+            <button onclick="toggleMapPointFilter('all')" id="filter-all-btn" class="px-2 py-0.5 rounded-xl font-bold bg-honey-500 text-gray-950 text-[11px]">Todos</button>
+            <button onclick="toggleMapPointFilter('hive')" id="filter-hive-btn" class="px-2 py-0.5 rounded-xl font-semibold text-gray-600 dark:text-gray-300 hover:text-honey-500 text-[11px]">📦 Colmeias</button>
+            <button onclick="toggleMapPointFilter('trap')" id="filter-trap-btn" class="px-2 py-0.5 rounded-xl font-semibold text-gray-600 dark:text-gray-300 hover:text-emerald-500 text-[11px]">🧪 Iscas</button>
+          </div>
+
+          <!-- Botão Ocultar / Mostrar Círculos de Raio Real -->
+          <button 
+            id="toggle-radius-btn"
+            onclick="toggleFlightRadiusCircles()" 
+            class="px-2.5 py-1.5 rounded-2xl glass-panel shadow-apple hover:bg-white dark:hover:bg-[#1E2330] text-gray-700 dark:text-gray-300 font-bold text-[11px] transition-all flex items-center gap-1.5 border border-gray-200/50 dark:border-white/10"
+            title="Alternar visibilidade dos círculos de alcance de voo"
+          >
+            <span id="radius-btn-icon">⭕</span>
+            <span id="radius-btn-label">Raios: Visíveis</span>
+          </button>
         </div>
 
-        <!-- Botão GPS Minha Posição -->
-        <button 
-          onclick="centerMapOnUserGps()" 
-          class="px-3.5 py-1.5 rounded-2xl glass-panel shadow-apple hover:bg-white dark:hover:bg-[#1E2330] text-gray-800 dark:text-gray-200 hover:text-honey-600 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer border border-gray-200/50 dark:border-white/10"
-          title="Centralizar no GPS Atual"
-        >
-          <span>📍</span>
-          <span>Minha Posição GPS</span>
-        </button>
-
-        <!-- Botão Cadastrar Ponto -->
-        <button 
-          onclick="openAddPointModal()" 
-          class="btn-honey px-4 py-1.5 rounded-2xl font-bold text-xs shadow-apple flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105"
-          title="Cadastrar Colmeia ou Ninho-Isca"
-        >
-          <span>➕</span>
-          <span>Cadastrar Ponto</span>
-        </button>
-
-        <!-- Filtros Rápidos de Camadas -->
-        <div class="hidden md:flex items-center gap-1 px-2 py-1 rounded-2xl glass-panel shadow-apple border border-gray-200/50 dark:border-white/10 text-xs">
-          <button onclick="toggleMapPointFilter('all')" id="filter-all-btn" class="px-2 py-0.5 rounded-xl font-bold bg-honey-500 text-gray-950 text-[11px]">Todos</button>
-          <button onclick="toggleMapPointFilter('hive')" id="filter-hive-btn" class="px-2 py-0.5 rounded-xl font-semibold text-gray-600 dark:text-gray-300 hover:text-honey-500 text-[11px]">📦 Colmeias</button>
-          <button onclick="toggleMapPointFilter('trap')" id="filter-trap-btn" class="px-2 py-0.5 rounded-xl font-semibold text-gray-600 dark:text-gray-300 hover:text-emerald-500 text-[11px]">🧪 Iscas</button>
+        <!-- Barra de Busca de Cidade / Bairro / Endereço (OpenStreetMap Nominatim) -->
+        <div class="relative w-full sm:w-64 max-w-full">
+          <div class="relative flex items-center">
+            <input 
+              type="text" 
+              id="map-search-input" 
+              placeholder="🔍 Buscar cidade ou local..." 
+              onkeydown="if(event.key==='Enter') searchCityAddressOnMap()"
+              class="w-full px-3.5 py-1.5 pr-8 rounded-2xl glass-panel shadow-apple border border-gray-200/60 dark:border-white/10 text-xs text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-honey-500"
+            >
+            <button onclick="searchCityAddressOnMap()" class="absolute right-2 text-gray-400 hover:text-honey-600 dark:hover:text-honey-400 text-xs" title="Buscar">
+              ➔
+            </button>
+          </div>
+          <div id="map-search-spinner" class="hidden absolute top-1.5 right-6 text-honey-500 text-[11px] animate-spin">
+            ⏳
+          </div>
         </div>
+      </div>
+
+      <!-- AVISO / TOAST DE GPS AMIGÁVEL (NUNCA ALERT INTRUSIVO) -->
+      <div id="gps-status-toast" class="hidden absolute bottom-5 left-1/2 -translate-x-1/2 z-30 max-w-md w-[calc(100%-32px)] p-3 rounded-2xl glass-panel shadow-2xl border border-amber-500/40 text-xs flex items-center justify-between gap-2.5 animate-fade-in pointer-events-auto">
+        <div class="flex items-center gap-2">
+          <span id="gps-toast-icon" class="text-base">📍</span>
+          <span id="gps-toast-msg" class="text-gray-800 dark:text-gray-200 font-medium">Localizando via GPS...</span>
+        </div>
+        <button onclick="dismissGpsToast()" class="p-1 rounded-lg hover:bg-gray-200 dark:hover:bg-white/10 text-gray-400 hover:text-gray-900 dark:hover:text-white text-xs">
+          ✕
+        </button>
       </div>
 
       <!-- PAINEL LATERAL DE INSPEÇÃO DE PONTO NO SATÉLITE (DESLIZANTE / MODAL RESPONSIVO) -->
@@ -1766,21 +1794,34 @@
             </p>
           </div>
 
-          <!-- Seletor Limpo de Espécie para o Radar 3D -->
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-bold text-gray-500">Espécie no Radar:</span>
-            <select id="simulator-species-select" onchange="onSelectSpecies(this.value)" class="px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] text-gray-900 dark:text-white font-bold text-xs focus:outline-none focus:border-honey-500 shadow-sm cursor-pointer">
-              <option value="mandacaia">1. Mandaçaia (~1.500m)</option>
-              <option value="jatai">2. Jataí Dourada (~500m)</option>
-              <option value="urucu">3. Uruçu Amarela (~2.000m)</option>
-              <option value="urucu_nordestina">4. Uruçu Nordestina (~2.000m)</option>
-              <option value="tiuba">5. Tiúba (~2.200m)</option>
-              <option value="mirim">6. Mirim Droryana (~400m)</option>
-              <option value="irai">7. Iraí (~600m)</option>
-              <option value="bora">8. Borá (~1.200m)</option>
-              <option value="manduri">9. Manduri (~1.000m)</option>
-              <option value="bugia">10. Bugia (~1.800m)</option>
-            </select>
+          <!-- Controles Integrados do Simulador 3D: Seletor de Espécie + Simular Chuva -->
+          <div class="flex flex-wrap items-center gap-2.5">
+            <div class="flex items-center gap-1.5">
+              <span class="text-xs font-bold text-gray-500 dark:text-gray-400">Espécie:</span>
+              <select id="simulator-species-select" onchange="onSelectSpecies(this.value)" class="px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] text-gray-900 dark:text-white font-bold text-xs focus:outline-none focus:border-honey-500 shadow-sm cursor-pointer">
+                <option value="mandacaia">1. Mandaçaia (~1.500m)</option>
+                <option value="jatai">2. Jataí Dourada (~500m)</option>
+                <option value="urucu">3. Uruçu Amarela (~2.000m)</option>
+                <option value="urucu_nordestina">4. Uruçu Nordestina (~2.000m)</option>
+                <option value="tiuba">5. Tiúba (~2.200m)</option>
+                <option value="mirim">6. Mirim Droryana (~400m)</option>
+                <option value="irai">7. Iraí (~600m)</option>
+                <option value="bora">8. Borá (~1.200m)</option>
+                <option value="manduri">9. Manduri (~1.000m)</option>
+                <option value="bugia">10. Bugia (~1.800m)</option>
+              </select>
+            </div>
+
+            <!-- Botão de Simulação de Chuva Integrado ao Simulador 3D -->
+            <button 
+              id="rain-toggle-btn"
+              onclick="toggleRainSimulation()" 
+              class="px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] text-gray-700 dark:text-gray-300 hover:border-sky-400 dark:hover:border-sky-500 transition-all flex items-center gap-1.5 text-xs font-semibold cursor-pointer shadow-sm"
+              title="Simular Chuva (Emergency Override nas Abelhas)"
+            >
+              <span id="rain-btn-icon">🌧️</span>
+              <span id="rain-btn-label">Simular Chuva</span>
+            </button>
           </div>
         </div>
 
@@ -5183,7 +5224,8 @@
       const config = SPECIES_CONFIG[key];
 
       targetHexScale = config.scale3D;
-      document.getElementById('species-3d-select').value = key;
+      const simSel = document.getElementById('simulator-species-select') || document.getElementById('species-3d-select');
+      if (simSel) simSel.value = key;
       document.getElementById('stat-radius').innerText = `${config.radiusMeters}m`;
       document.getElementById('stat-area').innerText = config.areaKm2;
       document.getElementById('badge-species-name').innerText = config.name.split(' ')[0];
@@ -5253,16 +5295,23 @@
     }
 
     function selectAndGoToRadar(key) {
+      // 1. Garante que a aba 'Espécies Nativas' está visível
       switchTab('species');
+
+      // 2. Aplica a espécie no modelo 3D, Hex-Radar e estatísticas
       onSelectSpecies(key);
-      const sel = document.getElementById('simulator-species-select');
-      if (sel) sel.value = key;
+
+      // 3. Atualiza o dropdown no simulador
+      const simSel = document.getElementById('simulator-species-select') || document.getElementById('species-3d-select');
+      if (simSel) simSel.value = key;
+
+      // 4. Smooth scroll até o simulador 3D no centro da tela
       setTimeout(() => {
         const simSection = document.getElementById('species-3d-simulator-section');
         if (simSection) {
-          simSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          simSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
-      }, 100);
+      }, 50);
     }
 
     let layersState = { flora: true, water: true, traps: true, threat: true };
@@ -6066,66 +6115,25 @@
     let satMarkersLayer = null;
     let satCirclesLayer = null;
     let currentSatPointFilter = 'all'; // 'all', 'hive', 'trap'
+    let areFlightCirclesVisible = true;
     let currentInspectedSatPoint = null;
     let userLocationMarker = null;
+    let userCurrentCoords = null; // { lat, lon }
+    let hasAttemptedInitialGps = false;
 
-    // Estrutura de dados inicial com Colmeias e Ninhos-Isca
-    const DEFAULT_MAP_POINTS = [
-      {
-        id: 'CX-01',
-        type: 'hive',
-        species: 'mandacaia',
-        status: 'Forte',
-        lat: -23.55052,
-        lon: -46.633308,
-        createdAt: '2026-10-20',
-        photos: []
-      },
-      {
-        id: 'CX-02',
-        type: 'hive',
-        species: 'jatai',
-        status: 'Forte',
-        lat: -23.55115,
-        lon: -46.63220,
-        createdAt: '2026-10-22',
-        photos: []
-      },
-      {
-        id: 'ISCA-04',
-        type: 'trap',
-        species: 'jatai',
-        status: 'Armadilhada',
-        lat: -23.55180,
-        lon: -46.63410,
-        createdAt: '2026-10-15',
-        photos: []
-      },
-      {
-        id: 'ISCA-09',
-        type: 'trap',
-        species: 'mandacaia',
-        status: 'Capturada',
-        lat: -23.54990,
-        lon: -46.63180,
-        createdAt: '2026-10-05',
-        photos: []
-      }
-    ];
-
-    // Carregar do LocalStorage ou usar padrão
+    // BANCO DE DADOS LOCAL DE PONTOS REAIS DO USUÁRIO (SEM PONTOS FALSOS INICIAIS EM SP)
     let satPoints = [];
     try {
       const savedPoints = localStorage.getItem('melipona_sat_points_v2');
       if (savedPoints) {
         satPoints = JSON.parse(savedPoints);
       } else {
-        satPoints = DEFAULT_MAP_POINTS;
-        localStorage.setItem('melipona_sat_points_v2', JSON.stringify(satPoints));
+        satPoints = [];
+        localStorage.setItem('melipona_sat_points_v2', JSON.stringify([]));
       }
     } catch (e) {
-      console.warn("Erro ao ler localStorage de satPoints:", e);
-      satPoints = DEFAULT_MAP_POINTS;
+      console.warn("Aviso ao ler satPoints:", e);
+      satPoints = [];
     }
 
     // Inicialização do Mapa Leaflet
@@ -6133,12 +6141,13 @@
       const mapContainer = document.getElementById('satellite-map-container');
       if (!mapContainer || satelliteMap) return;
 
-      const initialLat = satPoints.length > 0 ? satPoints[0].lat : -23.55052;
-      const initialLon = satPoints.length > 0 ? satPoints[0].lon : -46.633308;
+      // Ponto padrão inicial temporário enquanto detecta o GPS ou IP do usuário
+      const defaultInitialLat = -15.7801; // Centro do Brasil (Brasília) como visão ampla neutra
+      const defaultInitialLon = -47.9292;
 
       satelliteMap = L.map('satellite-map-container', {
-        center: [initialLat, initialLon],
-        zoom: 17,
+        center: [defaultInitialLat, defaultInitialLon],
+        zoom: 4, // Inicia em zoom geral até receber o GPS ou IP real
         zoomControl: true,
         attributionControl: false
       });
@@ -6158,7 +6167,7 @@
       satCirclesLayer = L.layerGroup().addTo(satelliteMap);
       satMarkersLayer = L.layerGroup().addTo(satelliteMap);
 
-      // Renderizar pontos cadastrados
+      // Renderizar pontos cadastrados pelo usuário
       renderAllSatellitePoints();
 
       // Clique no mapa para abrir cadastro de ponto naquela coordenada
@@ -6166,22 +6175,108 @@
         openAddPointModal(e.latlng.lat, e.latlng.lng);
       });
 
-      // Tenta centralizar automaticamente no GPS real se permitido
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-          function(pos) {
-            const uLat = pos.coords.latitude;
-            const uLon = pos.coords.longitude;
-            updateUserLocationMarker(uLat, uLon);
-          },
-          function(err) {
-            console.log("GPS inicial não concedido ou indisponível:", err.message);
-          },
-          { enableHighAccuracy: true, timeout: 6000 }
-        );
+      // Solicitar automaticamente GPS do usuário ao abrir
+      requestUserLocationOnStartup();
+    }
+
+    // SOLICITAÇÃO AUTOMÁTICA DE GPS AO ABRIR + FALLBACK INTELIGENTE POR IP
+    function requestUserLocationOnStartup() {
+      if (hasAttemptedInitialGps) return;
+      hasAttemptedInitialGps = true;
+
+      // Se o usuário já tiver pontos salvos, pode focar no primeiro ponto dele enquanto localiza
+      if (satPoints && satPoints.length > 0) {
+        satelliteMap.setView([satPoints[0].lat, satPoints[0].lon], 17);
+      }
+
+      showGpsToast("📍 Obtendo sua localização de campo...", false);
+
+      if (!navigator.geolocation) {
+        fallbackLocationByIp("Navegador sem suporte a geolocalização");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          userCurrentCoords = { lat, lon };
+          updateUserLocationMarker(lat, lon);
+          if (satelliteMap) {
+            satelliteMap.setView([lat, lon], 17);
+          }
+          showGpsToast("✅ Localização GPS de campo confirmada!", true, 3500);
+        },
+        function(err) {
+          console.warn("GPS bloqueado ou indisponível:", err.message);
+          // Fallback por IP para não cair em São Paulo
+          fallbackLocationByIp(err.message, err.code === 1);
+        },
+        { enableHighAccuracy: true, timeout: 10000, maximumAge: 30000 }
+      );
+    }
+
+    // Fallback Geográfico por IP (Abre na cidade real do usuário)
+    async function fallbackLocationByIp(reason, isPermissionDenied = false) {
+      try {
+        const resp = await fetch('https://ipwho.is/');
+        const data = await resp.json();
+        if (data && data.success && data.latitude && data.longitude) {
+          const lat = data.latitude;
+          const lon = data.longitude;
+          userCurrentCoords = { lat, lon };
+          if (satelliteMap && satPoints.length === 0) {
+            satelliteMap.setView([lat, lon], 14);
+          }
+          if (isPermissionDenied) {
+            showGpsToast(`⚠️ GPS negado. Mostrando aprox. ${data.city || 'sua região'}. Toque no 🔒 do navegador para liberar o GPS de alta precisão.`, true, 8000);
+          } else {
+            showGpsToast(`📍 Localização aproximada: ${data.city || 'Região detectada'}.`, true, 4000);
+          }
+          return;
+        }
+      } catch (e) {
+        console.warn("Falha no fallback por IP:", e);
+      }
+
+      if (isPermissionDenied) {
+        showGpsToast("⚠️ Acesso ao GPS bloqueado. Você pode pesquisar sua cidade na barra acima ou liberar o GPS nas permissões do site.", true, 7000);
+      } else {
+        dismissGpsToast();
       }
     }
 
+    // Botão GPS Minha Posição
+    function centerMapOnUserGps(isManualClick = false) {
+      if (!navigator.geolocation) {
+        showGpsToast("Geolocalização não é suportada neste navegador.", true, 4000);
+        return;
+      }
+      showGpsToast("📍 Buscando coordenadas GPS...", false);
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          userCurrentCoords = { lat, lon };
+          updateUserLocationMarker(lat, lon);
+          if (satelliteMap) {
+            satelliteMap.flyTo([lat, lon], 18, { animate: true, duration: 1.2 });
+          }
+          showGpsToast("🎯 Centralizado na sua posição GPS!", true, 3000);
+        },
+        function(err) {
+          console.warn("Erro GPS manual:", err);
+          if (err.code === 1) {
+            showGpsToast("⚠️ GPS bloqueado. Toque no cadeado (🔒) na barra de endereços para permitir a localização.", true, 7000);
+          } else {
+            showGpsToast("Não foi possível obter o sinal GPS. Tente pesquisar sua cidade acima.", true, 5000);
+          }
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    }
+
+    // Marcador com Pulso da Posição do Usuário
     function updateUserLocationMarker(lat, lon) {
       if (!satelliteMap) return;
       if (userLocationMarker) {
@@ -6189,38 +6284,90 @@
       }
       const userIcon = L.divIcon({
         className: 'user-gps-marker',
-        html: `<div style="position:relative; width:20px; height:20px;">
-                <div style="position:absolute; inset:0; border-radius:50%; background:rgba(59,130,246,0.35); animation:ping 1.5s cubic-bezier(0,0,0.2,1) infinite;"></div>
-                <div style="position:absolute; inset:3px; border-radius:50%; background:#3B82F6; border:2px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.4);"></div>
+        html: `<div style="position:relative; width:22px; height:22px;">
+                <div style="position:absolute; inset:-4px; border-radius:50%; background:rgba(59,130,246,0.35); animation:ping 1.5s cubic-bezier(0,0,0.2,1) infinite;"></div>
+                <div style="position:absolute; inset:0; border-radius:50%; background:#2563EB; border:2.5px solid #FFFFFF; box-shadow:0 3px 8px rgba(0,0,0,0.5);"></div>
                </div>`,
-        iconSize: [20, 20],
-        iconAnchor: [10, 10]
+        iconSize: [22, 22],
+        iconAnchor: [11, 11]
       });
-      userLocationMarker = L.marker([lat, lon], { icon: userIcon }).addTo(satelliteMap);
+      userLocationMarker = L.marker([lat, lon], { icon: userIcon, zIndexOffset: 1000 }).addTo(satelliteMap);
     }
 
-    function centerMapOnUserGps() {
-      if (!navigator.geolocation) {
-        alert("Geolocalização não é suportada neste navegador.");
-        return;
-      }
-      navigator.geolocation.getCurrentPosition(
-        function(pos) {
-          const lat = pos.coords.latitude;
-          const lon = pos.coords.longitude;
-          updateUserLocationMarker(lat, lon);
+    // BUSCA DE CIDADE OU ENDEREÇO VIA OPENSTREETMAP NOMINATIM
+    async function searchCityAddressOnMap() {
+      const input = document.getElementById('map-search-input');
+      const spinner = document.getElementById('map-search-spinner');
+      if (!input) return;
+      const query = input.value.trim();
+      if (!query) return;
+
+      if (spinner) spinner.classList.remove('hidden');
+
+      try {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&limit=1`;
+        const resp = await fetch(url, {
+          headers: { 'Accept-Language': 'pt-BR,pt;q=0.9' }
+        });
+        const results = await resp.json();
+        if (results && results.length > 0) {
+          const lat = parseFloat(results[0].lat);
+          const lon = parseFloat(results[0].lon);
           if (satelliteMap) {
-            satelliteMap.flyTo([lat, lon], 18, { animate: true, duration: 1.2 });
+            satelliteMap.flyTo([lat, lon], 16, { animate: true, duration: 1.5 });
           }
-        },
-        function(err) {
-          alert("Não foi possível obter a sua posição GPS: " + err.message);
-        },
-        { enableHighAccuracy: true, timeout: 10000 }
-      );
+          showGpsToast(`📍 ${results[0].display_name.split(',')[0]} encontrada!`, true, 3500);
+        } else {
+          showGpsToast("Nenhum local encontrado para esta pesquisa.", true, 3500);
+        }
+      } catch (err) {
+        showGpsToast("Erro ao pesquisar local: " + err.message, true, 4000);
+      } finally {
+        if (spinner) spinner.classList.add('hidden');
+      }
     }
 
-    // Renderizar Pinos e Perímetros no Mapa de Satélite
+    // TOAST NOTIFIER AMIGÁVEL (NUNCA ALERT INTRUSIVO)
+    let gpsToastTimeout = null;
+    function showGpsToast(msg, autoDismiss = true, durationMs = 4000) {
+      const toast = document.getElementById('gps-status-toast');
+      const msgEl = document.getElementById('gps-toast-msg');
+      if (!toast || !msgEl) return;
+
+      msgEl.innerText = msg;
+      toast.classList.remove('hidden');
+
+      if (gpsToastTimeout) clearTimeout(gpsToastTimeout);
+      if (autoDismiss) {
+        gpsToastTimeout = setTimeout(() => {
+          toast.classList.add('hidden');
+        }, durationMs);
+      }
+    }
+
+    function dismissGpsToast() {
+      const toast = document.getElementById('gps-status-toast');
+      if (toast) toast.classList.add('hidden');
+      if (gpsToastTimeout) clearTimeout(gpsToastTimeout);
+    }
+
+    // TOGGLE DE VISIBILIDADE DOS CÍRCULOS DE RAIO REAL
+    function toggleFlightRadiusCircles() {
+      areFlightCirclesVisible = !areFlightCirclesVisible;
+      const btnIcon = document.getElementById('radius-btn-icon');
+      const btnLabel = document.getElementById('radius-btn-label');
+      if (areFlightCirclesVisible) {
+        if (btnIcon) btnIcon.innerText = '⭕';
+        if (btnLabel) btnLabel.innerText = 'Raios: Visíveis';
+        if (satelliteMap && satCirclesLayer) satelliteMap.addLayer(satCirclesLayer);
+      } else {
+        if (btnIcon) btnIcon.innerText = '🚫';
+        if (btnLabel) btnLabel.innerText = 'Raios: Ocultos';
+        if (satelliteMap && satCirclesLayer) satelliteMap.removeLayer(satCirclesLayer);
+      }
+    }
+
+    // RENDERIZAR PINOS E PERÍMETROS BIOLÓGICOS REAIS NO SATÉLITE
     function renderAllSatellitePoints() {
       if (!satelliteMap || !satMarkersLayer || !satCirclesLayer) return;
 
@@ -6234,21 +6381,26 @@
 
         const isHive = point.type === 'hive';
         const spec = SPECIES_CONFIG[point.species] || SPECIES_CONFIG.mandacaia;
-        const flightRadiusMeters = spec.radius || 1500;
+        const flightRadiusMeters = spec.radiusMeters || 1500;
 
-        // Círculo de Raio de Voo / Atrativo
+        // CÍRCULO GEOGRÁFICO DE ALCANCE REAL EM METROS NO MAPA DE SATÉLITE
         if (isHive) {
-          L.circle([point.lat, point.lon], {
+          const circle = L.circle([point.lat, point.lon], {
             radius: flightRadiusMeters,
             color: '#FFC300',
-            weight: 1.8,
+            weight: 2,
             fillColor: '#FFC300',
             fillOpacity: 0.12,
             dashArray: null
           }).addTo(satCirclesLayer);
+
+          circle.bindTooltip(`${point.id} • ${spec.name}<br><strong>Raio Real: ${flightRadiusMeters.toLocaleString('pt-BR')}m</strong>`, {
+            sticky: true,
+            className: 'glass-panel text-xs text-gray-900 font-bold p-1 rounded-lg'
+          });
         } else {
-          // Isca: Círculo verde tracejado de atrativo feromonado (~120m)
-          L.circle([point.lat, point.lon], {
+          // Ninho-Isca PET: Alcance do atrativo feromonado (~120m)
+          const circle = L.circle([point.lat, point.lon], {
             radius: 120,
             color: '#10B981',
             weight: 2,
@@ -6256,13 +6408,19 @@
             fillOpacity: 0.16,
             dashArray: '6, 6'
           }).addTo(satCirclesLayer);
+
+          circle.bindTooltip(`${point.id} (Isca PET)<br><strong>Atrativo: 120m</strong>`, {
+            sticky: true,
+            className: 'glass-panel text-xs text-gray-900 font-bold p-1 rounded-lg'
+          });
         }
 
-        // Ícone / Pino Personalizado
+        // BADGE E ÍCONE DO PINO COM DETALHE DE RAIO REAL
         const markerBg = isHive ? '#FFC300' : '#10B981';
         const markerTextColor = isHive ? '#111827' : '#FFFFFF';
         const markerBorder = isHive ? '#D97706' : '#047857';
         const markerEmoji = isHive ? '📦' : '🧪';
+        const radiusBadgeText = isHive ? `${flightRadiusMeters}m` : 'Isca';
 
         const customIcon = L.divIcon({
           className: 'sat-pin-icon',
@@ -6286,9 +6444,10 @@
           ">
             <span>${markerEmoji}</span>
             <span>${point.id}</span>
+            <span style="font-size:9px; opacity:0.85; padding-left:2px; border-left:1px solid currentColor;">${radiusBadgeText}</span>
           </div>`,
-          iconSize: [60, 24],
-          iconAnchor: [30, 24]
+          iconSize: [80, 24],
+          iconAnchor: [40, 24]
         });
 
         const marker = L.marker([point.lat, point.lon], { icon: customIcon }).addTo(satMarkersLayer);
@@ -6334,8 +6493,8 @@
         typeBadge.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-amber-500/15 text-amber-600 dark:text-amber-400';
         iconBadge.innerHTML = '📦';
         iconBadge.className = 'w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-xl font-bold';
-        document.getElementById('sat-inspec-metric-label').innerText = 'Raio de Voo';
-        document.getElementById('sat-inspec-metric-val').innerText = `~${spec.radius || 1500}m`;
+        document.getElementById('sat-inspec-metric-label').innerText = 'Raio Real de Voo';
+        document.getElementById('sat-inspec-metric-val').innerText = `~${(spec.radiusMeters || 1500).toLocaleString('pt-BR')}m (${spec.areaKm2 || '5.8 km²'})`;
         document.getElementById('sat-inspec-transfer-container').classList.add('hidden');
         document.getElementById('sat-inspec-qr-btn').classList.remove('hidden');
       } else {
@@ -6456,7 +6615,7 @@
         saveSatPointsLocalAndCloud();
         renderSatPointPhotos(currentInspectedSatPoint);
       } catch (err) {
-        alert("Erro ao processar e comprimir fotografia: " + err.message);
+        showGpsToast("Erro ao processar fotografia: " + err.message, true, 4000);
       } finally {
         if (badge) badge.classList.add('hidden');
         event.target.value = '';
@@ -6494,9 +6653,13 @@
       if (lat && lon) {
         latInput.value = parseFloat(lat).toFixed(6);
         lonInput.value = parseFloat(lon).toFixed(6);
-      } else if (!latInput.value) {
-        latInput.value = satPoints.length > 0 ? satPoints[0].lat : -23.55052;
-        lonInput.value = satPoints.length > 0 ? satPoints[0].lon : -46.633308;
+      } else if (userCurrentCoords) {
+        latInput.value = userCurrentCoords.lat.toFixed(6);
+        lonInput.value = userCurrentCoords.lon.toFixed(6);
+      } else if (satelliteMap) {
+        const c = satelliteMap.getCenter();
+        latInput.value = c.lat.toFixed(6);
+        lonInput.value = c.lng.toFixed(6);
       }
 
       const nextNum = satPoints.length + 1;
@@ -6525,19 +6688,20 @@
 
     function captureGpsForSatForm() {
       if (!navigator.geolocation) {
-        alert("Geolocalização não suportada.");
+        showGpsToast("Geolocalização não suportada.", true, 3000);
         return;
       }
       navigator.geolocation.getCurrentPosition(
         function(pos) {
           document.getElementById('sat-form-lat').value = pos.coords.latitude.toFixed(6);
           document.getElementById('sat-form-lon').value = pos.coords.longitude.toFixed(6);
+          userCurrentCoords = { lat: pos.coords.latitude, lon: pos.coords.longitude };
           if (satelliteMap) {
             satelliteMap.setView([pos.coords.latitude, pos.coords.longitude], 18);
           }
         },
         function(err) {
-          alert("Erro ao obter GPS: " + err.message);
+          showGpsToast("Erro ao obter GPS: " + err.message, true, 4000);
         },
         { enableHighAccuracy: true, timeout: 8000 }
       );
@@ -6553,7 +6717,7 @@
         document.getElementById('sat-form-photo-preview').classList.remove('hidden');
         document.getElementById('sat-form-photo-feedback').innerText = 'Foto pronta!';
       } catch (e) {
-        alert("Erro na foto: " + e.message);
+        showGpsToast("Erro na foto: " + e.message, true, 4000);
       }
     }
 
@@ -6567,7 +6731,7 @@
       const lon = parseFloat(document.getElementById('sat-form-lon').value);
 
       if (isNaN(lat) || isNaN(lon)) {
-        alert("Coordenadas GPS inválidas.");
+        showGpsToast("Coordenadas GPS inválidas.", true, 3500);
         return;
       }
 
@@ -6670,8 +6834,6 @@
       syncDataToFirebaseCloud();
     }
 
-
-    // =========================================================
     // 🔥 FIREBASE AUTH & CLOUD FIRESTORE INTEGRATION
     // =========================================================
     let currentAuthUser = null;
