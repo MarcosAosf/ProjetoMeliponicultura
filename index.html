@@ -6680,21 +6680,31 @@
     let fbAuth = null;
     let fbDb = null;
 
+    const DEFAULT_FB_CONFIG = {
+      apiKey: "AIzaSyB_5og0nEyhUOQE3LIvqVwbAfLHHwDax1g",
+      authDomain: "meliponaos.firebaseapp.com",
+      projectId: "meliponaos",
+      storageBucket: "meliponaos.firebasestorage.app",
+      messagingSenderId: "1056649267960",
+      appId: "1:1056649267960:web:1371fe853433361d2f090d",
+      measurementId: "G-GV5M9B6KJ2"
+    };
+
     function getActiveFirebaseConfig() {
       try {
         const saved = localStorage.getItem('melipona_firebase_config');
         if (saved) {
           const parsed = JSON.parse(saved);
-          if (parsed && parsed.apiKey && !parsed.apiKey.includes('DEMO_KEY') && parsed.apiKey.startsWith('AIzaSy')) {
+          if (parsed && parsed.apiKey && parsed.apiKey.startsWith('AIzaSy')) {
             return parsed;
           }
         }
       } catch (e) {}
-      return null;
+      return DEFAULT_FB_CONFIG;
     }
 
     function isFirebaseConfigured() {
-      return getActiveFirebaseConfig() !== null;
+      return true;
     }
 
     window.initFirebaseApplication = function() {
