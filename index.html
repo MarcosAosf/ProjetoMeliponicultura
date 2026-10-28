@@ -25,6 +25,9 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
   <!-- Three.js, OrbitControls & CSS2DRenderer -->
+    <!-- Leaflet.js para Mapa de Satélite Real -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/renderers/CSS2DRenderer.js"></script>
@@ -130,7 +133,7 @@
         url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='56' viewBox='0 0 32 56'%3E%3Cpath fill-rule='evenodd' d='M16 10.66l14.85 8.57v17.14L16 44.94 1.15 36.37V19.23L16 10.66zm-13.7 9.83v14.48L16 43.14l13.7-7.91V20.49L16 12.58 2.3 20.49zM0 0h32v2H0V0zm0 54h32v2H0v-2z' fill='%23FFC300' fill-opacity='0.05'/%3E%3C/svg%3E");
     }
 
-    /* ONDAS ORGÂNICAS DE MEL ESCORRENDO (HONEY DRIP SVG) */
+    /* ONDAS ORGNICAS DE MEL ESCORRENDO (HONEY DRIP SVG) */
     .honey-drip-top {
       position: absolute;
       top: 0;
@@ -404,7 +407,7 @@
           <span>Início / Sobre</span>
         </button>
         <button onclick="switchTab('radar')" id="nav-radar" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all">
-          Hex-Radar 3D
+          🛰️ Mapa do Meliponário
         </button>
         <button onclick="switchTab('dashboard')" id="nav-dashboard" class="tab-btn px-3.5 py-1.5 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-all">
           Meliponário
@@ -447,6 +450,18 @@
           </svg>
         </button>
 
+        
+        <!-- Botão Status / Login de Conta Firebase -->
+        <button 
+          id="auth-topbar-btn"
+          onclick="openAuthModal()" 
+          class="px-2.5 sm:px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#151821] text-gray-700 dark:text-gray-300 hover:border-honey-500 transition-all flex items-center gap-1.5 text-xs font-semibold cursor-pointer shadow-sm"
+          title="Conta / Sincronização em Nuvem (Firebase)"
+        >
+          <span id="auth-btn-avatar" class="w-5 h-5 rounded-full bg-honey-500/20 text-honey-600 dark:text-honey-400 flex items-center justify-center text-xs font-bold">👤</span>
+          <span id="auth-btn-label" class="hidden sm:inline">Entrar</span>
+        </button>
+
         <div class="hidden lg:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-gray-50 dark:bg-[#151821] border border-gray-100 dark:border-gray-800 text-xs">
           <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
           <span class="font-medium text-gray-700 dark:text-gray-300">26°C • Voo Pleno</span>
@@ -484,8 +499,8 @@
           <span class="text-gray-400 text-xs">→</span>
         </button>
         <button onclick="mobileSwitchTab('radar')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-gray-900 dark:text-white hover:bg-amber-500/15 flex items-center justify-between">
-          <span class="flex items-center gap-2.5"><span>🗺️</span> Hex-Radar 3D</span>
-          <span class="text-honey-500 font-bold text-xs">3D Interativo</span>
+          <span class="flex items-center gap-2.5"><span>🛰️</span> Mapa do Meliponário</span>
+          <span class="text-honey-500 font-bold text-xs">Satélite Real</span>
         </button>
         <button onclick="mobileSwitchTab('dashboard')" class="w-full text-left px-4 py-3 rounded-xl font-bold text-sm text-gray-900 dark:text-white hover:bg-amber-500/15 flex items-center justify-between">
           <span class="flex items-center gap-2.5"><span>📊</span> Meliponário & Sensores</span>
@@ -517,7 +532,7 @@
   <!-- ======================================================== -->
   <main class="relative flex-1 w-full overflow-y-auto min-h-[calc(100vh-60px)] honeycomb-pattern transition-colors">
     
-    <!-- EFEITO ORGÂNICO: MEL ESCORRENDO NO TOPO DA PÁGINA (HONEY DRIP) -->
+    <!-- EFEITO ORGNICO: MEL ESCORRENDO NO TOPO DA PÁGINA (HONEY DRIP) -->
     <div class="honey-drip-top">
       <svg class="w-full h-full" viewBox="0 0 1440 38" fill="none" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M0,0 L1440,0 L1440,10 C1400,10 1385,28 1360,28 C1335,28 1320,8 1290,8 C1260,8 1245,22 1220,22 C1195,22 1180,6 1150,6 C1120,6 1105,32 1075,32 C1045,32 1030,12 1000,12 C970,12 955,24 930,24 C905,24 890,7 860,7 C830,7 815,35 780,35 C745,35 730,9 695,9 C660,9 645,20 620,20 C595,20 580,5 550,5 C520,5 505,30 470,30 C435,30 420,10 390,10 C360,10 345,26 315,26 C285,26 270,8 240,8 C210,8 195,33 160,33 C125,33 110,14 80,14 C50,14 35,25 0,10 Z" fill="url(#honey-drip-gradient)"/>
@@ -678,249 +693,143 @@
     </section>
 
     <!-- ABA HEX-RADAR 3D -->
-    <section id="view-radar" class="tab-view relative w-full h-[calc(100vh-60px)] hidden">
-      
-      <!-- CANVAS THREE.JS -->
-      <div id="three-canvas-container"></div>
+    <section id="view-radar" class="tab-view relative w-full h-[calc(100vh-60px)] hidden flex flex-col">
+      <!-- MAPA DE SATÉLITE LEAFLET EM TELA CHEIA -->
+      <div id="satellite-map-container" class="w-full h-full relative z-0"></div>
 
-      <!-- BANNER SUPERIOR DE MODO DE POSICIONAMENTO COM O MOUSE (MODO CONSTRUTOR) -->
-      <div id="click-placement-banner" class="hidden absolute top-4 left-1/2 -translate-x-1/2 z-30 px-5 py-2.5 rounded-2xl bg-amber-500/95 text-gray-950 shadow-2xl backdrop-blur-md flex items-center gap-3 border border-amber-300 font-sans transition-all animate-bounce-subtle">
-        <span id="placement-banner-icon" class="text-xl">🔨</span>
-        <div>
-          <div id="placement-banner-title" class="text-xs font-black uppercase tracking-wider">Modo Construtor Ativo</div>
-          <div id="placement-banner-desc" class="text-[11px] font-medium text-amber-950/80">Mova o cursor sobre o chão e clique no ponto onde deseja fixar o elemento</div>
-        </div>
-        <button onclick="cancelClickPlacement()" class="ml-2 px-2.5 py-1 rounded-xl bg-gray-950 text-white text-[11px] font-bold hover:bg-gray-800 transition-colors cursor-pointer">
-          Cancelar
-        </button>
-      </div>
-
-      <!-- PAINEL COMPACTO NO CANTO SUPERIOR ESQUERDO COM MINIMIZAR -->
-      <div id="radar-control-panel" class="absolute top-4 left-4 z-20 w-64 max-w-[calc(100vw-32px)] flex flex-col gap-2 pointer-events-auto transition-all duration-300">
-        
-        <div class="p-3 rounded-2xl glass-panel shadow-apple space-y-2">
-          
-          <!-- Cabeçalho com Botão Minimizar/Expandir -->
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-1.5">
-              <span class="w-2 h-2 rounded-full bg-honey-500 animate-pulse"></span>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
-                Colmeia Monitorada
-              </span>
-            </div>
-            <div class="flex items-center gap-1.5">
-              <span id="badge-species-name" class="text-[10px] font-bold text-honey-600 dark:text-honey-400">Mandaçaia</span>
-              <button onclick="togglePanelCollapse()" id="btn-collapse-panel" class="w-5 h-5 rounded-md flex items-center justify-center text-gray-400 hover:text-black dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-xs font-bold" title="Minimizar/Expandir painel">
-                −
-              </button>
-            </div>
-          </div>
-
-          <!-- Conteúdo que pode ser recolhido -->
-          <div id="panel-expandable-content" class="space-y-2">
-            <!-- Botão de Ação Rápida para Nova Caixa -->
-            <button onclick="activateBuilderPlacement('hive')" class="w-full py-2 px-3 rounded-xl bg-honey-500 hover:bg-honey-600 text-gray-950 font-bold text-[11px] shadow-sm flex items-center justify-center gap-1.5 transition-all hover:scale-[1.01] cursor-pointer" title="Adicionar colmeia clicando no terreno">
-              <span>➕</span> Adicionar Nova Caixa
-            </button>
-
-            <!-- Seletor de Espécie -->
-            <div class="relative">
-              <select id="species-3d-select" onchange="onSelectSpecies(this.value)" class="w-full bg-white dark:bg-[#12151D] border border-gray-200 dark:border-gray-700/80 text-gray-900 dark:text-white text-xs font-bold rounded-xl px-2.5 py-1.5 appearance-none focus:outline-none focus:ring-2 focus:ring-honey-500 cursor-pointer shadow-sm">
-                <option value="mandacaia" selected>1. Mandaçaia MQA (~1.500m)</option>
-                <option value="jatai">2. Jataí Dourada (~500m)</option>
-                <option value="urucu">3. Uruçu Amarela (~2.000m)</option>
-                <option value="urucu_nordestina">4. Uruçu Nordestina (~2.000m)</option>
-                <option value="tiuba">5. Tiúba (~2.200m)</option>
-                <option value="mirim">6. Mirim Droryana (~400m)</option>
-                <option value="irai">7. Iraí (~600m)</option>
-                <option value="bora">8. Borá (~1.200m)</option>
-                <option value="manduri">9. Manduri (~1.000m)</option>
-                <option value="bugia">10. Bugia (~1.800m)</option>
-              </select>
-              <div class="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 text-[10px]">
-                ▼
-              </div>
-            </div>
-
-            <!-- Métricas Lado a Lado -->
-            <div class="grid grid-cols-2 gap-1.5">
-              <div class="p-2 rounded-xl bg-gray-50/80 dark:bg-[#12151D] border border-gray-100 dark:border-gray-800">
-                <div class="text-[9px] text-gray-500 dark:text-gray-400 font-medium">Raio Efetivo</div>
-                <div id="stat-radius" class="text-sm font-display font-extrabold text-gray-900 dark:text-white mt-0.5">1.500m</div>
-              </div>
-              <div class="p-2 rounded-xl bg-gray-50/80 dark:bg-[#12151D] border border-gray-100 dark:border-gray-800">
-                <div class="text-[9px] text-gray-500 dark:text-gray-400 font-medium">Área Pasto</div>
-                <div id="stat-area" class="text-sm font-display font-extrabold text-emerald-600 dark:text-emerald-400 mt-0.5">5.84 km²</div>
-              </div>
-            </div>
-
-            <!-- Filtros de Recursos -->
-            <div class="pt-1.5 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between gap-1">
-              <button onclick="togglePinLayer('flora')" id="btn-layer-flora" class="flex-1 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] text-[10px] font-semibold flex items-center justify-center gap-1 shadow-sm" title="Filtrar Floradas">
-                <span>🌸</span> Flores
-              </button>
-              <button onclick="togglePinLayer('water')" id="btn-layer-water" class="flex-1 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] text-[10px] font-semibold flex items-center justify-center gap-1 shadow-sm" title="Filtrar Água">
-                <span>💧</span> Água
-              </button>
-              <button onclick="togglePinLayer('traps')" id="btn-layer-traps" class="flex-1 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] text-[10px] font-semibold flex items-center justify-center gap-1 shadow-sm" title="Filtrar Iscas">
-                <span>🍯</span> Iscas
-              </button>
-            </div>
-          </div>
-
+      <!-- BARRA DE CONTROLE SUPERIOR FLUTUANTE DO SATÉLITE -->
+      <div class="absolute top-4 left-4 right-4 sm:right-auto z-20 flex flex-wrap items-center gap-2 pointer-events-auto">
+        <!-- Badge Indicador de Modo Satélite -->
+        <div class="px-3 py-1.5 rounded-2xl glass-panel shadow-apple flex items-center gap-2 text-xs font-bold text-gray-800 dark:text-gray-200 border border-gray-200/50 dark:border-white/10">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span>Satélite Esri WorldImagery</span>
         </div>
 
-        <!-- Card de Inspeção Rápida e Bilhete de Identidade da Caixa/Isca -->
-        <div id="inspector-card" class="hidden p-3 rounded-2xl glass-panel shadow-apple space-y-2.5 transition-all text-xs">
-          
-          <!-- Foto Real da Caixa/Isca (Quando vinculada) -->
-          <div id="inspec-photo-container" class="hidden relative h-32 w-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-950 shadow-inner">
-            <img id="inspec-photo-img" src="" alt="Foto Real da Caixa" class="w-full h-full object-cover" />
-            <span class="absolute bottom-1.5 left-1.5 px-2 py-0.5 rounded-md text-[9px] font-bold bg-black/75 text-amber-300 backdrop-blur-sm border border-amber-400/20">
-              📷 Bilhete de Identidade Físico
-            </span>
-          </div>
-
-          <!-- Cabeçalho -->
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-1.5">
-              <span id="inspec-icon" class="text-sm">🌸</span>
-              <h4 id="inspec-title" class="font-bold text-gray-900 dark:text-white text-xs">Aroeira</h4>
-            </div>
-            <button onclick="closeInspector()" class="text-gray-400 hover:text-black dark:hover:text-white text-xs cursor-pointer">✕</button>
-          </div>
-
-          <!-- Descrição Técnica e Dados de Pasto -->
-          <p id="inspec-desc" class="text-[10px] text-gray-600 dark:text-gray-300 leading-snug">
-            Flores ricas em néctar e resina protetora.
-          </p>
-
-          <div class="pt-1.5 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-[10px] text-gray-500 dark:text-gray-400">
-            <span>Coordenadas / Posição:</span>
-            <span id="inspec-dist" class="font-bold text-honey-600">380m</span>
-          </div>
-
-          <!-- PAINEL DE AÇÕES DA CAIXA DEFINITIVA (QR CODE + ROTA GPS) -->
-          <div id="inspec-hive-actions" class="hidden pt-2 border-t border-gray-100 dark:border-gray-800 flex items-center gap-1.5">
-            <button onclick="openQrModalForCurrentHive()" class="flex-1 py-1.5 px-2 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-[10px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer shadow-sm">
-              <span>📱</span> QR Code
-            </button>
-            <button onclick="navigateToCurrentHiveGps()" class="flex-1 py-1.5 px-2 rounded-xl bg-honey-500 hover:bg-honey-600 text-gray-950 text-[10px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer shadow-sm">
-              <span>🧭</span> Rota GPS
-            </button>
-          </div>
-
-          <!-- BOTÃO DE DESTAQUE: TRANSFERÊNCIA (ISCA ➔ CAIXA) -->
-          <div id="inspec-transfer-container" class="hidden pt-2 border-t border-gray-100 dark:border-gray-800">
-            <button onclick="openTransferModalForCurrentTrap()" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-honey-500 hover:from-amber-600 hover:to-honey-600 text-gray-950 text-[11px] font-extrabold flex items-center justify-center gap-1.5 shadow-glow-honey transition-all hover:scale-[1.02] cursor-pointer animate-pulse">
-              <span>🐝</span>
-              <span>Realizar Transferência (Isca para Caixa)</span>
-            </button>
-          </div>
-
-          <!-- BOTÃO DE EXCLUSÃO (CAIXAS, CASAS, ÁRVORES, FONTES OU AMEAÇAS) -->
-          <div id="inspec-delete-container" class="hidden pt-2 border-t border-gray-100 dark:border-gray-800">
-            <button id="btn-delete-inspected" onclick="onDeleteCurrentInspectedItem()" class="w-full py-1.5 px-3 rounded-xl border border-red-500/80 hover:bg-red-500 hover:text-white text-red-600 dark:text-red-400 text-[11px] font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer shadow-sm group">
-              <span class="group-hover:scale-110 transition-transform">🗑️</span>
-              <span id="btn-delete-label">Excluir Item</span>
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- BARRA DE FERRAMENTAS DO CONSTRUTOR 3D (DESKTOP: TOPO DIREITA / MOBILE: BOTÃO FLUTUANTE FAB) -->
-      <div id="builder-toolbar" class="absolute top-4 right-4 z-20 flex flex-col gap-2 pointer-events-auto transition-all">
-        <!-- Botão FAB Mobile Circular (Visível apenas em telas pequenas) -->
+        <!-- Botão GPS Minha Posição -->
         <button 
-          id="btn-builder-fab"
-          onclick="toggleMobileBuilderToolbar()" 
-          class="flex md:hidden w-12 h-12 rounded-full bg-honey-500 hover:bg-honey-400 text-gray-950 font-bold text-xl shadow-2xl border-2 border-white dark:border-gray-800 items-center justify-center cursor-pointer transition-transform active:scale-95 ml-auto"
-          title="Abrir Ferramentas do Construtor 3D"
+          onclick="centerMapOnUserGps()" 
+          class="px-3.5 py-1.5 rounded-2xl glass-panel shadow-apple hover:bg-white dark:hover:bg-[#1E2330] text-gray-800 dark:text-gray-200 hover:text-honey-600 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer border border-gray-200/50 dark:border-white/10"
+          title="Centralizar no GPS Atual"
         >
-          <span id="builder-fab-icon">🛠️</span>
+          <span>📍</span>
+          <span>Minha Posição GPS</span>
         </button>
 
-        <!-- Conteúdo do Construtor -->
-        <div id="builder-toolbar-content" class="builder-collapsed md:!flex p-2.5 rounded-2xl glass-panel shadow-apple flex-col gap-1.5 text-xs">
-          <div class="flex items-center justify-between gap-1.5 px-1 pb-1 border-b border-gray-200/60 dark:border-gray-800 text-[11px] font-bold text-gray-800 dark:text-gray-200">
-            <span class="flex items-center gap-1.5">
-              <span>🔨</span>
-              <span>Modo Construtor 3D</span>
-            </span>
-            <button onclick="toggleMobileBuilderToolbar()" class="md:hidden text-gray-400 hover:text-black dark:hover:text-white text-xs px-1">✕</button>
-          </div>
+        <!-- Botão Cadastrar Ponto -->
+        <button 
+          onclick="openAddPointModal()" 
+          class="btn-honey px-4 py-1.5 rounded-2xl font-bold text-xs shadow-apple flex items-center gap-1.5 cursor-pointer transition-all hover:scale-105"
+          title="Cadastrar Colmeia ou Ninho-Isca"
+        >
+          <span>➕</span>
+          <span>Cadastrar Ponto</span>
+        </button>
 
-          <!-- Grade de Ferramentas / Elementos -->
-          <div class="grid grid-cols-1 gap-1">
-            <button onclick="activateBuilderPlacement('hive'); autoCloseMobileToolbars();" class="builder-tool-btn flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-honey-500/20 hover:text-honey-700 dark:hover:text-honey-400 text-gray-700 dark:text-gray-200 font-semibold text-[11px] transition-all cursor-pointer">
-              <span class="text-base">📦</span>
-              <span>Nova Colmeia</span>
-            </button>
-            <button onclick="activateBuilderPlacement('house'); autoCloseMobileToolbars();" class="builder-tool-btn flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-amber-500/20 hover:text-amber-700 dark:hover:text-amber-400 text-gray-700 dark:text-gray-200 font-semibold text-[11px] transition-all cursor-pointer">
-              <span class="text-base">🏠</span>
-              <span>Casa / Galpão</span>
-            </button>
-            <button onclick="activateBuilderPlacement('tree'); autoCloseMobileToolbars();" class="builder-tool-btn flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-emerald-500/20 hover:text-emerald-700 dark:hover:text-emerald-400 text-gray-700 dark:text-gray-200 font-semibold text-[11px] transition-all cursor-pointer">
-              <span class="text-base">🌸</span>
-              <span>Árvore Frutífera</span>
-            </button>
-            <button onclick="activateBuilderPlacement('water'); autoCloseMobileToolbars();" class="builder-tool-btn flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-sky-500/20 hover:text-sky-700 dark:hover:text-sky-400 text-gray-700 dark:text-gray-200 font-semibold text-[11px] transition-all cursor-pointer">
-              <span class="text-base">💧</span>
-              <span>Fonte de Água</span>
-            </button>
-            <button onclick="activateBuilderPlacement('threat'); autoCloseMobileToolbars();" class="builder-tool-btn flex items-center gap-2 px-2.5 py-1.5 rounded-xl hover:bg-red-500/20 hover:text-red-700 dark:hover:text-red-400 text-gray-700 dark:text-gray-200 font-semibold text-[11px] transition-all cursor-pointer">
-              <span class="text-base">☠️</span>
-              <span>Área de Risco</span>
-            </button>
-          </div>
+        <!-- Filtros Rápidos de Camadas -->
+        <div class="hidden md:flex items-center gap-1 px-2 py-1 rounded-2xl glass-panel shadow-apple border border-gray-200/50 dark:border-white/10 text-xs">
+          <button onclick="toggleMapPointFilter('all')" id="filter-all-btn" class="px-2 py-0.5 rounded-xl font-bold bg-honey-500 text-gray-950 text-[11px]">Todos</button>
+          <button onclick="toggleMapPointFilter('hive')" id="filter-hive-btn" class="px-2 py-0.5 rounded-xl font-semibold text-gray-600 dark:text-gray-300 hover:text-honey-500 text-[11px]">📦 Colmeias</button>
+          <button onclick="toggleMapPointFilter('trap')" id="filter-trap-btn" class="px-2 py-0.5 rounded-xl font-semibold text-gray-600 dark:text-gray-300 hover:text-emerald-500 text-[11px]">🧪 Iscas</button>
         </div>
       </div>
 
-      <!-- MONITOR SAZONAL AUTOMÁTICO (INFERIOR CENTRO NO DESKTOP, COMPACTO COM TOGGLE NO MOBILE) -->
-      <div id="seasonal-monitor-panel" class="absolute bottom-5 left-1/2 -translate-x-1/2 z-20 w-[90%] max-w-md p-2.5 sm:p-3.5 rounded-2xl glass-panel shadow-apple flex flex-col gap-1.5 sm:gap-2 transition-all">
-        <div class="flex items-center justify-between text-xs">
-          <div class="flex items-center gap-2 font-bold text-gray-900 dark:text-white">
-            <span id="season-icon" class="text-base">🌸</span>
+      <!-- PAINEL LATERAL DE INSPEÇÃO DE PONTO NO SATÉLITE (DESLIZANTE / MODAL RESPONSIVO) -->
+      <div id="satellite-inspector-drawer" class="hidden absolute top-4 bottom-4 right-4 z-30 w-full max-w-sm glass-panel rounded-3xl shadow-2xl border border-gray-200 dark:border-white/10 flex flex-col overflow-hidden animate-fade-in pointer-events-auto">
+        <!-- Cabeçalho do Ponto Inspecionado -->
+        <div class="p-4 border-b border-gray-100 dark:border-white/5 flex items-center justify-between bg-white/40 dark:bg-black/20">
+          <div class="flex items-center gap-2.5">
+            <div id="sat-inspec-icon-badge" class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-xl font-bold">
+              📦
+            </div>
             <div>
-              <span id="season-name" class="text-xs sm:text-sm">Primavera Floral</span>
-              <span class="ml-1 sm:ml-1.5 px-1.5 sm:px-2 py-0.5 rounded-full text-[8px] sm:text-[9px] font-semibold bg-honey-500/15 text-honey-700 dark:text-honey-400 border border-honey-500/25">Auto</span>
+              <div class="flex items-center gap-1.5">
+                <h4 id="sat-inspec-code" class="text-sm font-bold text-gray-900 dark:text-white font-mono">CX-01</h4>
+                <span id="sat-inspec-type-badge" class="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-amber-500/15 text-amber-600 dark:text-amber-400">Colmeia</span>
+              </div>
+              <p id="sat-inspec-species" class="text-xs text-gray-500 dark:text-gray-400 font-medium">Mandaçaia (Melipona quadrifasciata)</p>
             </div>
           </div>
+          <button onclick="closeSatelliteInspector()" class="p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-white/10 text-gray-400 hover:text-gray-700 dark:hover:text-white transition-colors">
+            ✕
+          </button>
+        </div>
+
+        <!-- Conteúdo Rolável -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
+          <!-- Status & Detalhes -->
+          <div class="grid grid-cols-2 gap-2">
+            <div class="p-2.5 rounded-2xl bg-gray-50 dark:bg-[#151821] border border-gray-100 dark:border-white/5">
+              <span class="text-[10px] uppercase font-bold text-gray-400 block mb-0.5">Status Vital</span>
+              <span id="sat-inspec-status" class="font-bold text-emerald-600 dark:text-emerald-400">Forte & Ativa</span>
+            </div>
+            <div class="p-2.5 rounded-2xl bg-gray-50 dark:bg-[#151821] border border-gray-100 dark:border-white/5">
+              <span class="text-[10px] uppercase font-bold text-gray-400 block mb-0.5" id="sat-inspec-metric-label">Raio de Voo</span>
+              <span id="sat-inspec-metric-val" class="font-mono font-bold text-amber-600 dark:text-amber-400">~1.500m</span>
+            </div>
+          </div>
+
+          <!-- Botões de Ação Rápida (Google Maps + QR Code) -->
           <div class="flex items-center gap-2">
-            <span id="season-month" class="font-mono text-[10px] sm:text-[11px] font-semibold text-honey-600 dark:text-honey-400">
-              Outubro
-            </span>
-            <button onclick="toggleSeasonalPanel()" class="md:hidden text-gray-400 hover:text-gray-700 dark:hover:text-white text-xs px-1.5 py-0.5 rounded-lg bg-gray-100 dark:bg-gray-800" title="Recolher Clima">
-              ▲
+            <a id="sat-inspec-maps-link" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 px-3 rounded-xl bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/15 text-gray-800 dark:text-white font-semibold flex items-center justify-center gap-1.5 transition-all text-xs">
+              <span>🧭</span>
+              <span>Abrir Rota Maps</span>
+            </a>
+            <button id="sat-inspec-qr-btn" onclick="openQrModalForCurrentSatHive()" class="py-2 px-3 rounded-xl bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/15 text-gray-800 dark:text-white font-semibold flex items-center justify-center gap-1.5 transition-all text-xs">
+              <span>📱</span>
+              <span>QR Code</span>
+            </button>
+          </div>
+
+          <!-- BOTÃO ESPECIAL DE TRANSFERÊNCIA (ISCA ➔ CAIXA) -->
+          <div id="sat-inspec-transfer-container" class="hidden">
+            <button onclick="openTransferModalForSatTrap()" class="w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-gray-950 font-bold shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 transition-all">
+              <span>🐝</span>
+              <span>Transferir para Caixa Racional</span>
+            </button>
+          </div>
+
+          <!-- Galeria de Fotos do Ponto com Câmera -->
+          <div class="space-y-2 pt-2 border-t border-gray-100 dark:border-white/5">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-gray-900 dark:text-white text-xs flex items-center gap-1.5">
+                <span>📷</span>
+                <span>Galeria de Fotos do Ponto</span>
+              </span>
+              <span id="sat-photo-count" class="text-[10px] text-gray-400 font-mono">0 fotos</span>
+            </div>
+
+            <!-- Upload com Câmera & Seletor de Categoria -->
+            <div class="p-3 rounded-2xl bg-gray-50 dark:bg-[#151821] border border-dashed border-gray-200 dark:border-gray-700 space-y-2.5">
+              <div class="flex items-center gap-2">
+                <select id="sat-photo-category" class="flex-1 px-2.5 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0E1015] text-[11px] font-medium text-gray-800 dark:text-gray-200 focus:outline-none">
+                  <option value="Local/Árvore">🌳 Local / Árvore</option>
+                  <option value="Entrada/Pito">🚪 Entrada / Pito</option>
+                  <option value="Disco de Cria/Interno">🍯 Disco de Cria / Interno</option>
+                </select>
+                <label class="cursor-pointer px-3 py-1.5 rounded-xl btn-honey font-bold text-[11px] flex items-center gap-1 shadow-sm shrink-0">
+                  <span>📷 Tirar Foto</span>
+                  <input type="file" id="sat-photo-file-input" accept="image/*" capture="environment" class="hidden" onchange="handleSatPhotoUpload(event)">
+                </label>
+              </div>
+              <div id="sat-photo-compressing-badge" class="hidden text-center py-1 text-honey-600 dark:text-honey-400 font-semibold animate-pulse text-[11px]">
+                ⚡ Otimizando fotografia via Canvas...
+              </div>
+            </div>
+
+            <!-- Lista / Grade de Fotos Salvas -->
+            <div id="sat-photos-grid" class="grid grid-cols-2 gap-2 pt-1">
+              <!-- Cards dinâmicos de foto serão inseridos aqui -->
+            </div>
+          </div>
+
+          <!-- Botão Excluir Ponto -->
+          <div class="pt-2">
+            <button onclick="deleteCurrentSatPoint()" class="w-full py-2 rounded-xl text-red-500 hover:bg-red-500/10 text-[11px] font-semibold transition-colors">
+              🗑️ Excluir Este Ponto
             </button>
           </div>
         </div>
-        
-        <!-- Barra de Progresso do Ciclo Anual (Leitura Automática) -->
-        <div id="seasonal-progress-container" class="space-y-1">
-          <div class="w-full bg-gray-200 dark:bg-gray-800 h-1.5 sm:h-2 rounded-full overflow-hidden relative">
-            <div id="season-progress-bar" class="h-full bg-gradient-to-r from-amber-400 via-honey-500 to-emerald-400 rounded-full transition-all duration-700" style="width: 83.3%;"></div>
-          </div>
-          <div class="flex items-center justify-between text-[9px] sm:text-[10px] text-gray-400 font-medium px-0.5">
-            <span id="label-verao">☀️ Verão</span>
-            <span id="label-outono">🍂 Outono</span>
-            <span id="label-inverno">❄️ Inverno</span>
-            <span id="label-primavera" class="text-honey-600 dark:text-honey-400 font-bold">🌸 Primavera</span>
-          </div>
-        </div>
       </div>
-
-      <!-- CONTROLES DA CÂMERA (CANTO INFERIOR DIREITO) -->
-      <div id="camera-controls-container" class="absolute bottom-5 right-5 z-20 flex items-center gap-2">
-        <button onclick="reset3DCamera()" class="px-3 py-1.5 rounded-xl glass-panel shadow-apple hover:bg-white dark:hover:bg-[#1E2330] text-gray-700 dark:text-gray-200 transition-all text-xs font-semibold flex items-center gap-1.5">
-          <span>Padrão 3D</span>
-        </button>
-        <button onclick="toggleTopDownView()" class="px-3 py-1.5 rounded-xl glass-panel shadow-apple hover:bg-white dark:hover:bg-[#1E2330] text-gray-700 dark:text-gray-200 transition-all text-xs font-semibold flex items-center gap-1.5">
-          <span>Vista Aérea</span>
-        </button>
-      </div>
-
     </section>
 
     <!-- ABA 2: PAINEL -->
@@ -1078,7 +987,7 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- CARD: JATAÃ­ -->
+        <!-- CARD: JATAÍ -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-jatai" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
@@ -1154,7 +1063,7 @@
           </div>
         </div>
 
-        <!-- CARD: MANDAÃ§AIA -->
+        <!-- CARD: MANDAÇAIA -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-mandacaia" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
@@ -1198,13 +1107,13 @@
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona quadrifasciata</p>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                Abelha robusta de corpo escuro com 4 listras amarelas no abdÃ´men. Entrada tÃ­pica estriada em barro convergente. Excelente polinizadora de solanÃ¡ceas.
+                Abelha robusta de corpo escuro com 4 listras amarelas no abdômen. Entrada típica estriada em barro convergente. Excelente polinizadora de solanáceas.
               </p>
               <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
                 <div>
                   <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
                     <span>Docilidade & Manejo</span>
-                    <span class="text-emerald-500 font-bold">95% (Muito PacÃ­fica)</span>
+                    <span class="text-emerald-500 font-bold">95% (Muito Pacífica)</span>
                   </div>
                   <div class="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
                     <div class="h-full bg-emerald-500 rounded-full" style="width: 95%"></div>
@@ -1230,7 +1139,7 @@
           </div>
         </div>
 
-        <!-- CARD: URUÃ§U AMARELA -->
+        <!-- CARD: URUÇU AMARELA -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-urucu" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
@@ -1274,7 +1183,7 @@
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona flavolineata</p>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                Abelha imponente de tonalidade dourada viva. Produz mel nobre de sabor cÃ­trico floral e densidade rica. Grande defensora das matas tropicais.
+                Abelha imponente de tonalidade dourada viva. Produz mel nobre de sabor cítrico floral e densidade rica. Grande defensora das matas tropicais.
               </p>
               <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
                 <div>
@@ -1306,7 +1215,7 @@
           </div>
         </div>
 
-        <!-- CARD: URUÃ§U NORDESTINA -->
+        <!-- CARD: URUÇU NORDESTINA -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-urucu_nordestina" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
@@ -1350,7 +1259,7 @@
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona scutellaris</p>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                Uruçu verdadeira da Zona da Mata AtlÃ¢ntica e Nordeste. Excelente produtora de mel medicinal com enxames populosos e alta capacidade polinizadora.
+                Uruçu verdadeira da Zona da Mata Atlântica e Nordeste. Excelente produtora de mel medicinal com enxames populosos e alta capacidade polinizadora.
               </p>
               <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
                 <div>
@@ -1382,7 +1291,7 @@
           </div>
         </div>
 
-        <!-- CARD: TIÃºBA / URUÃ§U-CINZENTA -->
+        <!-- CARD: TIÚBA / URUÇU-CINZENTA -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-tiuba" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
@@ -1426,7 +1335,7 @@
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona fasciculata</p>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                Rainha do MaranhÃ£o e ParÃ¡. Excelente forrageadora de dossel em matas de cocais e vÃ¡rzeas. Produz própolis com alta concentraÃ§Ã£o de compostos fenÃ³licos.
+                Rainha do Maranhão e Pará. Excelente forrageadora de dossel em matas de cocais e várzeas. Produz própolis com alta concentração de compostos fenólicos.
               </p>
               <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
                 <div>
@@ -1502,7 +1411,7 @@
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Plebeia droryana</p>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                Abelha minÃºscula com grande capacidade de forragear em flores de corola fechada. Entrada feita em própolis com orifÃ­cios microscÃ³picos.
+                Abelha minúscula com grande capacidade de forragear em flores de corola fechada. Entrada feita em própolis com orifícios microscópicos.
               </p>
               <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
                 <div>
@@ -1534,7 +1443,7 @@
           </div>
         </div>
 
-        <!-- CARD: IRAÃ­ -->
+        <!-- CARD: IRAÍ -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-irai" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
@@ -1578,7 +1487,7 @@
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Nannotrigona testaceicornis</p>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                Muito dócil, excelente para ambientes urbanos e jardins residenciais. O tubo de entrada possui perfuraÃ§Ãµes rendilhadas caracterÃ­sticas que facilitam a aeraÃ§Ã£o.
+                Muito dócil, excelente para ambientes urbanos e jardins residenciais. O tubo de entrada possui perfurações rendilhadas características que facilitam a aeração.
               </p>
               <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
                 <div>
@@ -1610,7 +1519,7 @@
           </div>
         </div>
 
-        <!-- CARD: BORÃ¡ -->
+        <!-- CARD: BORÁ -->
         <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-bora" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
@@ -1730,13 +1639,13 @@
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona marginata</p>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                A menor abelha do gÃªnero Melipona. Constrói entradas com raias de barro finÃ­ssimas. Produz mel muito doce, aromÃ¡tico e de alta viscosidade.
+                A menor abelha do gênero Melipona. Constrói entradas com raias de barro finíssimas. Produz mel muito doce, aromático e de alta viscosidade.
               </p>
               <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
                 <div>
                   <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
                     <span>Docilidade & Manejo</span>
-                    <span class="text-emerald-500 font-bold">90% (PacÃ­fica)</span>
+                    <span class="text-emerald-500 font-bold">90% (Pacífica)</span>
                   </div>
                   <div class="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
                     <div class="h-full bg-emerald-500 rounded-full" style="width: 90%"></div>
@@ -1806,13 +1715,13 @@
                 <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona mondury</p>
               </div>
               <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
-                EspÃ©cie nobre de altitude das Serras da Mata AtlÃ¢ntica. Tonalidade dourada acastanhada marcante. Mel de excelente buquÃª e acidez equilibrada.
+                Espécie nobre de altitude das Serras da Mata Atlântica. Tonalidade dourada acastanhada marcante. Mel de excelente buquê e acidez equilibrada.
               </p>
               <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
                 <div>
                   <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
                     <span>Docilidade & Manejo</span>
-                    <span class="text-emerald-500 font-bold">95% (Muito PacÃ­fica)</span>
+                    <span class="text-emerald-500 font-bold">95% (Muito Pacífica)</span>
                   </div>
                   <div class="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
                     <div class="h-full bg-emerald-500 rounded-full" style="width: 95%"></div>
@@ -1839,6 +1748,105 @@
         </div>
 
       </div>
+    
+      <!-- ======================================================== -->
+      <!-- 🔬 SIMULADOR 3D DE ALCANCE DE VOO & ECOLOGIA (THREE.JS)  -->
+      <!-- ======================================================== -->
+      <div id="species-3d-simulator-section" class="pt-10 border-t border-gray-200 dark:border-gray-800 space-y-4">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-honey-500 animate-pulse"></span>
+              <h3 class="text-xl font-bold font-display text-gray-900 dark:text-white">
+                🔬 Simulador 3D de Alcance de Voo & Ecologia
+              </h3>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              Simulação de voo procedural, bioma sazonal dinâmico e perímetro Hex-Radar proporcional em Three.js WebGL.
+            </p>
+          </div>
+
+          <!-- Seletor Limpo de Espécie para o Radar 3D -->
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-bold text-gray-500">Espécie no Radar:</span>
+            <select id="simulator-species-select" onchange="onSelectSpecies(this.value)" class="px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] text-gray-900 dark:text-white font-bold text-xs focus:outline-none focus:border-honey-500 shadow-sm cursor-pointer">
+              <option value="mandacaia">1. Mandaçaia (~1.500m)</option>
+              <option value="jatai">2. Jataí Dourada (~500m)</option>
+              <option value="urucu">3. Uruçu Amarela (~2.000m)</option>
+              <option value="urucu_nordestina">4. Uruçu Nordestina (~2.000m)</option>
+              <option value="tiuba">5. Tiúba (~2.200m)</option>
+              <option value="mirim">6. Mirim Droryana (~400m)</option>
+              <option value="irai">7. Iraí (~600m)</option>
+              <option value="bora">8. Borá (~1.200m)</option>
+              <option value="manduri">9. Manduri (~1.000m)</option>
+              <option value="bugia">10. Bugia (~1.800m)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- CANVAS DO THREE.JS COM CLIMA E CONTROLES INTEGRADOS -->
+        <div class="relative w-full h-[540px] sm:h-[620px] rounded-3xl overflow-hidden border border-gray-200 dark:border-white/10 shadow-2xl bg-gray-950">
+          <!-- Canvas Container -->
+          <div id="three-canvas-container" class="w-full h-full"></div>
+
+          <!-- PAINEL COMPACTO NO CANTO SUPERIOR ESQUERDO (COLMEIA MONITORADA) -->
+          <div id="radar-control-panel" class="absolute top-4 left-4 z-20 w-64 max-w-[calc(100vw-32px)] flex flex-col gap-2 pointer-events-auto transition-all duration-300">
+            <div class="p-3 rounded-2xl glass-panel shadow-apple space-y-2">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-honey-500 animate-pulse"></span>
+                  <span class="text-[10px] font-bold uppercase tracking-wider text-gray-500 dark:text-gray-400">
+                    Colmeia Simulada
+                  </span>
+                </div>
+                <span id="badge-species-name" class="text-[10px] font-bold text-honey-600 dark:text-honey-400">Mandaçaia</span>
+              </div>
+              <div class="grid grid-cols-2 gap-1.5 pt-1 border-t border-gray-200/50 dark:border-gray-800">
+                <div class="p-1.5 rounded-xl bg-gray-50/80 dark:bg-black/30">
+                  <div class="text-[9px] uppercase font-bold text-gray-400">Raio Efetivo</div>
+                  <div id="stat-radius" class="text-xs font-mono font-bold text-honey-600 dark:text-honey-400">~1.500m</div>
+                </div>
+                <div class="p-1.5 rounded-xl bg-gray-50/80 dark:bg-black/30">
+                  <div class="text-[9px] uppercase font-bold text-gray-400">Área Forrageamento</div>
+                  <div id="stat-area" class="text-xs font-mono font-bold text-emerald-600 dark:text-emerald-400">~706 ha</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- PAINEL CLIMA / SLIDER DE ESTAÇÕES -->
+          <div id="seasonal-monitor-panel" class="absolute top-4 right-4 z-20 w-72 max-w-[calc(100vw-32px)] glass-panel rounded-2xl shadow-apple p-3 space-y-2 pointer-events-auto">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-1.5 text-xs font-bold text-gray-900 dark:text-white">
+                <span id="season-icon">🌸</span>
+                <span id="season-title">Primavera Floral</span>
+                <span class="px-1.5 py-0.5 rounded-full text-[8px] font-semibold bg-honey-500/15 text-honey-700 dark:text-honey-400">Auto</span>
+              </div>
+              <span id="season-month" class="font-mono text-[10px] font-semibold text-honey-600 dark:text-honey-400">Outubro</span>
+            </div>
+            <div class="w-full bg-gray-200 dark:bg-gray-800 h-1.5 rounded-full overflow-hidden">
+              <div id="season-progress-bar" class="h-full bg-gradient-to-r from-amber-400 via-honey-500 to-emerald-400 rounded-full transition-all duration-700" style="width: 83.3%;"></div>
+            </div>
+            <div class="flex items-center justify-between text-[9px] text-gray-400 font-medium px-0.5">
+              <span>☀️ Verão</span>
+              <span>🍂 Outono</span>
+              <span>❄️ Inverno</span>
+              <span class="text-honey-600 dark:text-honey-400 font-bold">🌸 Primavera</span>
+            </div>
+          </div>
+
+          <!-- CONTROLES DA CMERA (CANTO INFERIOR DIREITO) -->
+          <div id="camera-controls-container" class="absolute bottom-4 right-4 z-20 flex items-center gap-2">
+            <button onclick="reset3DCamera()" class="px-3 py-1.5 rounded-xl glass-panel shadow-apple hover:bg-white dark:hover:bg-[#1E2330] text-gray-700 dark:text-gray-200 transition-all text-xs font-semibold flex items-center gap-1.5">
+              <span>Padrão 3D</span>
+            </button>
+            <button onclick="toggleTopDownView()" class="px-3 py-1.5 rounded-xl glass-panel shadow-apple hover:bg-white dark:hover:bg-[#1E2330] text-gray-700 dark:text-gray-200 transition-all text-xs font-semibold flex items-center gap-1.5">
+              <span>Vista Aérea</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
     </section>
 
     <!-- ABA 4: MANEJO -->
@@ -2024,7 +2032,7 @@
           </select>
         </div>
 
-        <!-- FOTOGRAFIA DA CAIXA (CÂMERA DO DISPOSITIVO COM CAPTURE ENVIRONMENT) -->
+        <!-- FOTOGRAFIA DA CAIXA (CMERA DO DISPOSITIVO COM CAPTURE ENVIRONMENT) -->
         <div class="p-3 rounded-2xl bg-gray-50 dark:bg-[#0E1015] border border-gray-200 dark:border-gray-800 space-y-2">
           <div class="flex items-center justify-between">
             <label class="block font-semibold text-gray-700 dark:text-gray-300 text-[11px] flex items-center gap-1.5">
@@ -2103,6 +2111,223 @@
   </div>
 
   
+  
+  <!-- MODAL: CADASTRAR PONTO REAL NO MAPA DE SATÉLITE (COLMEIA OU ISCA) -->
+  <div id="add-sat-point-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
+    <div class="bg-white dark:bg-[#161922] w-full max-w-lg rounded-3xl border border-gray-200 dark:border-white/10 p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeAddPointModal()" class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <div class="flex items-center space-x-3 mb-4">
+        <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-2xl">
+          📍
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white">Cadastrar Ponto no Satélite</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Vincule caixas ou iscas às coordenadas reais de campo</p>
+        </div>
+      </div>
+
+      <form id="add-sat-point-form" onsubmit="submitAddSatPoint(event)" class="space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Tipo de Ponto:</label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-500/40 bg-amber-500/10 cursor-pointer">
+              <input type="radio" name="point-type-choice" value="hive" checked onchange="togglePointTypeFields(this.value)">
+              <span class="font-bold text-gray-900 dark:text-white">📦 Colmeia Racional</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 cursor-pointer">
+              <input type="radio" name="point-type-choice" value="trap" onchange="togglePointTypeFields(this.value)">
+              <span class="font-bold text-gray-900 dark:text-white">🧪 Ninho-Isca PET</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5">
+          <div>
+            <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Código / Numeração:</label>
+            <input type="text" id="sat-point-code" placeholder="Ex: CX-05 ou ISCA-12" required class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white focus:outline-none focus:border-honey-500 font-mono">
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Status:</label>
+            <select id="sat-point-status" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white focus:outline-none focus:border-honey-500 font-medium">
+              <option value="Forte">Forte & Produtiva</option>
+              <option value="Média">Média / Estável</option>
+              <option value="Em Divisão">Em Divisão / Multiplicação</option>
+              <option value="Armadilhada">Isca Armadilhada (Aguardando)</option>
+              <option value="Capturada">Isca Capturada! (Pronta p/ transferir)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="sat-species-field-container">
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Espécie da Abelha:</label>
+          <select id="sat-point-species" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white focus:outline-none focus:border-honey-500 font-medium">
+            <option value="mandacaia">1. Mandaçaia MQA (~1.500m • Meliponini)</option>
+            <option value="jatai" selected>2. Jataí Dourada (~500m • Trigonini)</option>
+            <option value="urucu">3. Uruçu Amarela (~2.000m • Meliponini)</option>
+            <option value="urucu_nordestina">4. Uruçu Nordestina (~2.000m • Meliponini)</option>
+            <option value="tiuba">5. Tiúba (~2.200m • Meliponini)</option>
+            <option value="mirim">6. Mirim Droryana (~400m • Trigonini)</option>
+            <option value="irai">7. Iraí (~600m • Trigonini)</option>
+            <option value="bora">8. Borá (~1.200m • Trigonini)</option>
+            <option value="manduri">9. Manduri (~1.000m • Meliponini)</option>
+            <option value="bugia">10. Bugia (~1.800m • Meliponini)</option>
+          </select>
+        </div>
+
+        <!-- Coordenadas GPS -->
+        <div class="p-3 rounded-2xl bg-gray-50 dark:bg-[#0E1015] border border-gray-200 dark:border-gray-700 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-gray-700 dark:text-gray-300">Posição no Mapa:</span>
+            <button type="button" onclick="captureGpsForSatForm()" class="px-2.5 py-1 rounded-xl bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold hover:bg-amber-500/30 transition-colors">
+              📍 Obter GPS do Aparelho
+            </button>
+          </div>
+          <div class="grid grid-cols-2 gap-2 font-mono">
+            <div>
+              <label class="block text-[10px] text-gray-400">Latitude:</label>
+              <input type="text" id="sat-form-lat" placeholder="-23.5505" required class="w-full px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] text-xs">
+            </div>
+            <div>
+              <label class="block text-[10px] text-gray-400">Longitude:</label>
+              <input type="text" id="sat-form-lon" placeholder="-46.6333" required class="w-full px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] text-xs">
+            </div>
+          </div>
+          <p class="text-[10px] text-gray-400 italic">Dica: Você também pode clicar diretamente em qualquer ponto do mapa de satélite para preencher as coordenadas.</p>
+        </div>
+
+        <!-- Foto Inicial (Opcional) -->
+        <div>
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Foto Inicial (Câmera / Galeria):</label>
+          <div class="flex items-center space-x-2">
+            <label class="cursor-pointer flex items-center space-x-2 px-3 py-2 rounded-xl bg-gray-100 dark:bg-[#0E1015] border border-dashed border-gray-300 dark:border-gray-700 hover:border-amber-500 text-gray-700 dark:text-gray-300 transition-colors">
+              <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+              <span class="text-[11px] font-medium">Tirar Foto do Ponto</span>
+              <input type="file" id="sat-form-photo-input" accept="image/*" capture="environment" class="hidden" onchange="handleSatFormPhoto(event)">
+            </label>
+            <span id="sat-form-photo-feedback" class="text-[10px] text-gray-400 italic">Sem foto</span>
+          </div>
+          <div id="sat-form-photo-preview" class="hidden mt-2 relative w-full h-32 rounded-xl overflow-hidden border border-gray-200 dark:border-white/10">
+            <img id="sat-form-photo-img" src="" alt="Foto" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-2 pt-2 border-t border-gray-100 dark:border-white/5">
+          <button type="button" onclick="closeAddPointModal()" class="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold shadow-md shadow-amber-500/20">Salvar no Mapa de Satélite</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: AUTENTICAÇÃO FIREBASE (GOOGLE + EMAIL + DEMO + CONFIG) -->
+  <div id="auth-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
+    <div class="bg-white dark:bg-[#161922] w-full max-w-md rounded-3xl border border-gray-200 dark:border-white/10 p-6 shadow-2xl relative">
+      <button onclick="closeAuthModal()" class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <!-- Painel quando o usuário JÁ ESTÁ LOGADO -->
+      <div id="auth-logged-in-view" class="hidden text-center space-y-4">
+        <div class="w-16 h-16 rounded-full bg-honey-500/20 text-honey-600 dark:text-honey-400 mx-auto flex items-center justify-center text-3xl font-bold shadow-inner">
+          <img id="auth-profile-img" class="w-full h-full rounded-full object-cover hidden" alt="Avatar">
+          <span id="auth-profile-fallback">👤</span>
+        </div>
+        <div>
+          <h3 id="auth-profile-name" class="text-base font-bold text-gray-900 dark:text-white">Usuário</h3>
+          <p id="auth-profile-email" class="text-xs text-gray-500 dark:text-gray-400 font-mono">user@exemplo.com</p>
+          <span id="auth-sync-status" class="inline-block mt-2 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+            ☁️ Nuvem Firestore Sincronizada
+          </span>
+        </div>
+        <div class="flex items-center gap-2 justify-center pt-2">
+          <button onclick="syncDataToFirebaseCloud()" class="btn-honey px-4 py-2 rounded-xl text-xs font-bold shadow-sm">
+            🔄 Sincronizar Agora
+          </button>
+          <button onclick="logoutFirebase()" class="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-red-500 text-xs font-bold hover:bg-red-500/10">
+            Sair da Conta
+          </button>
+        </div>
+      </div>
+
+      <!-- Painel quando o usuário NÃO ESTÁ LOGADO -->
+      <div id="auth-login-view" class="space-y-4 text-xs">
+        <div class="text-center">
+          <div class="w-12 h-12 rounded-2xl bg-honey-500/20 text-honey-500 mx-auto flex items-center justify-center text-2xl mb-2">
+            🐝
+          </div>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white">Conta MeliponaOS</h3>
+          <p class="text-gray-500 dark:text-gray-400">Sincronize suas colmeias e fotos na nuvem Firebase</p>
+        </div>
+
+        <!-- Botão Google -->
+        <button onclick="loginWithGoogle()" class="w-full py-2.5 px-4 rounded-2xl border border-gray-300 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-white/5 font-bold text-gray-800 dark:text-white flex items-center justify-center gap-3 transition-all shadow-sm">
+          <svg class="w-4 h-4" viewBox="0 0 24 24">
+            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+          </svg>
+          <span>Entrar com Google</span>
+        </button>
+
+        <div class="relative flex py-1 items-center">
+          <div class="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
+          <span class="flex-shrink mx-3 text-gray-400 text-[10px] uppercase font-bold">ou com e-mail</span>
+          <div class="flex-grow border-t border-gray-200 dark:border-gray-700"></div>
+        </div>
+
+        <form id="email-auth-form" onsubmit="handleEmailAuth(event)" class="space-y-2.5">
+          <div>
+            <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-0.5">E-mail:</label>
+            <input type="email" id="auth-email-input" required placeholder="seu@email.com" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white focus:outline-none focus:border-honey-500">
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-0.5">Senha:</label>
+            <input type="password" id="auth-password-input" required placeholder="••••••••" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white focus:outline-none focus:border-honey-500">
+          </div>
+          <div class="flex gap-2 pt-1">
+            <button type="submit" onclick="window.authMode='login'" class="flex-1 py-2 rounded-xl bg-gray-900 dark:bg-white text-white dark:text-gray-950 font-bold hover:opacity-90 transition-opacity">
+              Entrar
+            </button>
+            <button type="submit" onclick="window.authMode='register'" class="flex-1 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-50 dark:hover:bg-white/5 transition-colors">
+              Cadastrar
+            </button>
+          </div>
+        </form>
+
+        <div class="pt-3 border-t border-gray-100 dark:border-white/5 flex flex-col gap-2">
+          <!-- Modo Demonstração -->
+          <button onclick="activateDemoMode()" class="w-full py-2 rounded-xl bg-amber-500/15 hover:bg-amber-500/25 text-amber-700 dark:text-amber-400 font-bold transition-colors">
+            🧪 Entrar em Modo Demonstração (Teste Local)
+          </button>
+          <!-- Configurar Chaves Firebase -->
+          <button onclick="toggleFirebaseConfigPanel()" class="w-full text-center text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 text-[11px] py-1">
+            ⚙️ Configurar Chaves Firebase
+          </button>
+        </div>
+
+        <!-- Painel Expansível de Chaves Firebase -->
+        <div id="firebase-config-panel" class="hidden p-3 rounded-2xl bg-gray-50 dark:bg-[#0E1015] border border-gray-200 dark:border-gray-700 space-y-2">
+          <label class="block font-bold text-gray-700 dark:text-gray-300 text-[11px]">Cole seu firebaseConfig JSON aqui:</label>
+          <textarea id="firebase-config-textarea" rows="4" placeholder='{
+  "apiKey": "AIzaSy...",
+  "authDomain": "seu-app.firebaseapp.com",
+  "projectId": "seu-app",
+  "storageBucket": "...",
+  "messagingSenderId": "...",
+  "appId": "..."
+}' class="w-full p-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#151821] font-mono text-[10px] text-gray-900 dark:text-white focus:outline-none"></textarea>
+          <button onclick="saveFirebaseCustomConfig()" class="w-full py-1.5 rounded-xl btn-honey font-bold text-[11px]">
+            Salvar e Reiniciar Conexão Firebase
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: TRANSFERÊNCIA DE ISCA PARA CAIXA RACIONAL -->
   <div id="transfer-trap-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
     <div class="bg-white dark:bg-[#161922] w-full max-w-lg rounded-3xl border border-gray-200 dark:border-white/10 p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
@@ -2253,6 +2478,50 @@
   <!-- ======================================================== -->
   <!-- SCRIPT THREE.JS: TERRENO NATIVO SUAVE & RADAR 100% LIMPO -->
   <!-- ======================================================== -->
+  
+  <!-- Firebase Modular SDK v10 (Compat / Modular Bridge via ES Modules) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { 
+      getAuth, 
+      signInWithPopup, 
+      GoogleAuthProvider, 
+      signInWithEmailAndPassword, 
+      createUserWithEmailAndPassword, 
+      signOut, 
+      onAuthStateChanged 
+    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+    import { 
+      getFirestore, 
+      doc, 
+      setDoc, 
+      getDoc, 
+      onSnapshot 
+    } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+    // Expor globalmente para a aplicação
+    window.fbService = {
+      initializeApp,
+      getAuth,
+      signInWithPopup,
+      GoogleAuthProvider,
+      signInWithEmailAndPassword,
+      createUserWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged,
+      getFirestore,
+      doc,
+      setDoc,
+      getDoc,
+      onSnapshot
+    };
+
+    console.log("🔥 Firebase v10 Modular Bridge pronto!");
+    if (window.initFirebaseApplication) {
+      window.initFirebaseApplication();
+    }
+  </script>
+
   <script>
     const SPECIES_CONFIG = {
       mandacaia: {
@@ -2680,8 +2949,9 @@
 
     function initThreeJS() {
       const container = document.getElementById('three-canvas-container');
-      const width = container.clientWidth;
-      const height = container.clientHeight;
+      if (!container) return;
+      const width = container.clientWidth || 800;
+      const height = container.clientHeight || 560;
 
       scene = new THREE.Scene();
       
@@ -3804,7 +4074,7 @@
       }
     }
 
-    // ALTERNÂNCIA DE TEMA DARK/LIGHT
+    // ALTERNNCIA DE TEMA DARK/LIGHT
     function toggleDarkMode() {
       isDarkMode = !isDarkMode;
       const html = document.documentElement;
@@ -3824,7 +4094,7 @@
     }
 
     // ========================================================
-    // SISTEMA CLIMÁTICO DINÂMICO (SIMULAR CHUVA & REAÇÃO)
+    // SISTEMA CLIMÁTICO DINMICO (SIMULAR CHUVA & REAÇÃO)
     // ========================================================
     function toggleRainSimulation() {
       isRaining = !isRaining;
@@ -3911,7 +4181,7 @@
         seasonIcon = '☀️';
         seasonType = 'summer';
       } else if (m >= 3 && m <= 5) {
-        seasonTitle = 'Outono Âmbar (Seca Gradual e Maturação)';
+        seasonTitle = 'Outono mbar (Seca Gradual e Maturação)';
         seasonIcon = '🍂';
         seasonType = 'autumn';
       } else if (m >= 6 && m <= 8) {
@@ -4983,8 +5253,16 @@
     }
 
     function selectAndGoToRadar(key) {
-      switchTab('radar');
+      switchTab('species');
       onSelectSpecies(key);
+      const sel = document.getElementById('simulator-species-select');
+      if (sel) sel.value = key;
+      setTimeout(() => {
+        const simSection = document.getElementById('species-3d-simulator-section');
+        if (simSection) {
+          simSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
     }
 
     let layersState = { flora: true, water: true, traps: true, threat: true };
@@ -5470,7 +5748,7 @@
               focusCameraOnObject(new THREE.Vector3(0, 1.9, 0));
               showPinInspector({
                 name: hivesArray[0].name,
-                sub: `Ponto Zero Âncora GPS • Precisão ±${accuracy}m`,
+                sub: `Ponto Zero ncora GPS • Precisão ±${accuracy}m`,
                 dist: `Lat: ${userLat.toFixed(5)}, Lon: ${userLon.toFixed(5)}`,
                 desc: `📅 Último Exame: ${examDate} • ${examStatus}. Ponto Zero estabelecido com sucesso!`,
                 icon: '📍',
@@ -5519,7 +5797,7 @@
             const distReal = Math.round(offset.distanceMeters);
             showPinInspector({
               name: newHiveData.name,
-              sub: `Fixada via GPS • Distância da Âncora: ${distReal}m`,
+              sub: `Fixada via GPS • Distância da ncora: ${distReal}m`,
               dist: `Lat: ${userLat.toFixed(5)}, Lon: ${userLon.toFixed(5)}`,
               desc: `📅 Exame: ${examDate} • ${examStatus}. ${newHiveData.hasOverlap ? '⚠️ Alerta de Competição de Pasto!' : '✅ Pasto Floral Equilibrado.'}`,
               icon: '📍',
@@ -5635,7 +5913,13 @@
         document.getElementById('view-home').classList.remove('hidden');
       } else if (tabId === 'radar') {
         document.getElementById('view-radar').classList.remove('hidden');
-        onWindowResize();
+        setTimeout(() => {
+          if (!satelliteMap) {
+            initSatelliteMap();
+          } else {
+            satelliteMap.invalidateSize();
+          }
+        }, 50);
       } else if (tabId === 'dashboard') {
         document.getElementById('view-dashboard').classList.remove('hidden');
         setTimeout(() => {
@@ -5643,6 +5927,9 @@
         }, 50);
       } else if (tabId === 'species') {
         document.getElementById('view-species').classList.remove('hidden');
+        setTimeout(() => {
+          onWindowResize();
+        }, 50);
       } else if (tabId === 'management') {
         document.getElementById('view-management').classList.remove('hidden');
       }
@@ -5732,7 +6019,7 @@
 
     
     // ==========================================
-    // CARROSSEL INTERATIVO DE FOTOS DO CATÃLOGO
+    // CARROSSEL INTERATIVO DE FOTOS DO CATÁLOGO
     // ==========================================
     function setSpeciesCarouselSlide(containerId, targetIndex) {
       const container = document.getElementById(containerId);
@@ -5771,7 +6058,849 @@
       setSpeciesCarouselSlide(containerId, currentIndex + direction);
     }
 
-function onWindowResize() {
+
+    // =========================================================
+    // 🛰️ SATÉLITE LEAFLET 2D REAL & PONTOS DE CAMPO COM ESPELHO OFFLINE
+    // =========================================================
+    let satelliteMap = null;
+    let satMarkersLayer = null;
+    let satCirclesLayer = null;
+    let currentSatPointFilter = 'all'; // 'all', 'hive', 'trap'
+    let currentInspectedSatPoint = null;
+    let userLocationMarker = null;
+
+    // Estrutura de dados inicial com Colmeias e Ninhos-Isca
+    const DEFAULT_MAP_POINTS = [
+      {
+        id: 'CX-01',
+        type: 'hive',
+        species: 'mandacaia',
+        status: 'Forte',
+        lat: -23.55052,
+        lon: -46.633308,
+        createdAt: '2026-10-20',
+        photos: []
+      },
+      {
+        id: 'CX-02',
+        type: 'hive',
+        species: 'jatai',
+        status: 'Forte',
+        lat: -23.55115,
+        lon: -46.63220,
+        createdAt: '2026-10-22',
+        photos: []
+      },
+      {
+        id: 'ISCA-04',
+        type: 'trap',
+        species: 'jatai',
+        status: 'Armadilhada',
+        lat: -23.55180,
+        lon: -46.63410,
+        createdAt: '2026-10-15',
+        photos: []
+      },
+      {
+        id: 'ISCA-09',
+        type: 'trap',
+        species: 'mandacaia',
+        status: 'Capturada',
+        lat: -23.54990,
+        lon: -46.63180,
+        createdAt: '2026-10-05',
+        photos: []
+      }
+    ];
+
+    // Carregar do LocalStorage ou usar padrão
+    let satPoints = [];
+    try {
+      const savedPoints = localStorage.getItem('melipona_sat_points_v2');
+      if (savedPoints) {
+        satPoints = JSON.parse(savedPoints);
+      } else {
+        satPoints = DEFAULT_MAP_POINTS;
+        localStorage.setItem('melipona_sat_points_v2', JSON.stringify(satPoints));
+      }
+    } catch (e) {
+      console.warn("Erro ao ler localStorage de satPoints:", e);
+      satPoints = DEFAULT_MAP_POINTS;
+    }
+
+    // Inicialização do Mapa Leaflet
+    function initSatelliteMap() {
+      const mapContainer = document.getElementById('satellite-map-container');
+      if (!mapContainer || satelliteMap) return;
+
+      const initialLat = satPoints.length > 0 ? satPoints[0].lat : -23.55052;
+      const initialLon = satPoints.length > 0 ? satPoints[0].lon : -46.633308;
+
+      satelliteMap = L.map('satellite-map-container', {
+        center: [initialLat, initialLon],
+        zoom: 17,
+        zoomControl: true,
+        attributionControl: false
+      });
+
+      // Camada de Imagens de Satélite Esri WorldImagery
+      L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19,
+        maxNativeZoom: 18
+      }).addTo(satelliteMap);
+
+      // Rótulos de Referência Cartográfica (Estradas, Lugares)
+      L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 19,
+        opacity: 0.85
+      }).addTo(satelliteMap);
+
+      satCirclesLayer = L.layerGroup().addTo(satelliteMap);
+      satMarkersLayer = L.layerGroup().addTo(satelliteMap);
+
+      // Renderizar pontos cadastrados
+      renderAllSatellitePoints();
+
+      // Clique no mapa para abrir cadastro de ponto naquela coordenada
+      satelliteMap.on('click', function(e) {
+        openAddPointModal(e.latlng.lat, e.latlng.lng);
+      });
+
+      // Tenta centralizar automaticamente no GPS real se permitido
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          function(pos) {
+            const uLat = pos.coords.latitude;
+            const uLon = pos.coords.longitude;
+            updateUserLocationMarker(uLat, uLon);
+          },
+          function(err) {
+            console.log("GPS inicial não concedido ou indisponível:", err.message);
+          },
+          { enableHighAccuracy: true, timeout: 6000 }
+        );
+      }
+    }
+
+    function updateUserLocationMarker(lat, lon) {
+      if (!satelliteMap) return;
+      if (userLocationMarker) {
+        satelliteMap.removeLayer(userLocationMarker);
+      }
+      const userIcon = L.divIcon({
+        className: 'user-gps-marker',
+        html: `<div style="position:relative; width:20px; height:20px;">
+                <div style="position:absolute; inset:0; border-radius:50%; background:rgba(59,130,246,0.35); animation:ping 1.5s cubic-bezier(0,0,0.2,1) infinite;"></div>
+                <div style="position:absolute; inset:3px; border-radius:50%; background:#3B82F6; border:2px solid white; box-shadow:0 2px 6px rgba(0,0,0,0.4);"></div>
+               </div>`,
+        iconSize: [20, 20],
+        iconAnchor: [10, 10]
+      });
+      userLocationMarker = L.marker([lat, lon], { icon: userIcon }).addTo(satelliteMap);
+    }
+
+    function centerMapOnUserGps() {
+      if (!navigator.geolocation) {
+        alert("Geolocalização não é suportada neste navegador.");
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          updateUserLocationMarker(lat, lon);
+          if (satelliteMap) {
+            satelliteMap.flyTo([lat, lon], 18, { animate: true, duration: 1.2 });
+          }
+        },
+        function(err) {
+          alert("Não foi possível obter a sua posição GPS: " + err.message);
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    }
+
+    // Renderizar Pinos e Perímetros no Mapa de Satélite
+    function renderAllSatellitePoints() {
+      if (!satelliteMap || !satMarkersLayer || !satCirclesLayer) return;
+
+      satMarkersLayer.clearLayers();
+      satCirclesLayer.clearLayers();
+
+      satPoints.forEach(point => {
+        if (currentSatPointFilter !== 'all' && point.type !== currentSatPointFilter) {
+          return;
+        }
+
+        const isHive = point.type === 'hive';
+        const spec = SPECIES_CONFIG[point.species] || SPECIES_CONFIG.mandacaia;
+        const flightRadiusMeters = spec.radius || 1500;
+
+        // Círculo de Raio de Voo / Atrativo
+        if (isHive) {
+          L.circle([point.lat, point.lon], {
+            radius: flightRadiusMeters,
+            color: '#FFC300',
+            weight: 1.8,
+            fillColor: '#FFC300',
+            fillOpacity: 0.12,
+            dashArray: null
+          }).addTo(satCirclesLayer);
+        } else {
+          // Isca: Círculo verde tracejado de atrativo feromonado (~120m)
+          L.circle([point.lat, point.lon], {
+            radius: 120,
+            color: '#10B981',
+            weight: 2,
+            fillColor: '#10B981',
+            fillOpacity: 0.16,
+            dashArray: '6, 6'
+          }).addTo(satCirclesLayer);
+        }
+
+        // Ícone / Pino Personalizado
+        const markerBg = isHive ? '#FFC300' : '#10B981';
+        const markerTextColor = isHive ? '#111827' : '#FFFFFF';
+        const markerBorder = isHive ? '#D97706' : '#047857';
+        const markerEmoji = isHive ? '📦' : '🧪';
+
+        const customIcon = L.divIcon({
+          className: 'sat-pin-icon',
+          html: `<div style="
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: ${markerBg};
+            color: ${markerTextColor};
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-family: monospace;
+            font-size: 11px;
+            font-weight: 800;
+            border: 2px solid ${markerBorder};
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            white-space: nowrap;
+            cursor: pointer;
+            transform: translate(-50%, -100%);
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          ">
+            <span>${markerEmoji}</span>
+            <span>${point.id}</span>
+          </div>`,
+          iconSize: [60, 24],
+          iconAnchor: [30, 24]
+        });
+
+        const marker = L.marker([point.lat, point.lon], { icon: customIcon }).addTo(satMarkersLayer);
+        marker.on('click', function(ev) {
+          L.DomEvent.stopPropagation(ev);
+          openSatelliteInspector(point);
+        });
+      });
+    }
+
+    function toggleMapPointFilter(filterType) {
+      currentSatPointFilter = filterType;
+      ['all', 'hive', 'trap'].forEach(f => {
+        const btn = document.getElementById(`filter-${f}-btn`);
+        if (btn) {
+          if (f === filterType) {
+            btn.className = `px-2 py-0.5 rounded-xl font-bold ${f === 'trap' ? 'bg-emerald-500 text-white' : 'bg-honey-500 text-gray-950'} text-[11px]`;
+          } else {
+            btn.className = 'px-2 py-0.5 rounded-xl font-semibold text-gray-600 dark:text-gray-300 hover:text-honey-500 text-[11px]';
+          }
+        }
+      });
+      renderAllSatellitePoints();
+    }
+
+    // Painel de Inspeção do Ponto
+    function openSatelliteInspector(point) {
+      currentInspectedSatPoint = point;
+      const drawer = document.getElementById('satellite-inspector-drawer');
+      if (!drawer) return;
+
+      const isHive = point.type === 'hive';
+      const spec = SPECIES_CONFIG[point.species] || SPECIES_CONFIG.mandacaia;
+
+      document.getElementById('sat-inspec-code').innerText = point.id;
+      document.getElementById('sat-inspec-species').innerText = `${spec.name} (${spec.scientific || ''})`;
+      document.getElementById('sat-inspec-status').innerText = point.status || 'Ativa';
+
+      const typeBadge = document.getElementById('sat-inspec-type-badge');
+      const iconBadge = document.getElementById('sat-inspec-icon-badge');
+      if (isHive) {
+        typeBadge.innerText = 'Colmeia Racional';
+        typeBadge.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-amber-500/15 text-amber-600 dark:text-amber-400';
+        iconBadge.innerHTML = '📦';
+        iconBadge.className = 'w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-xl font-bold';
+        document.getElementById('sat-inspec-metric-label').innerText = 'Raio de Voo';
+        document.getElementById('sat-inspec-metric-val').innerText = `~${spec.radius || 1500}m`;
+        document.getElementById('sat-inspec-transfer-container').classList.add('hidden');
+        document.getElementById('sat-inspec-qr-btn').classList.remove('hidden');
+      } else {
+        typeBadge.innerText = 'Ninho-Isca PET';
+        typeBadge.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-emerald-500/15 text-emerald-600 dark:text-emerald-400';
+        iconBadge.innerHTML = '🧪';
+        iconBadge.className = 'w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-xl font-bold';
+        
+        let daysInstalled = 1;
+        if (point.createdAt) {
+          const diffMs = Date.now() - new Date(point.createdAt).getTime();
+          daysInstalled = Math.max(1, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
+        }
+        document.getElementById('sat-inspec-metric-label').innerText = 'Dias Armada';
+        document.getElementById('sat-inspec-metric-val').innerText = `${daysInstalled} dias`;
+        document.getElementById('sat-inspec-transfer-container').classList.remove('hidden');
+        document.getElementById('sat-inspec-qr-btn').classList.add('hidden');
+      }
+
+      // Link Google Maps
+      const mapsLink = document.getElementById('sat-inspec-maps-link');
+      mapsLink.href = `https://www.google.com/maps/dir/?api=1&destination=${point.lat},${point.lon}`;
+
+      // Renderizar Galeria de Fotos
+      renderSatPointPhotos(point);
+
+      drawer.classList.remove('hidden');
+    }
+
+    function closeSatelliteInspector() {
+      const drawer = document.getElementById('satellite-inspector-drawer');
+      if (drawer) drawer.classList.add('hidden');
+      currentInspectedSatPoint = null;
+    }
+
+    function renderSatPointPhotos(point) {
+      const grid = document.getElementById('sat-photos-grid');
+      const countLabel = document.getElementById('sat-photo-count');
+      if (!grid) return;
+
+      const photos = point.photos || [];
+      countLabel.innerText = `${photos.length} foto${photos.length === 1 ? '' : 's'}`;
+
+      if (photos.length === 0) {
+        grid.innerHTML = '<div class="col-span-2 py-4 text-center text-gray-400 italic text-[11px]">Nenhuma foto registrada para este ponto ainda.</div>';
+        return;
+      }
+
+      grid.innerHTML = photos.map((p, idx) => `
+        <div class="relative group rounded-xl overflow-hidden border border-gray-200 dark:border-white/10 bg-gray-900 aspect-video">
+          <img src="${p.dataUrl}" alt="${p.category}" class="w-full h-full object-cover">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-2 text-white">
+            <span class="text-[9px] font-bold text-amber-400 uppercase tracking-wider">${p.category}</span>
+            <span class="text-[8px] text-gray-300 font-mono">${p.date || 'Hoje'}</span>
+          </div>
+          <button onclick="deleteSatPhoto(${idx})" class="absolute top-1 right-1 p-1 rounded-full bg-red-600/80 hover:bg-red-600 text-white opacity-0 group-hover:opacity-100 transition-opacity text-[10px]" title="Remover Foto">
+            ✕
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // Compressão de Foto via Canvas (máx 700px, JPEG 0.7)
+    function compressImageFile(file, maxWidth = 700, quality = 0.7) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const img = new Image();
+          img.onload = function() {
+            const canvas = document.createElement('canvas');
+            let w = img.width;
+            let h = img.height;
+
+            if (w > maxWidth) {
+              h = Math.round((h * maxWidth) / w);
+              w = maxWidth;
+            }
+
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+
+            const compressedBase64 = canvas.toDataURL('image/jpeg', quality);
+            resolve(compressedBase64);
+          };
+          img.onerror = reject;
+          img.src = event.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handleSatPhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file || !currentInspectedSatPoint) return;
+
+      const badge = document.getElementById('sat-photo-compressing-badge');
+      if (badge) badge.classList.remove('hidden');
+
+      try {
+        const compressedBase64 = await compressImageFile(file, 700, 0.7);
+        const categorySelect = document.getElementById('sat-photo-category');
+        const category = categorySelect ? categorySelect.value : 'Local/Árvore';
+
+        const todayStr = new Date().toLocaleDateString('pt-BR');
+        if (!currentInspectedSatPoint.photos) {
+          currentInspectedSatPoint.photos = [];
+        }
+
+        currentInspectedSatPoint.photos.unshift({
+          dataUrl: compressedBase64,
+          category: category,
+          date: todayStr
+        });
+
+        saveSatPointsLocalAndCloud();
+        renderSatPointPhotos(currentInspectedSatPoint);
+      } catch (err) {
+        alert("Erro ao processar e comprimir fotografia: " + err.message);
+      } finally {
+        if (badge) badge.classList.add('hidden');
+        event.target.value = '';
+      }
+    }
+
+    function deleteSatPhoto(idx) {
+      if (!currentInspectedSatPoint || !currentInspectedSatPoint.photos) return;
+      if (confirm("Deseja excluir esta fotografia do ponto?")) {
+        currentInspectedSatPoint.photos.splice(idx, 1);
+        saveSatPointsLocalAndCloud();
+        renderSatPointPhotos(currentInspectedSatPoint);
+      }
+    }
+
+    function deleteCurrentSatPoint() {
+      if (!currentInspectedSatPoint) return;
+      if (confirm(`Tem certeza que deseja excluir o ponto ${currentInspectedSatPoint.id}?`)) {
+        satPoints = satPoints.filter(p => p.id !== currentInspectedSatPoint.id);
+        saveSatPointsLocalAndCloud();
+        closeSatelliteInspector();
+        renderAllSatellitePoints();
+      }
+    }
+
+    // Modal Cadastrar Ponto
+    function openAddPointModal(lat, lon) {
+      const modal = document.getElementById('add-sat-point-modal');
+      if (!modal) return;
+
+      const latInput = document.getElementById('sat-form-lat');
+      const lonInput = document.getElementById('sat-form-lon');
+      const codeInput = document.getElementById('sat-point-code');
+
+      if (lat && lon) {
+        latInput.value = parseFloat(lat).toFixed(6);
+        lonInput.value = parseFloat(lon).toFixed(6);
+      } else if (!latInput.value) {
+        latInput.value = satPoints.length > 0 ? satPoints[0].lat : -23.55052;
+        lonInput.value = satPoints.length > 0 ? satPoints[0].lon : -46.633308;
+      }
+
+      const nextNum = satPoints.length + 1;
+      codeInput.value = `CX-${nextNum < 10 ? '0' + nextNum : nextNum}`;
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeAddPointModal() {
+      const modal = document.getElementById('add-sat-point-modal');
+      if (modal) modal.classList.add('hidden');
+      window.tempSatFormPhotoBase64 = null;
+      const preview = document.getElementById('sat-form-photo-preview');
+      if (preview) preview.classList.add('hidden');
+    }
+
+    function togglePointTypeFields(type) {
+      const codeInput = document.getElementById('sat-point-code');
+      const nextNum = satPoints.length + 1;
+      if (type === 'trap') {
+        codeInput.value = `ISCA-${nextNum < 10 ? '0' + nextNum : nextNum}`;
+      } else {
+        codeInput.value = `CX-${nextNum < 10 ? '0' + nextNum : nextNum}`;
+      }
+    }
+
+    function captureGpsForSatForm() {
+      if (!navigator.geolocation) {
+        alert("Geolocalização não suportada.");
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        function(pos) {
+          document.getElementById('sat-form-lat').value = pos.coords.latitude.toFixed(6);
+          document.getElementById('sat-form-lon').value = pos.coords.longitude.toFixed(6);
+          if (satelliteMap) {
+            satelliteMap.setView([pos.coords.latitude, pos.coords.longitude], 18);
+          }
+        },
+        function(err) {
+          alert("Erro ao obter GPS: " + err.message);
+        },
+        { enableHighAccuracy: true, timeout: 8000 }
+      );
+    }
+
+    async function handleSatFormPhoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      try {
+        const compressed = await compressImageFile(file, 700, 0.7);
+        window.tempSatFormPhotoBase64 = compressed;
+        document.getElementById('sat-form-photo-img').src = compressed;
+        document.getElementById('sat-form-photo-preview').classList.remove('hidden');
+        document.getElementById('sat-form-photo-feedback').innerText = 'Foto pronta!';
+      } catch (e) {
+        alert("Erro na foto: " + e.message);
+      }
+    }
+
+    function submitAddSatPoint(e) {
+      e.preventDefault();
+      const type = document.querySelector('input[name="point-type-choice"]:checked').value;
+      const code = document.getElementById('sat-point-code').value.trim();
+      const status = document.getElementById('sat-point-status').value;
+      const species = document.getElementById('sat-point-species').value;
+      const lat = parseFloat(document.getElementById('sat-form-lat').value);
+      const lon = parseFloat(document.getElementById('sat-form-lon').value);
+
+      if (isNaN(lat) || isNaN(lon)) {
+        alert("Coordenadas GPS inválidas.");
+        return;
+      }
+
+      const newPoint = {
+        id: code,
+        type: type,
+        species: species,
+        status: status,
+        lat: lat,
+        lon: lon,
+        createdAt: new Date().toISOString().split('T')[0],
+        photos: []
+      };
+
+      if (window.tempSatFormPhotoBase64) {
+        newPoint.photos.push({
+          dataUrl: window.tempSatFormPhotoBase64,
+          category: 'Local/Árvore',
+          date: new Date().toLocaleDateString('pt-BR')
+        });
+      }
+
+      satPoints.push(newPoint);
+      saveSatPointsLocalAndCloud();
+      closeAddPointModal();
+      renderAllSatellitePoints();
+
+      if (satelliteMap) {
+        satelliteMap.flyTo([lat, lon], 18, { animate: true });
+      }
+    }
+
+    function openTransferModalForSatTrap() {
+      if (!currentInspectedSatPoint) return;
+      openTransferModalForCurrentTrap();
+      const trapIdInput = document.getElementById('transfer-trap-id');
+      const trapLabel = document.getElementById('transfer-trap-label');
+      if (trapIdInput) trapIdInput.value = currentInspectedSatPoint.id;
+      if (trapLabel) trapLabel.innerText = `${currentInspectedSatPoint.id} (${currentInspectedSatPoint.species})`;
+    }
+
+    const originalSubmitTransferTrap = window.submitTransferTrap;
+    window.submitTransferTrap = function(event) {
+      if (event) event.preventDefault();
+      
+      const trapId = document.getElementById('transfer-trap-id').value;
+      const newSpecies = document.getElementById('transfer-hive-species').value;
+      const newName = document.getElementById('transfer-hive-name').value.trim();
+
+      const satP = satPoints.find(p => p.id === trapId);
+      if (satP) {
+        satP.type = 'hive';
+        satP.id = newName || `CX-${satP.id.replace('ISCA-', '')}`;
+        satP.species = newSpecies;
+        satP.status = 'Forte';
+        if (window.pendingTransferPhotoBase64) {
+          if (!satP.photos) satP.photos = [];
+          satP.photos.unshift({
+            dataUrl: window.pendingTransferPhotoBase64,
+            category: 'Entrada/Pito',
+            date: new Date().toLocaleDateString('pt-BR')
+          });
+        }
+        saveSatPointsLocalAndCloud();
+        renderAllSatellitePoints();
+        openSatelliteInspector(satP);
+      }
+
+      if (originalSubmitTransferTrap) {
+        try {
+          originalSubmitTransferTrap(event);
+        } catch (e) {
+          console.log("Sucesso no satélite. Log original Three.js ignorado se em modo catálogo:", e);
+        }
+      }
+
+      closeTransferModal();
+    };
+
+    function openQrModalForCurrentSatHive() {
+      if (!currentInspectedSatPoint) return;
+      openQrModalForCurrentHive();
+      const title = document.getElementById('qr-modal-title');
+      const sub = document.getElementById('qr-modal-sub');
+      const img = document.getElementById('qr-modal-img');
+      if (title) title.innerText = `QR Code: ${currentInspectedSatPoint.id}`;
+      if (sub) sub.innerText = `Espécie: ${currentInspectedSatPoint.species} • Lat: ${currentInspectedSatPoint.lat.toFixed(4)}`;
+      if (img) {
+        const qrPayload = encodeURIComponent(`MELIPONA_OS|${currentInspectedSatPoint.id}|${currentInspectedSatPoint.species}|${currentInspectedSatPoint.lat},${currentInspectedSatPoint.lon}`);
+        img.src = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${qrPayload}&color=111827&bgcolor=FFFFFF`;
+      }
+    }
+
+    function saveSatPointsLocalAndCloud() {
+      try {
+        localStorage.setItem('melipona_sat_points_v2', JSON.stringify(satPoints));
+      } catch (err) {
+        console.warn("Aviso ao salvar LocalStorage:", err);
+      }
+      syncDataToFirebaseCloud();
+    }
+
+
+    // =========================================================
+    // 🔥 FIREBASE AUTH & CLOUD FIRESTORE INTEGRATION
+    // =========================================================
+    let currentAuthUser = null;
+    let isDemoModeActive = false;
+    let fbApp = null;
+    let fbAuth = null;
+    let fbDb = null;
+
+    const DEFAULT_FB_CONFIG = {
+      apiKey: "AIzaSyD-DEMO_KEY_CONFIGURAVEL",
+      authDomain: "meliponaos-demo.firebaseapp.com",
+      projectId: "meliponaos-demo",
+      storageBucket: "meliponaos-demo.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abcdef"
+    };
+
+    function getActiveFirebaseConfig() {
+      try {
+        const saved = localStorage.getItem('melipona_firebase_config');
+        if (saved) return JSON.parse(saved);
+      } catch (e) {}
+      return DEFAULT_FB_CONFIG;
+    }
+
+    window.initFirebaseApplication = function() {
+      if (!window.fbService) return;
+      const cfg = getActiveFirebaseConfig();
+      try {
+        fbApp = window.fbService.initializeApp(cfg);
+        fbAuth = window.fbService.getAuth(fbApp);
+        fbDb = window.fbService.getFirestore(fbApp);
+
+        window.fbService.onAuthStateChanged(fbAuth, (user) => {
+          if (user) {
+            handleUserSignedIn(user);
+          } else if (!isDemoModeActive) {
+            handleUserSignedOut();
+          }
+        });
+        console.log("🔥 Firebase inicializado com sucesso!");
+      } catch (e) {
+        console.log("Firebase aguardando credenciais válidas do usuário ou operando offline:", e.message);
+      }
+    };
+
+    function openAuthModal() {
+      const modal = document.getElementById('auth-modal');
+      if (!modal) return;
+      modal.classList.remove('hidden');
+
+      const loggedInView = document.getElementById('auth-logged-in-view');
+      const loginView = document.getElementById('auth-login-view');
+
+      if (currentAuthUser) {
+        loggedInView.classList.remove('hidden');
+        loginView.classList.add('hidden');
+      } else {
+        loggedInView.classList.add('hidden');
+        loginView.classList.remove('hidden');
+      }
+    }
+
+    function closeAuthModal() {
+      const modal = document.getElementById('auth-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function toggleFirebaseConfigPanel() {
+      const p = document.getElementById('firebase-config-panel');
+      if (p) {
+        p.classList.toggle('hidden');
+        if (!p.classList.contains('hidden')) {
+          const area = document.getElementById('firebase-config-textarea');
+          area.value = JSON.stringify(getActiveFirebaseConfig(), null, 2);
+        }
+      }
+    }
+
+    function saveFirebaseCustomConfig() {
+      const area = document.getElementById('firebase-config-textarea');
+      try {
+        const parsed = JSON.parse(area.value.trim());
+        localStorage.setItem('melipona_firebase_config', JSON.stringify(parsed));
+        alert("Configuração Firebase salva! A aplicação será reinicializada.");
+        location.reload();
+      } catch (e) {
+        alert("JSON inválido. Por favor, verifique a sintaxe: " + e.message);
+      }
+    }
+
+    async function loginWithGoogle() {
+      if (!window.fbService || !fbAuth) {
+        alert("Configuração Firebase necessária para login Google real. Você pode usar o 'Modo Demonstração' para testar agora!");
+        return;
+      }
+      try {
+        const provider = new window.fbService.GoogleAuthProvider();
+        const result = await window.fbService.signInWithPopup(fbAuth, provider);
+        handleUserSignedIn(result.user);
+        closeAuthModal();
+      } catch (err) {
+        alert("Erro no Login Google: " + err.message + "\nDica: Você pode ativar o 'Modo Demonstração' logo abaixo para testar de imediato.");
+      }
+    }
+
+    async function handleEmailAuth(event) {
+      event.preventDefault();
+      const email = document.getElementById('auth-email-input').value.trim();
+      const password = document.getElementById('auth-password-input').value;
+
+      if (!window.fbService || !fbAuth) {
+        alert("Firebase não conectado à nuvem real. Ativando Modo Demonstração com este e-mail.");
+        activateDemoMode(email);
+        return;
+      }
+
+      try {
+        let cred;
+        if (window.authMode === 'register') {
+          cred = await window.fbService.createUserWithEmailAndPassword(fbAuth, email, password);
+        } else {
+          cred = await window.fbService.signInWithEmailAndPassword(fbAuth, email, password);
+        }
+        handleUserSignedIn(cred.user);
+        closeAuthModal();
+      } catch (err) {
+        alert("Erro na autenticação: " + err.message);
+      }
+    }
+
+    function activateDemoMode(customEmail = "meliponicultor@demo.com") {
+      isDemoModeActive = true;
+      const demoUser = {
+        uid: "demo_uid_98765",
+        displayName: "Meliponicultor Demo",
+        email: customEmail,
+        photoURL: null
+      };
+      handleUserSignedIn(demoUser);
+      closeAuthModal();
+      alert("✨ Modo Demonstração Ativado! Todas as colmeias, fotos e registros estão ativos e serão espelhados no seu navegador.");
+    }
+
+    function handleUserSignedIn(user) {
+      currentAuthUser = user;
+      const label = document.getElementById('auth-btn-label');
+      const avatar = document.getElementById('auth-btn-avatar');
+      const profileName = document.getElementById('auth-profile-name');
+      const profileEmail = document.getElementById('auth-profile-email');
+      const profileImg = document.getElementById('auth-profile-img');
+      const profileFallback = document.getElementById('auth-profile-fallback');
+
+      const name = user.displayName || user.email.split('@')[0];
+      if (label) label.innerText = name.length > 12 ? name.substring(0, 10) + '...' : name;
+
+      if (profileName) profileName.innerText = name;
+      if (profileEmail) profileEmail.innerText = user.email;
+
+      if (user.photoURL) {
+        if (profileImg) {
+          profileImg.src = user.photoURL;
+          profileImg.classList.remove('hidden');
+        }
+        if (profileFallback) profileFallback.classList.add('hidden');
+        if (avatar) avatar.innerHTML = `<img src="${user.photoURL}" class="w-full h-full rounded-full object-cover">`;
+      } else {
+        if (profileImg) profileImg.classList.add('hidden');
+        if (profileFallback) profileFallback.classList.remove('hidden');
+        if (avatar) avatar.innerText = name.charAt(0).toUpperCase();
+      }
+
+      loadDataFromFirebaseCloud(user.uid);
+    }
+
+    function handleUserSignedOut() {
+      currentAuthUser = null;
+      isDemoModeActive = false;
+      const label = document.getElementById('auth-btn-label');
+      const avatar = document.getElementById('auth-btn-avatar');
+      if (label) label.innerText = 'Entrar';
+      if (avatar) avatar.innerText = '👤';
+    }
+
+    async function logoutFirebase() {
+      if (window.fbService && fbAuth) {
+        try {
+          await window.fbService.signOut(fbAuth);
+        } catch (e) {}
+      }
+      handleUserSignedOut();
+      closeAuthModal();
+    }
+
+    async function syncDataToFirebaseCloud() {
+      if (!currentAuthUser || !window.fbService || !fbDb) return;
+      const uid = currentAuthUser.uid;
+      try {
+        const userDocRef = window.fbService.doc(fbDb, "users", uid, "meliponario_data", "main_record");
+        await window.fbService.setDoc(userDocRef, {
+          satPoints: satPoints,
+          lastUpdated: new Date().toISOString()
+        }, { merge: true });
+        console.log("☁️ Dados sincronizados com Cloud Firestore!");
+      } catch (err) {
+        console.log("Espelho Firestore aguardando conexão ativa:", err.message);
+      }
+    }
+
+    async function loadDataFromFirebaseCloud(uid) {
+      if (!window.fbService || !fbDb || !uid) return;
+      try {
+        const userDocRef = window.fbService.doc(fbDb, "users", uid, "meliponario_data", "main_record");
+        const docSnap = await window.fbService.getDoc(userDocRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          if (data && data.satPoints && Array.isArray(data.satPoints)) {
+            satPoints = data.satPoints;
+            localStorage.setItem('melipona_sat_points_v2', JSON.stringify(satPoints));
+            renderAllSatellitePoints();
+            console.log("☁️ Dados baixados da nuvem Firestore com sucesso!");
+          }
+        }
+      } catch (err) {
+        console.log("Leitura inicial Cloud Firestore:", err.message);
+      }
+    }
+
+    function onWindowResize() {
       const container = document.getElementById('three-canvas-container');
       if (!container || !renderer || !camera) return;
       const width = container.clientWidth;
@@ -5793,6 +6922,9 @@ function onWindowResize() {
       initThreeJS();
       onSelectSpecies('mandacaia');
       applyCurrentRealSeason(); // Aplica a estação automática do mês atual
+      if (window.initFirebaseApplication) {
+        window.initFirebaseApplication();
+      }
 
       // Registro do Service Worker PWA para suporte offline e mobile
       if ('serviceWorker' in navigator) {
