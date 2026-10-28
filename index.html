@@ -716,6 +716,30 @@
       <div id="satellite-map-container" class="w-full h-full relative z-0"></div>
 
       <!-- BANNER DE MODO DE POSICIONAMENTO POR CLIQUE NO MAPA -->
+      <!-- PAINEL MINIMIZÁVEL "CAIXAS REGISTRADAS" NO CANTO SUPERIOR ESQUERDO DO MAPA -->
+      <div id="sat-boxes-quick-panel" class="absolute top-20 sm:top-24 left-4 z-20 w-64 max-w-[calc(100%-32px)] glass-panel rounded-2xl shadow-2xl border border-gray-200/60 dark:border-white/10 overflow-hidden transition-all duration-300 pointer-events-auto">
+        <!-- Cabeçalho do Painel (Sempre visível / Clicável para alternar) -->
+        <div onclick="toggleSatBoxesQuickPanel()" class="p-3 bg-white/70 dark:bg-[#151821]/80 backdrop-blur-md flex items-center justify-between cursor-pointer select-none border-b border-gray-100 dark:border-white/5 hover:bg-white/90 dark:hover:bg-[#1a1f2c] transition-colors">
+          <div class="flex items-center gap-2">
+            <span class="text-base">📦</span>
+            <div>
+              <h4 class="text-xs font-bold text-gray-900 dark:text-white flex items-center gap-1.5">
+                <span>Caixas Registradas</span>
+                <span id="quick-panel-count-badge" class="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-extrabold bg-amber-500 text-gray-950">0</span>
+              </h4>
+            </div>
+          </div>
+          <button type="button" id="quick-panel-toggle-btn" class="w-6 h-6 rounded-lg bg-gray-100 dark:bg-white/10 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300 transition-transform">
+            ▼
+          </button>
+        </div>
+
+        <!-- Lista Rolável de Caixas e Iscas (Expansível / Minimizável) -->
+        <div id="sat-boxes-quick-list" class="max-h-64 overflow-y-auto p-2 space-y-1.5 bg-white/40 dark:bg-[#0E1015]/60 backdrop-blur-sm divide-y divide-gray-100/50 dark:divide-white/5">
+          <!-- Itens renderizados dinamicamente via renderSatBoxesQuickPanel() -->
+        </div>
+      </div>
+
       <div id="sat-pick-mode-banner" class="hidden absolute top-4 left-1/2 -translate-x-1/2 z-30 px-5 py-2.5 rounded-2xl bg-amber-500 text-gray-950 font-extrabold text-xs shadow-2xl border-2 border-white flex items-center gap-3 animate-bounce">
         <span>🎯 Modo Ativo: Clique no terreno do mapa para posicionar a caixa/isca</span>
         <button type="button" onclick="disableMapPickMode()" class="px-2 py-0.5 rounded-lg bg-black text-white text-[10px] uppercase font-bold hover:bg-gray-800">
@@ -798,55 +822,99 @@
 
       <!-- PAINEL LATERAL DE INSPEÇÃO DE PONTO NO SATÉLITE (DESLIZANTE / MODAL RESPONSIVO) -->
       <div id="satellite-inspector-drawer" class="hidden absolute top-4 bottom-4 right-4 z-30 w-full max-w-sm glass-panel rounded-3xl shadow-2xl border border-gray-200 dark:border-white/10 flex flex-col overflow-hidden animate-fade-in pointer-events-auto">
-        <!-- Cabeçalho do Ponto Inspecionado -->
-        <div class="p-4 border-b border-gray-100 dark:border-white/5 flex items-center justify-between bg-white/40 dark:bg-black/20">
-          <div class="flex items-center gap-2.5">
-            <div id="sat-inspec-icon-badge" class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-xl font-bold">
-              📦
-            </div>
-            <div>
-              <div class="flex items-center gap-1.5">
-                <h4 id="sat-inspec-code" class="text-sm font-bold text-gray-900 dark:text-white font-mono">CX-01</h4>
-                <span id="sat-inspec-type-badge" class="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-amber-500/15 text-amber-600 dark:text-amber-400">Colmeia</span>
-              </div>
-              <p id="sat-inspec-species" class="text-xs text-gray-500 dark:text-gray-400 font-medium">Mandaçaia (Melipona quadrifasciata)</p>
-            </div>
-          </div>
-          <button onclick="closeSatelliteInspector()" class="p-1.5 rounded-xl hover:bg-gray-100 dark:hover:bg-white/10 text-gray-400 hover:text-gray-700 dark:hover:text-white transition-colors">
+        <!-- FOTO EM DESTAQUE NO TOPO (OU HERO PLACEHOLDER) -->
+        <div class="relative w-full h-44 bg-gray-900 shrink-0 overflow-hidden group">
+          <img id="sat-inspec-top-photo" src="assets/logo.png" alt="Foto da Caixa" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/20"></div>
+
+          <!-- Botão Fechar no Topo da Imagem -->
+          <button onclick="closeSatelliteInspector()" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-black/60 hover:bg-black/90 text-white flex items-center justify-center text-sm transition-all shadow-md z-10 cursor-pointer">
             ✕
           </button>
+
+          <!-- Badges sobre a foto -->
+          <div class="absolute top-3 left-3 flex items-center gap-1.5 z-10">
+            <span id="sat-inspec-type-badge" class="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-500 text-gray-950 shadow-md">
+              Colmeia Racional
+            </span>
+            <span id="sat-inspec-radius-badge" class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-black/70 text-amber-400 border border-amber-400/30">
+              1.500m
+            </span>
+          </div>
+
+          <!-- Botão Rápido de Câmera sobre a foto -->
+          <label class="absolute bottom-3 right-3 px-3 py-1.5 rounded-xl bg-black/70 hover:bg-black/90 text-white font-bold text-[11px] backdrop-blur-md border border-white/20 flex items-center gap-1.5 cursor-pointer transition-all shadow-lg hover:scale-105">
+            <span>📷</span>
+            <span id="sat-inspec-photo-btn-label">Trocar Foto</span>
+            <input type="file" id="sat-inspec-hero-photo-input" accept="image/*" capture="environment" class="hidden" onchange="handleHeroPhotoUpload(event)">
+          </label>
+
+          <!-- Título e Código sobreposto na Foto -->
+          <div class="absolute bottom-3 left-3.5 right-24 text-white">
+            <h3 id="sat-inspec-code" class="text-xl font-display font-extrabold font-mono tracking-tight text-white drop-shadow-md">CX-01</h3>
+            <p id="sat-inspec-species" class="text-xs font-semibold text-amber-300 drop-shadow truncate">Mandaçaia (Melipona quadrifasciata)</p>
+          </div>
         </div>
 
         <!-- Conteúdo Rolável -->
         <div class="flex-1 overflow-y-auto p-4 space-y-4 text-xs">
-          <!-- Status & Detalhes com Força do Enxame -->
-          <div class="grid grid-cols-2 gap-2">
-            <div class="p-2.5 rounded-2xl bg-gray-50 dark:bg-[#151821] border border-gray-100 dark:border-white/5 space-y-1">
-              <span class="text-[10px] uppercase font-bold text-gray-400 block">Força do Enxame</span>
-              <select id="sat-inspec-strength-select" onchange="handleChangeInspectedPointStrength(this.value)" class="w-full px-2 py-1 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0E1015] font-bold text-xs focus:outline-none focus:border-honey-500 cursor-pointer">
-                <option value="Forte">🟢 Forte</option>
-                <option value="Médio">🟡 Médio</option>
-                <option value="Fraco">🔴 Fraco</option>
-              </select>
+          
+          <!-- ESTADO ATUAL DA COLMEIA (STATUS & FORÇA) -->
+          <div class="p-3.5 rounded-2xl bg-white/60 dark:bg-[#151821] border border-gray-100 dark:border-white/5 shadow-sm space-y-2.5">
+            <div class="flex items-center justify-between">
+              <span class="text-[10px] uppercase font-bold text-gray-500 dark:text-gray-400 flex items-center gap-1">
+                <span>⚡</span>
+                <span>Como está a Caixa (Estado Atual)</span>
+              </span>
+              <span id="sat-inspec-status-pill" class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">
+                Forte & Produtiva
+              </span>
             </div>
-            <div class="p-2.5 rounded-2xl bg-gray-50 dark:bg-[#151821] border border-gray-100 dark:border-white/5">
-              <span class="text-[10px] uppercase font-bold text-gray-400 block mb-0.5" id="sat-inspec-metric-label">Raio Real de Voo</span>
-              <span id="sat-inspec-metric-val" class="font-mono font-bold text-amber-600 dark:text-amber-400">~1.500m</span>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[10px] font-semibold text-gray-600 dark:text-gray-300 mb-1">Status:</label>
+                <select id="sat-inspec-status-select" onchange="handleChangeInspectedPointStatus(this.value)" class="w-full px-2 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0E1015] font-semibold text-xs focus:outline-none focus:border-honey-500 cursor-pointer">
+                  <option value="Forte & Produtiva">Forte & Produtiva</option>
+                  <option value="Média / Estável">Média / Estável</option>
+                  <option value="Em Divisão / Multiplicação">Em Divisão / Multiplicação</option>
+                  <option value="Fraca / Em Observação">Fraca / Em Observação</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-[10px] font-semibold text-gray-600 dark:text-gray-300 mb-1">Força / Vigor:</label>
+                <select id="sat-inspec-strength-select" onchange="handleChangeInspectedPointStrength(this.value)" class="w-full px-2 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0E1015] font-bold text-xs focus:outline-none focus:border-honey-500 cursor-pointer">
+                  <option value="Forte">🟢 Forte</option>
+                  <option value="Médio">🟡 Médio</option>
+                  <option value="Fraco">🔴 Fraco</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Campo de Observações / Notas da Caixa -->
+            <div class="pt-1">
+              <label class="block text-[10px] font-semibold text-gray-600 dark:text-gray-300 mb-1">Notas de Campo / Observações:</label>
+              <textarea 
+                id="sat-inspec-notes" 
+                rows="2" 
+                placeholder="Ex: Rainha nova poedeira, 4 discos de cria, reforço de cera..."
+                onchange="handleChangeInspectedPointNotes(this.value)"
+                class="w-full px-3 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0E1015] text-xs text-gray-900 dark:text-white placeholder-gray-400 focus:outline-none focus:border-honey-500 resize-none font-sans"
+              ></textarea>
             </div>
           </div>
 
-          <!-- Indicador de Última Revisão com Alerta (> 90 dias) -->
-          <div class="p-3 rounded-2xl bg-gray-50 dark:bg-[#151821] border border-gray-100 dark:border-white/5 flex items-center justify-between gap-2">
-            <div>
-              <span class="text-[10px] uppercase font-bold text-gray-400 block">Última Revisão</span>
-              <div class="flex items-center gap-1.5 mt-0.5">
-                <span id="sat-inspec-last-exam-date" class="font-mono font-bold text-gray-900 dark:text-white text-xs">--/--/----</span>
-                <span id="sat-inspec-exam-badge" class="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/15 text-emerald-600 dark:text-emerald-400">Em dia</span>
-              </div>
+          <!-- DATAS DE REGISTRO E ÚLTIMA ATUALIZAÇÃO -->
+          <div class="p-3 rounded-2xl bg-gray-50 dark:bg-[#151821]/80 border border-gray-100 dark:border-white/5 space-y-1.5 font-mono text-[11px]">
+            <div class="flex items-center justify-between text-gray-500 dark:text-gray-400">
+              <span class="flex items-center gap-1 font-sans font-medium">📅 Cadastrada em:</span>
+              <span id="sat-inspec-created-at" class="font-bold text-gray-800 dark:text-gray-200">--/--/----</span>
             </div>
-            <button onclick="registerQuickExamNow()" class="px-2.5 py-1 rounded-xl btn-honey font-bold text-[10px] shadow-sm cursor-pointer shrink-0">
-              ✍️ Revisar Hoje
-            </button>
+            <div class="flex items-center justify-between text-gray-500 dark:text-gray-400 pt-1 border-t border-gray-200/50 dark:border-white/5">
+              <span class="flex items-center gap-1 font-sans font-medium">🔄 Última atualização:</span>
+              <span id="sat-inspec-updated-at" class="font-bold text-honey-600 dark:text-honey-400">Hoje</span>
+            </div>
           </div>
 
           <!-- SELETOR DINÂMICO PARA ALTERAR A ESPÉCIE DA CAIXA (RECÁLCULO IMEDIATO) -->
@@ -856,7 +924,7 @@
                 <span>🐝</span>
                 <span>Alterar Espécie (Atualiza Raio no Satélite):</span>
               </label>
-              <span id="sat-inspec-radius-badge" class="px-2 py-0.5 rounded-full text-[9px] font-mono font-extrabold bg-amber-500 text-gray-950">1500m</span>
+              <span id="sat-inspec-metric-val" class="text-[10px] font-mono text-gray-500 dark:text-gray-400">~1.500m</span>
             </div>
             <select id="sat-inspec-species-select" onchange="handleChangeInspectedPointSpecies(this.value)" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0E1015] text-gray-900 dark:text-white font-bold text-xs focus:outline-none focus:border-honey-500 shadow-sm cursor-pointer">
               <option value="mirim">1. Mirim Droryana (Raio: 400m • Área: ~0.5 km²)</option>
@@ -876,18 +944,6 @@
             </select>
           </div>
 
-          <!-- Botões de Ação Rápida (Google Maps + QR Code) -->
-          <div class="flex items-center gap-2">
-            <a id="sat-inspec-maps-link" href="#" target="_blank" rel="noopener noreferrer" class="flex-1 py-2 px-3 rounded-xl bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/15 text-gray-800 dark:text-white font-semibold flex items-center justify-center gap-1.5 transition-all text-xs">
-              <span>🧭</span>
-              <span>Abrir Rota Maps</span>
-            </a>
-            <button id="sat-inspec-qr-btn" onclick="openQrModalForCurrentSatHive()" class="py-2 px-3 rounded-xl bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/15 text-gray-800 dark:text-white font-semibold flex items-center justify-center gap-1.5 transition-all text-xs">
-              <span>📱</span>
-              <span>QR Code</span>
-            </button>
-          </div>
-
           <!-- BOTÃO ESPECIAL DE TRANSFERÊNCIA (ISCA ➔ CAIXA) -->
           <div id="sat-inspec-transfer-container" class="hidden">
             <button onclick="openTransferModalForSatTrap()" class="w-full py-2.5 px-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-gray-950 font-bold shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2 transition-all">
@@ -896,26 +952,38 @@
             </button>
           </div>
 
-          <!-- Galeria de Fotos do Ponto com Câmera -->
+          <!-- Botões de Ação Rápida (Google Maps + QR Code) -->
+          <div class="grid grid-cols-2 gap-2">
+            <a id="sat-inspec-maps-link" href="#" target="_blank" rel="noopener noreferrer" class="py-2 px-3 rounded-xl bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/15 text-gray-800 dark:text-white font-semibold flex items-center justify-center gap-1.5 transition-all text-xs">
+              <span>🧭</span>
+              <span>Rota Maps</span>
+            </a>
+            <button id="sat-inspec-qr-btn" onclick="openQrModalForCurrentSatHive()" class="py-2 px-3 rounded-xl bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/15 text-gray-800 dark:text-white font-semibold flex items-center justify-center gap-1.5 transition-all text-xs">
+              <span>📱</span>
+              <span>QR Code</span>
+            </button>
+          </div>
+
+          <!-- Galeria Secundária de Fotos -->
           <div class="space-y-2 pt-2 border-t border-gray-100 dark:border-white/5">
             <div class="flex items-center justify-between">
               <span class="font-bold text-gray-900 dark:text-white text-xs flex items-center gap-1.5">
                 <span>📷</span>
-                <span>Galeria de Fotos do Ponto</span>
+                <span>Mais Fotos do Ponto</span>
               </span>
               <span id="sat-photo-count" class="text-[10px] text-gray-400 font-mono">0 fotos</span>
             </div>
 
             <!-- Upload com Câmera & Seletor de Categoria -->
-            <div class="p-3 rounded-2xl bg-gray-50 dark:bg-[#151821] border border-dashed border-gray-200 dark:border-gray-700 space-y-2.5">
+            <div class="p-2.5 rounded-2xl bg-gray-50 dark:bg-[#151821] border border-dashed border-gray-200 dark:border-gray-700 space-y-2">
               <div class="flex items-center gap-2">
-                <select id="sat-photo-category" class="flex-1 px-2.5 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0E1015] text-[11px] font-medium text-gray-800 dark:text-gray-200 focus:outline-none">
+                <select id="sat-photo-category" class="flex-1 px-2 py-1 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-[#0E1015] text-[11px] font-medium text-gray-800 dark:text-gray-200 focus:outline-none">
                   <option value="Local/Árvore">🌳 Local / Árvore</option>
                   <option value="Entrada/Pito">🚪 Entrada / Pito</option>
                   <option value="Disco de Cria/Interno">🍯 Disco de Cria / Interno</option>
                 </select>
-                <label class="cursor-pointer px-3 py-1.5 rounded-xl btn-honey font-bold text-[11px] flex items-center gap-1 shadow-sm shrink-0">
-                  <span>📷 Tirar Foto</span>
+                <label class="cursor-pointer px-2.5 py-1 rounded-xl btn-honey font-bold text-[11px] flex items-center gap-1 shadow-sm shrink-0">
+                  <span>+ Foto</span>
                   <input type="file" id="sat-photo-file-input" accept="image/*" capture="environment" class="hidden" onchange="handleSatPhotoUpload(event)">
                 </label>
               </div>
@@ -924,21 +992,21 @@
               </div>
             </div>
 
-            <!-- Lista / Grade de Fotos Salvas -->
+            <!-- Grade de Fotos Salvas -->
             <div id="sat-photos-grid" class="grid grid-cols-2 gap-2 pt-1">
-              <!-- Cards dinâmicos de foto serão inseridos aqui -->
+              <!-- Fotos adicionais -->
             </div>
           </div>
 
-          <!-- Ações do Ponto: Editar & Excluir -->
+          <!-- Ações do Rodapé: Editar Completo & Excluir -->
           <div class="pt-3 border-t border-gray-100 dark:border-white/5 space-y-2">
             <button type="button" onclick="openEditSatPointModal(currentInspectedSatPoint?.id)" class="w-full py-2.5 px-3 rounded-2xl bg-honey-500 hover:bg-honey-600 text-gray-950 text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-amber-500/20">
               <span>✏️</span>
-              <span>Editar Informações do Ponto</span>
+              <span>Editar / Atualizar Caixa</span>
             </button>
-            <button type="button" onclick="deleteCurrentSatPoint()" class="w-full py-2.5 px-3 rounded-2xl bg-red-500/15 hover:bg-red-500/25 text-red-600 dark:text-red-400 border border-red-500/30 text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm">
+            <button type="button" onclick="deleteCurrentSatPoint()" class="w-full py-2 px-3 rounded-2xl bg-red-500/15 hover:bg-red-500/25 text-red-600 dark:text-red-400 border border-red-500/30 text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm">
               <span>🗑️</span>
-              <span>Excluir Ponto / Caixa do Meliponário</span>
+              <span>Excluir Ponto / Caixa</span>
             </button>
           </div>
         </div>
@@ -7837,7 +7905,8 @@
             weight: 2,
             fillColor: '#FFC300',
             fillOpacity: 0.12,
-            dashArray: null
+            dashArray: null,
+            interactive: false
           }).addTo(satCirclesLayer);
 
           circle.bindTooltip(`${point.id} • ${spec.name}<br><strong>Raio Real: ${flightRadiusMeters.toLocaleString('pt-BR')}m</strong>`, {
@@ -7852,7 +7921,8 @@
             weight: 2,
             fillColor: '#10B981',
             fillOpacity: 0.16,
-            dashArray: '6, 6'
+            dashArray: '6, 6',
+            interactive: false
           }).addTo(satCirclesLayer);
 
           circle.bindTooltip(`${point.id} (Isca PET)<br><strong>Atrativo: 120m</strong>`, {
@@ -7874,7 +7944,7 @@
 
         const customIcon = L.divIcon({
           className: 'sat-pin-icon',
-          html: `<div style="
+          html: `<div onclick="window.openBoxDetailCard('${point.id}')" style="
             display: flex;
             align-items: center;
             gap: 4px;
@@ -7888,7 +7958,8 @@
             border: 2px solid ${markerBorder};
             box-shadow: 0 4px 12px rgba(0,0,0,0.5);
             white-space: nowrap;
-            cursor: pointer;
+            cursor: pointer !important;
+            pointer-events: auto !important;
             transform: translate(-50%, -100%);
             transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
           ">
@@ -7903,13 +7974,16 @@
         const marker = L.marker([point.lat, point.lon], { icon: customIcon }).addTo(satMarkersLayer);
         marker.on('click', function(ev) {
           L.DomEvent.stopPropagation(ev);
-          openSatelliteInspector(point);
+          window.openBoxDetailCard(point.id);
         });
       });
 
       // Se os círculos estiverem desativados pelo botão toggle, remove do mapa
       if (!areFlightCirclesVisible && satCirclesLayer) {
         satelliteMap.removeLayer(satCirclesLayer);
+      }
+      if (typeof renderSatBoxesQuickPanel === 'function') {
+        renderSatBoxesQuickPanel();
       }
     }
 
@@ -7928,6 +8002,170 @@
       renderAllSatellitePoints();
     }
 
+
+    // =========================================================================
+    // 📦 PAINEL MINIMIZÁVEL DE CAIXAS (CANTO SUPERIOR ESQUERDO) & DETALHES
+    // =========================================================================
+    let isSatBoxesQuickPanelOpen = true;
+
+    function toggleSatBoxesQuickPanel() {
+      isSatBoxesQuickPanelOpen = !isSatBoxesQuickPanelOpen;
+      const listEl = document.getElementById('sat-boxes-quick-list');
+      const toggleBtn = document.getElementById('quick-panel-toggle-btn');
+      if (listEl) {
+        if (isSatBoxesQuickPanelOpen) {
+          listEl.classList.remove('hidden');
+        } else {
+          listEl.classList.add('hidden');
+        }
+      }
+      if (toggleBtn) {
+        toggleBtn.innerText = isSatBoxesQuickPanelOpen ? '▼' : '▲';
+      }
+    }
+
+    function renderSatBoxesQuickPanel() {
+      const listEl = document.getElementById('sat-boxes-quick-list');
+      const badgeCount = document.getElementById('quick-panel-count-badge');
+      if (!listEl) return;
+
+      const points = Array.isArray(satPoints) ? satPoints : [];
+      if (badgeCount) badgeCount.innerText = points.length;
+
+      if (points.length === 0) {
+        listEl.innerHTML = `
+          <div class="py-3 text-center text-gray-400 text-[11px] italic">
+            Nenhuma caixa cadastrada.<br>Clique em <strong>+ Cadastrar</strong> para iniciar!
+          </div>
+        `;
+        return;
+      }
+
+      listEl.innerHTML = points.map(p => {
+        const isHive = p.type === 'hive';
+        const spec = SPECIES_CONFIG[p.species] || SPECIES_CONFIG.mandacaia;
+        const statusText = p.status || (isHive ? 'Forte & Produtiva' : 'Isca Armadilhada');
+        
+        // Status indicator dot
+        let dotColor = 'bg-emerald-500';
+        if (statusText.includes('Fraca') || statusText.includes('Atenção')) {
+          dotColor = 'bg-red-500';
+        } else if (statusText.includes('Média') || statusText.includes('Aguardando') || statusText.includes('Divisão')) {
+          dotColor = 'bg-amber-500';
+        }
+
+        const iconBg = isHive ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30' : 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30';
+        const typeEmoji = isHive ? '📦' : '🧪';
+
+        return `
+          <div onclick="window.openBoxDetailCard('${p.id}')" class="p-2 rounded-xl bg-white/60 dark:bg-white/5 hover:bg-amber-500/10 dark:hover:bg-amber-500/20 border border-transparent hover:border-amber-500/40 cursor-pointer transition-all flex items-center justify-between gap-2 group">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="w-6 h-6 rounded-lg ${iconBg} flex items-center justify-center text-xs shrink-0">
+                ${typeEmoji}
+              </span>
+              <div class="min-w-0">
+                <div class="flex items-center gap-1.5">
+                  <span class="font-mono font-bold text-xs text-gray-900 dark:text-white truncate group-hover:text-amber-500 transition-colors">${p.id}</span>
+                  <span class="w-2 h-2 rounded-full ${dotColor} shrink-0"></span>
+                </div>
+                <p class="text-[10px] text-gray-500 dark:text-gray-400 truncate">
+                  ${isHive ? spec.name : 'Isca PET'}
+                </p>
+              </div>
+            </div>
+            <span class="text-gray-400 group-hover:text-amber-500 text-xs shrink-0 transition-transform group-hover:translate-x-0.5">➔</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function formatIsoDateBr(isoStr) {
+      if (!isoStr) return '--/--/----';
+      try {
+        const d = new Date(isoStr);
+        if (isNaN(d.getTime())) return isoStr;
+        return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ' ' + d.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      } catch (e) {
+        return isoStr;
+      }
+    }
+
+    // Abertura Centralizada do Card Completo de Informações da Caixa
+    window.openBoxDetailCard = function(boxId) {
+      const point = satPoints.find(p => p.id === boxId);
+      if (!point) return;
+
+      // Voo suave até o marcador no satélite
+      if (satelliteMap) {
+        satelliteMap.flyTo([point.lat, point.lon], 17, { animate: true, duration: 1.2 });
+      }
+
+      openSatelliteInspector(point);
+    };
+
+    // Atualização de Status Diretamente pelo Card
+    function handleChangeInspectedPointStatus(newStatus) {
+      if (!currentInspectedSatPoint) return;
+      currentInspectedSatPoint.status = newStatus;
+      currentInspectedSatPoint.updatedAt = new Date().toISOString();
+
+      const pill = document.getElementById('sat-inspec-status-pill');
+      if (pill) pill.innerText = newStatus;
+
+      const updateDateEl = document.getElementById('sat-inspec-updated-at');
+      if (updateDateEl) updateDateEl.innerText = formatIsoDateBr(currentInspectedSatPoint.updatedAt);
+
+      saveSatPointsLocalAndCloud();
+      renderAllSatellitePoints();
+      renderSatBoxesQuickPanel();
+      if (typeof updateDashboardKpisAndList === 'function') updateDashboardKpisAndList();
+      showGpsToast(`Status de ${currentInspectedSatPoint.id} alterado para "${newStatus}"`, true, 2500);
+    }
+
+    // Atualização de Notas de Campo Diretamente pelo Card
+    function handleChangeInspectedPointNotes(newNotes) {
+      if (!currentInspectedSatPoint) return;
+      currentInspectedSatPoint.notes = newNotes;
+      currentInspectedSatPoint.updatedAt = new Date().toISOString();
+
+      const updateDateEl = document.getElementById('sat-inspec-updated-at');
+      if (updateDateEl) updateDateEl.innerText = formatIsoDateBr(currentInspectedSatPoint.updatedAt);
+
+      saveSatPointsLocalAndCloud();
+    }
+
+    // Upload rápido de foto principal (Hero Photo)
+    async function handleHeroPhotoUpload(event) {
+      const file = event.target.files[0];
+      if (!file || !currentInspectedSatPoint) return;
+
+      try {
+        const compressedBase64 = await compressImageFile(file, 900, 0.75);
+        if (!currentInspectedSatPoint.photos) currentInspectedSatPoint.photos = [];
+        
+        currentInspectedSatPoint.photos.unshift({
+          dataUrl: compressedBase64,
+          category: 'Entrada/Pito',
+          date: new Date().toLocaleDateString('pt-BR')
+        });
+        currentInspectedSatPoint.updatedAt = new Date().toISOString();
+
+        document.getElementById('sat-inspec-top-photo').src = compressedBase64;
+        const btnLabel = document.getElementById('sat-inspec-photo-btn-label');
+        if (btnLabel) btnLabel.innerText = "Trocar Foto";
+
+        saveSatPointsLocalAndCloud();
+        renderSatPointPhotos(currentInspectedSatPoint);
+        renderSatBoxesQuickPanel();
+        if (typeof updateDashboardKpisAndList === 'function') updateDashboardKpisAndList();
+        showGpsToast("Foto da colmeia atualizada com sucesso!", true, 3000);
+      } catch (err) {
+        showGpsToast("Erro ao processar fotografia: " + err.message, true, 4000);
+      } finally {
+        event.target.value = '';
+      }
+    }
+
     // Painel de Inspeção do Ponto
     function openSatelliteInspector(point) {
       currentInspectedSatPoint = point;
@@ -7938,9 +8176,52 @@
       const spec = SPECIES_CONFIG[point.species] || SPECIES_CONFIG.mandacaia;
       const flightRadiusMeters = Number(BIOLOGICAL_SPECIES_RADIUS[point.species] || spec.radiusMeters || 1500);
 
+      // Foto no Topo
+      const topPhotoEl = document.getElementById('sat-inspec-top-photo');
+      const photoBtnLabel = document.getElementById('sat-inspec-photo-btn-label');
+      if (point.photos && point.photos.length > 0) {
+        topPhotoEl.src = point.photos[0].dataUrl;
+        if (photoBtnLabel) photoBtnLabel.innerText = "Trocar Foto";
+      } else {
+        topPhotoEl.src = spec.macroUrl || 'assets/logo.png';
+        if (photoBtnLabel) photoBtnLabel.innerText = "📷 Adicionar Foto";
+      }
+
       document.getElementById('sat-inspec-code').innerText = point.id;
       document.getElementById('sat-inspec-species').innerText = `${spec.name} (${spec.scientific || ''})`;
-      document.getElementById('sat-inspec-status').innerText = point.status || 'Ativa';
+
+      // Status Pill & Select
+      const statusPill = document.getElementById('sat-inspec-status-pill');
+      const statusSelect = document.getElementById('sat-inspec-status-select');
+      const currentStatus = point.status || (isHive ? 'Forte & Produtiva' : 'Isca Armadilhada (Aguardando)');
+      if (statusPill) statusPill.innerText = currentStatus;
+
+      if (statusSelect) {
+        if (isHive) {
+          statusSelect.innerHTML = `
+            <option value="Forte & Produtiva">Forte & Produtiva</option>
+            <option value="Média / Estável">Média / Estável</option>
+            <option value="Em Divisão / Multiplicação">Em Divisão / Multiplicação</option>
+            <option value="Fraca / Em Observação">Fraca / Em Observação</option>
+          `;
+        } else {
+          statusSelect.innerHTML = `
+            <option value="Isca Armadilhada (Aguardando)">Isca Armadilhada (Aguardando)</option>
+            <option value="Isca Capturada! (Pronta p/ transferir)">Isca Capturada! (Pronta p/ transferir)</option>
+          `;
+        }
+        statusSelect.value = currentStatus;
+      }
+
+      // Notas de Campo
+      const notesEl = document.getElementById('sat-inspec-notes');
+      if (notesEl) notesEl.value = point.notes || '';
+
+      // Datas de Criação e Última Atualização
+      const createdAtEl = document.getElementById('sat-inspec-created-at');
+      const updatedAtEl = document.getElementById('sat-inspec-updated-at');
+      if (createdAtEl) createdAtEl.innerText = formatIsoDateBr(point.createdAt);
+      if (updatedAtEl) updatedAtEl.innerText = point.updatedAt ? formatIsoDateBr(point.updatedAt) : 'Hoje';
 
       const typeBadge = document.getElementById('sat-inspec-type-badge');
       const iconBadge = document.getElementById('sat-inspec-icon-badge');
@@ -8359,6 +8640,7 @@
         return;
       }
 
+      const nowIso = new Date().toISOString();
       const newPoint = {
         id: code,
         type: type,
@@ -8366,7 +8648,9 @@
         status: status,
         lat: lat,
         lon: lon,
-        createdAt: new Date().toISOString().split('T')[0],
+        notes: '',
+        createdAt: nowIso,
+        updatedAt: nowIso,
         photos: []
       };
 
@@ -8582,8 +8866,10 @@
         });
       }
 
+      point.updatedAt = new Date().toISOString();
       saveSatPointsLocalAndCloud();
       renderAllSatellitePoints();
+      renderSatBoxesQuickPanel();
       updateDashboardKpisAndList();
       closeEditSatPointModal();
 
