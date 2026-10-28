@@ -770,8 +770,18 @@
 
         </div>
 
-        <!-- Card de Inspeção Rápida -->
-        <div id="inspector-card" class="hidden p-3 rounded-2xl glass-panel shadow-apple space-y-2 transition-all text-xs">
+        <!-- Card de Inspeção Rápida e Bilhete de Identidade da Caixa/Isca -->
+        <div id="inspector-card" class="hidden p-3 rounded-2xl glass-panel shadow-apple space-y-2.5 transition-all text-xs">
+          
+          <!-- Foto Real da Caixa/Isca (Quando vinculada) -->
+          <div id="inspec-photo-container" class="hidden relative h-32 w-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 bg-gray-950 shadow-inner">
+            <img id="inspec-photo-img" src="" alt="Foto Real da Caixa" class="w-full h-full object-cover" />
+            <span class="absolute bottom-1.5 left-1.5 px-2 py-0.5 rounded-md text-[9px] font-bold bg-black/75 text-amber-300 backdrop-blur-sm border border-amber-400/20">
+              📷 Bilhete de Identidade Físico
+            </span>
+          </div>
+
+          <!-- Cabeçalho -->
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-1.5">
               <span id="inspec-icon" class="text-sm">🌸</span>
@@ -779,12 +789,33 @@
             </div>
             <button onclick="closeInspector()" class="text-gray-400 hover:text-black dark:hover:text-white text-xs cursor-pointer">✕</button>
           </div>
+
+          <!-- Descrição Técnica e Dados de Pasto -->
           <p id="inspec-desc" class="text-[10px] text-gray-600 dark:text-gray-300 leading-snug">
             Flores ricas em néctar e resina protetora.
           </p>
-          <div class="pt-1 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-[10px] text-gray-500 dark:text-gray-400">
-            <span>Posição:</span>
+
+          <div class="pt-1.5 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between text-[10px] text-gray-500 dark:text-gray-400">
+            <span>Coordenadas / Posição:</span>
             <span id="inspec-dist" class="font-bold text-honey-600">380m</span>
+          </div>
+
+          <!-- PAINEL DE AÇÕES DA CAIXA DEFINITIVA (QR CODE + ROTA GPS) -->
+          <div id="inspec-hive-actions" class="hidden pt-2 border-t border-gray-100 dark:border-gray-800 flex items-center gap-1.5">
+            <button onclick="openQrModalForCurrentHive()" class="flex-1 py-1.5 px-2 rounded-xl bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 text-gray-800 dark:text-gray-200 text-[10px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer shadow-sm">
+              <span>📱</span> QR Code
+            </button>
+            <button onclick="navigateToCurrentHiveGps()" class="flex-1 py-1.5 px-2 rounded-xl bg-honey-500 hover:bg-honey-600 text-gray-950 text-[10px] font-bold flex items-center justify-center gap-1 transition-all cursor-pointer shadow-sm">
+              <span>🧭</span> Rota GPS
+            </button>
+          </div>
+
+          <!-- BOTÃO DE DESTAQUE: TRANSFERÊNCIA (ISCA ➔ CAIXA) -->
+          <div id="inspec-transfer-container" class="hidden pt-2 border-t border-gray-100 dark:border-gray-800">
+            <button onclick="openTransferModalForCurrentTrap()" class="w-full py-2 px-3 rounded-xl bg-gradient-to-r from-amber-500 to-honey-500 hover:from-amber-600 hover:to-honey-600 text-gray-950 text-[11px] font-extrabold flex items-center justify-center gap-1.5 shadow-glow-honey transition-all hover:scale-[1.02] cursor-pointer animate-pulse">
+              <span>🐝</span>
+              <span>Realizar Transferência (Isca para Caixa)</span>
+            </button>
           </div>
 
           <!-- BOTÃO DE EXCLUSÃO (CAIXAS, CASAS, ÁRVORES, FONTES OU AMEAÇAS) -->
@@ -899,12 +930,15 @@
           <h2 class="text-2xl font-display font-extrabold text-gray-900 dark:text-white">Visão Geral do Meliponário</h2>
           <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Status biométrico, pesagem e monitoramento das caixas racionais em tempo real</p>
         </div>
-        <div class="flex items-center gap-3">
+        <div class="flex flex-wrap items-center gap-3">
+          <button onclick="openAddHiveModal(false)" class="btn-honey px-4 py-2 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1.5 shadow-sm hover:scale-[1.02] transition-all">
+            <span>➕</span>
+            <span>Cadastrar Caixa / Foto</span>
+          </button>
           <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             Sensores Ativos
           </span>
-          <span class="text-xs text-gray-400 font-mono">Atualizado há 2min</span>
         </div>
       </div>
 
@@ -1990,6 +2024,35 @@
           </select>
         </div>
 
+        <!-- FOTOGRAFIA DA CAIXA (CÂMERA DO DISPOSITIVO COM CAPTURE ENVIRONMENT) -->
+        <div class="p-3 rounded-2xl bg-gray-50 dark:bg-[#0E1015] border border-gray-200 dark:border-gray-800 space-y-2">
+          <div class="flex items-center justify-between">
+            <label class="block font-semibold text-gray-700 dark:text-gray-300 text-[11px] flex items-center gap-1.5">
+              <span>📷</span>
+              <span>Fotografia Real da Caixa (Bilhete de Identidade):</span>
+            </label>
+            <span class="text-[10px] text-gray-400">Opcional</span>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <label class="flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-700 hover:border-honey-500 cursor-pointer transition-colors bg-white dark:bg-[#151821]">
+              <span class="text-sm">📸</span>
+              <span class="text-[11px] font-semibold text-gray-700 dark:text-gray-300">Tirar Foto / Escolher</span>
+              <input type="file" id="add-hive-photo-input" accept="image/*" capture="environment" onchange="handleHivePhotoUpload(event)" class="hidden" />
+            </label>
+            <button type="button" id="btn-remove-hive-photo" onclick="removeHivePhoto()" class="hidden px-2.5 py-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-600 text-[11px] font-bold">
+              Remover
+            </button>
+          </div>
+
+          <div id="add-hive-photo-preview-container" class="hidden relative h-28 w-full rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+            <img id="add-hive-photo-preview" src="" alt="Foto da Caixa" class="w-full h-full object-cover" />
+            <span class="absolute bottom-1.5 left-1.5 px-2 py-0.5 rounded-md text-[9px] font-bold bg-black/70 text-emerald-400 backdrop-blur-sm">
+              ✓ Foto vinculada ao modelo 3D
+            </span>
+          </div>
+        </div>
+
         <!-- Seletor de Modo de Posicionamento -->
         <input type="hidden" id="add-hive-mode" value="click">
         <input type="hidden" id="add-hive-click-x" value="12">
@@ -2036,6 +2099,103 @@
           </button>
         </div>
       </form>
+    </div>
+  </div>
+
+  
+  <!-- MODAL: TRANSFERÊNCIA DE ISCA PARA CAIXA RACIONAL -->
+  <div id="transfer-trap-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
+    <div class="bg-white dark:bg-[#161922] w-full max-w-lg rounded-3xl border border-gray-200 dark:border-white/10 p-6 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <button onclick="closeTransferModal()" class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <div class="flex items-center space-x-3 mb-4">
+        <div class="w-11 h-11 rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-2xl">
+          🐝
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white">Transferência de Isca para Caixa</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Evolução do ninho-isca para colmeia definitiva</p>
+        </div>
+      </div>
+
+      <form id="transfer-trap-form" onsubmit="submitTransferTrap(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="transfer-trap-id">
+
+        <div class="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/40 text-amber-800 dark:text-amber-300">
+          <span class="font-bold">Isca de Origem: </span><span id="transfer-trap-label" class="font-mono"></span>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">1. Espécie Capturada na Isca:</label>
+          <select id="transfer-hive-species" required class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white focus:outline-none focus:border-honey-500 font-medium">
+            <option value="jatai" selected>Jataí (Tetragonisca angustula - 500m)</option>
+            <option value="mandacaia">Mandaçaia (Melipona quadrifasciata - 1500m)</option>
+            <option value="urucu">Uruçu Amarela (Melipona flavolineata - 2000m)</option>
+            <option value="urucu_nordestina">Uruçu Nordestina (Melipona scutellaris - 2000m)</option>
+            <option value="tiuba">Tiúba / Uruçu-Cinzenta (Melipona fasciculata - 2200m)</option>
+            <option value="mirim">Mirim Droryana (Plebeia droryana - 400m)</option>
+            <option value="irai">Iraí (Nannotrigona testaceicornis - 600m)</option>
+            <option value="bora">Borá (Tetragona clavipes - 1200m)</option>
+            <option value="manduri">Manduri (Melipona marginata - 1000m)</option>
+            <option value="bugia">Bugia / Uruçu-Amarela (Melipona mondury - 1800m)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">2. Identificação da Nova Caixa Racional:</label>
+          <input type="text" id="transfer-hive-name" placeholder="Ex: CX-08 Nova Jataí (INPA 15x15)" required class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white focus:outline-none focus:border-honey-500">
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">3. Fotografia da Nova Caixa de Madeira (Câmera do Celular):</label>
+          <div class="flex items-center space-x-2">
+            <label class="cursor-pointer flex items-center space-x-2 px-3 py-2 rounded-xl bg-gray-100 dark:bg-[#0E1015] border border-dashed border-gray-300 dark:border-gray-700 hover:border-amber-500 text-gray-700 dark:text-gray-300 transition-colors">
+              <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+              <span class="text-[11px] font-medium">Tirar Foto da Caixa</span>
+              <input type="file" id="transfer-hive-photo-input" accept="image/*" capture="environment" class="hidden" onchange="handleTransferPhotoUpload(event)">
+            </label>
+            <span id="transfer-photo-feedback" class="text-[10px] text-gray-400 italic">Nenhuma foto tirada</span>
+          </div>
+          <div id="transfer-photo-preview" class="hidden mt-2 relative w-full h-36 rounded-xl overflow-hidden border border-gray-200 dark:border-white/10">
+            <img id="transfer-photo-img" src="" alt="Foto da Caixa" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-2 pt-2 border-t border-gray-100 dark:border-white/5">
+          <button type="button" onclick="closeTransferModal()" class="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 font-medium">Cancelar</button>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold transition-all shadow-md shadow-amber-500/20">Concluir Transferência & Criar Registro</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: QR CODE DA COLMEIA -->
+  <div id="qrcode-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fade-in">
+    <div class="bg-white dark:bg-[#161922] w-full max-w-sm rounded-3xl border border-gray-200 dark:border-white/10 p-6 shadow-2xl relative text-center">
+      <button onclick="closeQrModal()" class="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-gray-500">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+      </button>
+
+      <div class="w-12 h-12 mx-auto rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-2xl mb-3">
+        📱
+      </div>
+      <h3 id="qr-modal-title" class="text-base font-bold text-gray-900 dark:text-white">QR Code da Caixa</h3>
+      <p id="qr-modal-sub" class="text-xs text-gray-500 dark:text-gray-400 mb-4">Etiqueta de campo para identificação instantânea</p>
+
+      <div class="p-4 bg-white rounded-2xl inline-block shadow-inner border border-gray-200 mb-4">
+        <img id="qr-modal-img" src="" alt="QR Code" class="w-48 h-48 mx-auto object-contain">
+      </div>
+
+      <div class="flex space-x-2 justify-center">
+        <button onclick="window.print()" class="px-4 py-2 rounded-xl bg-gray-100 dark:bg-white/10 hover:bg-gray-200 dark:hover:bg-white/15 text-gray-700 dark:text-gray-200 text-xs font-semibold">
+          🖨️ Imprimir
+        </button>
+        <button onclick="closeQrModal()" class="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-gray-950 text-xs font-bold">
+          Fechar
+        </button>
+      </div>
     </div>
   </div>
 
@@ -2781,6 +2941,39 @@
     }
 
     // Cria as linhas e o preenchimento de radar para uma caixa específica
+    
+    // Cria o Hex-Radar Verde Tracejado específico para Iscas-PET
+    function createTrapRadarLines(centerX, centerZ, scale) {
+      const PERIM_POINTS = 60;
+      const geom = new THREE.BufferGeometry();
+      const positions = new Float32Array((PERIM_POINTS + 1) * 3);
+      for (let i = 0; i <= PERIM_POINTS; i++) {
+        const angle = (i / PERIM_POINTS) * Math.PI * 2;
+        const pt = getUnitHexagonPoint(angle);
+        const px = pt.x * scale;
+        const pz = pt.z * scale;
+        const py = getTerrainHeight(centerX + px, centerZ + pz) + 0.15;
+        positions[i * 3] = px;
+        positions[i * 3 + 1] = py;
+        positions[i * 3 + 2] = pz;
+      }
+      geom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+      const mat = new THREE.LineDashedMaterial({
+        color: 0x10B981, // Verde Esmeralda da Isca
+        dashSize: 0.8,
+        gapSize: 0.5,
+        linewidth: 2,
+        transparent: true,
+        opacity: 0.85,
+        depthWrite: false
+      });
+      const line = new THREE.Line(geom, mat);
+      line.computeLineDistances();
+      line.renderOrder = 15;
+      return line;
+    }
+
     function createHiveRadarLines(hiveData) {
       const PERIM_POINTS = 120;
       const geom = new THREE.BufferGeometry();
@@ -3079,6 +3272,11 @@
           petBody.add(trapLabel);
 
           itemGroup.add(trapSubGroup);
+
+          // Hex-Radar Verde Tracejado para a Isca-PET (Raio de atratividade feromonada)
+          const trapRadarLine = createTrapRadarLines(data.x, data.z, 8.0);
+          itemGroup.add(trapRadarLine);
+
 
         } else if (data.type === 'water') {
           // BEBEDOURO NATURAL COM PEDRAS RASAS
@@ -4144,7 +4342,10 @@
             desc: `${examInfo}. ${statusOverlap}. Colmeia racional monitorada no mapa interativo.`,
             icon: '🐝',
             type: 'hive',
-            targetId: matchedHive.id
+            targetId: matchedHive.id,
+            photoUrl: matchedHive.photoUrl,
+            lat: matchedHive.lat,
+            lon: matchedHive.lon
           });
           focusCameraOnObject(new THREE.Vector3(matchedHive.x, 1.9, matchedHive.z));
           return;
@@ -4186,25 +4387,275 @@
       }
     }
 
+    
+    // ========================================================
+    // GESTÃO DE FOTOGRAFIAS REAIS DAS CAIXAS & TRANSFERÊNCIA DE ISCAS
+    // ========================================================
+    let currentPendingHivePhoto = null;
+    let currentPendingTransferPhoto = null;
+
+    function handleHivePhotoUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentPendingHivePhoto = e.target.result;
+        const preview = document.getElementById('add-hive-photo-preview');
+        const container = document.getElementById('add-hive-photo-preview-container');
+        const removeBtn = document.getElementById('btn-remove-hive-photo');
+        if (preview) preview.src = currentPendingHivePhoto;
+        if (container) container.classList.remove('hidden');
+        if (removeBtn) removeBtn.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeHivePhoto() {
+      currentPendingHivePhoto = null;
+      const input = document.getElementById('add-hive-photo-input');
+      const container = document.getElementById('add-hive-photo-preview-container');
+      const removeBtn = document.getElementById('btn-remove-hive-photo');
+      if (input) input.value = '';
+      if (container) container.classList.add('hidden');
+      if (removeBtn) removeBtn.classList.add('hidden');
+    }
+
+    function handleTransferPhotoUpload(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        currentPendingTransferPhoto = e.target.result;
+        const preview = document.getElementById('transfer-photo-preview');
+        const container = document.getElementById('transfer-photo-preview-container');
+        if (preview) preview.src = currentPendingTransferPhoto;
+        if (container) container.classList.remove('hidden');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Modal de Transferência
+    function openTransferModalForCurrentTrap() {
+      if (!currentlyInspectedTarget || currentlyInspectedTarget.type !== 'trap') return;
+      const trap = PINS_DATA.find(p => p.id === currentlyInspectedTarget.id && p.type === 'traps');
+      if (!trap) return;
+
+      document.getElementById('transfer-trap-id').value = trap.id;
+      document.getElementById('transfer-trap-name-display').innerText = `${trap.name} (${trap.sub})`;
+      document.getElementById('transfer-hive-name').value = `CX-${hivesArray.length + 1} (${trap.sub || 'Ex-Isca'})`;
+      currentPendingTransferPhoto = null;
+      const previewCont = document.getElementById('transfer-photo-preview-container');
+      if (previewCont) previewCont.classList.add('hidden');
+
+      document.getElementById('transfer-trap-modal').classList.remove('hidden');
+    }
+
+    function closeTransferModal() {
+      document.getElementById('transfer-trap-modal').classList.add('hidden');
+    }
+
+    // Conclusão da Transferência: Isca ➔ Caixa Racional
+    function submitTransferTrap(event) {
+      event.preventDefault();
+      const trapId = document.getElementById('transfer-trap-id').value;
+      const speciesKey = document.getElementById('transfer-species-select').value;
+      const newHiveName = document.getElementById('transfer-hive-name').value.trim();
+      const trap = PINS_DATA.find(p => p.id === trapId && p.type === 'traps');
+      if (!trap) return;
+
+      const speciesName = SPECIES_CONFIG[speciesKey]?.name || 'Abelha Nativa';
+      const newHiveId = `CX-0${hivesArray.length + 1}`;
+      const today = new Date().toISOString().split('T')[0];
+
+      // 1. Remove o modelo visual da Isca PET da cena e do array pinMeshes
+      const pinIndex = pinMeshes.findIndex(mesh => mesh.userData && mesh.userData.id === trap.id);
+      if (pinIndex !== -1) {
+        const pinMesh = pinMeshes[pinIndex];
+        scene.remove(pinMesh);
+        disposeThreeObject(pinMesh);
+        pinMeshes.splice(pinIndex, 1);
+      }
+
+      // Remove de PINS_DATA
+      const pinDataIdx = PINS_DATA.findIndex(p => p.id === trap.id);
+      if (pinDataIdx !== -1) {
+        PINS_DATA.splice(pinDataIdx, 1);
+      }
+
+      // 2. Instancia a nova Caixa Racional no mesmo ponto x, z
+      const newHiveData = {
+        id: newHiveId,
+        name: newHiveName || `${speciesName} (Ex-Isca ${trapId})`,
+        speciesKey: speciesKey,
+        x: trap.x,
+        z: trap.z,
+        lat: trap.lat || (gpsAnchor ? convertThreeCoordsToGps(trap.x, trap.z, gpsAnchor).lat : null),
+        lon: trap.lon || (gpsAnchor ? convertThreeCoordsToGps(trap.x, trap.z, gpsAnchor).lon : null),
+        examDate: today,
+        examStatus: 'Transferência Concluída • Crias Preservadas',
+        photoUrl: currentPendingTransferPhoto || trap.photoUrl || null,
+        meshGroup: null,
+        radarLine: null,
+        radarFill: null,
+        baseScale: SPECIES_CONFIG[speciesKey]?.scale3D || 10.0,
+        hasOverlap: false
+      };
+
+      hivesArray.push(newHiveData);
+      createHiveInstance(newHiveData);
+      updateHivesCompetitionCheck();
+
+      // 3. Registra automaticamente no Diário de Manejo
+      const container = document.getElementById('logs-container');
+      if (container) {
+        const item = document.createElement('div');
+        item.className = 'relative group animate-fade-in';
+        item.innerHTML = `
+          <div class="absolute -left-[31px] sm:-left-[37px] top-1.5 w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-950/80 border-2 border-emerald-500 text-emerald-600 dark:text-emerald-300 flex items-center justify-center text-sm shadow-sm group-hover:scale-110 transition-transform">
+            🐝
+          </div>
+          <div class="p-5 rounded-2xl bg-gray-50 dark:bg-[#0E1015] border border-gray-200/80 dark:border-gray-800/80 hover:border-emerald-500/50 transition-all">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-gray-200/60 dark:border-gray-800">
+              <div class="flex items-center gap-2.5">
+                <span class="px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                  Transferência de Ninho-Isca
+                </span>
+                <span class="px-2 py-0.5 rounded-md text-[11px] font-mono font-bold bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-200 dark:border-gray-700">
+                  ${newHiveId}
+                </span>
+              </div>
+              <div class="flex items-center gap-2 text-xs text-honey-700 dark:text-honey-400 font-mono font-bold">
+                <span>Agora mesmo</span>
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                <span class="text-emerald-500 font-sans font-semibold">Sucesso</span>
+              </div>
+            </div>
+            <p class="text-xs text-gray-700 dark:text-gray-300 mt-3 leading-relaxed">
+              Enxame capturado na isca ${trap.name} (${trap.sub}) transferido para caixa racional ${newHiveName}. Espécie identificada: <strong>${speciesName}</strong>. Discos de cria e potes de alimento assentados com sucesso.
+            </p>
+            <div class="mt-3 flex items-center gap-4 text-[11px] text-gray-500 dark:text-gray-400">
+              <span>Registro: <strong>Transferência Biológica</strong></span>
+              <span>•</span>
+              <span>Coordenadas: <strong>${(trap.x * SCALE_METERS_PER_UNIT).toFixed(0)}m, ${(trap.z * SCALE_METERS_PER_UNIT).toFixed(0)}m</strong></span>
+            </div>
+          </div>
+        `;
+        container.insertBefore(item, container.firstChild);
+      }
+
+      // Adiciona no seletor de caixas do diário
+      const modalSelect = document.getElementById('modal-hive');
+      if (modalSelect) {
+        const opt = document.createElement('option');
+        opt.value = newHiveId;
+        opt.innerText = `${newHiveId} (${newHiveName})`;
+        modalSelect.appendChild(opt);
+      }
+
+      closeTransferModal();
+
+      // Foca na nova caixa com zoom e abre o inspetor
+      focusCameraOnObject(new THREE.Vector3(newHiveData.x, 1.9, newHiveData.z));
+      showPinInspector({
+        name: newHiveData.name,
+        sub: `${speciesName} • Caixa Instalada`,
+        dist: `Posição: ${(newHiveData.x * SCALE_METERS_PER_UNIT).toFixed(0)}m, ${(newHiveData.z * SCALE_METERS_PER_UNIT).toFixed(0)}m`,
+        desc: `🎉 Transferência da Isca concluída! Enxame de ${speciesName} alojado em caixa racional. Hex-Radar de forrageamento ativo.`,
+        icon: '🐝',
+        type: 'hive',
+        targetId: newHiveData.id,
+        photoUrl: newHiveData.photoUrl,
+        lat: newHiveData.lat,
+        lon: newHiveData.lon
+      });
+    }
+
+    // Modal e Geração de QR Code
+    function openQrModalForCurrentHive() {
+      if (!currentlyInspectedTarget || currentlyInspectedTarget.type !== 'hive') return;
+      const hive = hivesArray.find(h => h.id === currentlyInspectedTarget.id);
+      if (!hive) return;
+
+      const speciesName = SPECIES_CONFIG[hive.speciesKey]?.name || 'Abelha Nativa';
+      const qrData = encodeURIComponent(`https://meliponaos.app/hive/${hive.id}?species=${hive.speciesKey}&name=${encodeURIComponent(hive.name)}`);
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${qrData}`;
+
+      const img = document.getElementById('qrcode-modal-img');
+      const title = document.getElementById('qrcode-modal-title');
+      const sub = document.getElementById('qrcode-modal-sub');
+
+      if (img) img.src = qrApiUrl;
+      if (title) title.innerText = `${hive.id} - ${hive.name}`;
+      if (sub) sub.innerText = `${speciesName} • Último Exame: ${hive.examDate || 'Recente'}`;
+
+      document.getElementById('qrcode-modal').classList.remove('hidden');
+    }
+
+    function closeQrModal() {
+      document.getElementById('qrcode-modal').classList.add('hidden');
+    }
+
+    // Rota GPS: Navegar até à Caixa
+    function navigateToCurrentHiveGps() {
+      if (!currentlyInspectedTarget || currentlyInspectedTarget.type !== 'hive') return;
+      const hive = hivesArray.find(h => h.id === currentlyInspectedTarget.id);
+      if (!hive) return;
+
+      if (hive.lat && hive.lon) {
+        window.open(`https://www.google.com/maps/dir/?api=1&destination=${hive.lat},${hive.lon}`, '_blank');
+      } else if (gpsAnchor) {
+        const coords = convertThreeCoordsToGps(hive.x, hive.z, gpsAnchor);
+        window.open(`https://www.google.com/maps/dir/?api=1&destination=${coords.lat},${coords.lon}`, '_blank');
+      } else {
+        alert(`Coordenadas locais relativas: X: ${(hive.x * SCALE_METERS_PER_UNIT).toFixed(1)}m, Z: ${(hive.z * SCALE_METERS_PER_UNIT).toFixed(1)}m a partir do centro do meliponário.`);
+      }
+    }
+
     function showPinInspector(data) {
       document.getElementById('inspec-title').innerText = data.name;
       document.getElementById('inspec-desc').innerText = data.desc;
       document.getElementById('inspec-dist').innerText = data.dist;
-      document.getElementById('inspec-icon').innerText = data.icon || (data.type === 'flora' ? '🌸' : (data.type === 'water' ? '💧' : (data.type === 'threat' ? '☠️' : '🍯')));
-      
+      document.getElementById('inspec-icon').innerText = data.icon || (data.type === 'flora' ? '🌸' : (data.type === 'water' ? '💧' : (data.type === 'threat' ? '☠️' : (data.type === 'traps' ? '📦' : '🍯'))));
+
+      const photoContainer = document.getElementById('inspec-photo-container');
+      const photoImg = document.getElementById('inspec-photo-img');
+      const hiveActions = document.getElementById('inspec-hive-actions');
+      const transferContainer = document.getElementById('inspec-transfer-container');
       const deleteContainer = document.getElementById('inspec-delete-container');
       const deleteLabel = document.getElementById('btn-delete-label');
-      
+
+      // 1. Exibição da Foto da Caixa / Isca
+      if (data.photoUrl) {
+        if (photoImg) photoImg.src = data.photoUrl;
+        if (photoContainer) photoContainer.classList.remove('hidden');
+      } else {
+        if (photoContainer) photoContainer.classList.add('hidden');
+      }
+
+      // 2. Ações Específicas por Tipo
       if (data.type === 'hive' && data.targetId) {
         currentlyInspectedTarget = { type: 'hive', id: data.targetId };
+        if (hiveActions) hiveActions.classList.remove('hidden');
+        if (transferContainer) transferContainer.classList.add('hidden');
         if (deleteLabel) deleteLabel.innerText = "Excluir Caixa";
         if (deleteContainer) deleteContainer.classList.remove('hidden');
+      } else if (data.type === 'traps') {
+        currentlyInspectedTarget = { type: 'trap', id: data.id || data.targetId };
+        if (hiveActions) hiveActions.classList.add('hidden');
+        if (transferContainer) transferContainer.classList.remove('hidden');
+        if (deleteContainer) deleteContainer.classList.add('hidden');
       } else if (data.type === 'built' && data.targetId) {
         currentlyInspectedTarget = { type: 'built', id: data.targetId };
+        if (hiveActions) hiveActions.classList.add('hidden');
+        if (transferContainer) transferContainer.classList.add('hidden');
         if (deleteLabel) deleteLabel.innerText = "Excluir Elemento";
         if (deleteContainer) deleteContainer.classList.remove('hidden');
       } else {
         currentlyInspectedTarget = null;
+        if (hiveActions) hiveActions.classList.add('hidden');
+        if (transferContainer) transferContainer.classList.add('hidden');
         if (deleteContainer) deleteContainer.classList.add('hidden');
       }
 
@@ -5091,6 +5542,7 @@
           speciesKey: speciesKey,
           examDate: examDate,
           examStatus: examStatus,
+          photoUrl: currentPendingHivePhoto || null,
           baseScale: SPECIES_CONFIG[speciesKey]?.scale3D || 10.0
         };
 
@@ -5129,6 +5581,7 @@
         lon: null,
         examDate: hiveDataToUse.examDate,
         examStatus: hiveDataToUse.examStatus,
+        photoUrl: hiveDataToUse.photoUrl || currentPendingHivePhoto || null,
         meshGroup: null,
         radarLine: null,
         radarFill: null,
@@ -5168,7 +5621,10 @@
         desc: `📅 Último Exame: ${newHiveData.examDate} • ${newHiveData.examStatus}. Colmeia racional posicionada no seu meliponário! ${newHiveData.hasOverlap ? '⚠️ Alerta: Competição de Pasto Detectada!' : '✅ Pasto Floral Equilibrado.'}`,
         icon: '🐝',
         type: 'hive',
-        targetId: newHiveData.id
+        targetId: newHiveData.id,
+        photoUrl: newHiveData.photoUrl,
+        lat: newHiveData.lat,
+        lon: newHiveData.lon
       });
     }
 
