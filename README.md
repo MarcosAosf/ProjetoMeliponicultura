@@ -75,6 +75,10 @@ A plataforma divide de forma limpa o uso **prático de campo** (satélite de alt
 - **Carrossel Duplo em Cada Card**:
   - *Foto 1*: Macrofotografia detalhada da abelha em close-up.
   - *Foto 2*: Arquitetura de ninho (potes cerosos, tubos de entrada e discos de cria).
+- **Selos Oficiais de Conservação e Risco de Extinção (MMA / ICMBio / IUCN)**:
+  - 🚨 **Em Perigo de Extinção (EN)** com alerta pulsante: *Uruçu Nordestina* (*Melipona scutellaris*) e *Guaraipo* (*Melipona bicolor*).
+  - ⚠️ **Vulnerável (VU)** com indicador luminoso: *Mandaçaia MQA* (*Melipona quadrifasciata*), *Uruçu Amarela* (*Melipona flavolineata*), *Tiúba* (*Melipona fasciculata*), *Manduri* (*Melipona marginata*) e *Bugia* (*Melipona mondury*).
+  - 🟢 **Pouco Preocupante (LC)**: *Jataí*, *Mambucão*, *Tubuna*, *Borá*, *Iraí*, *Mirim Droryana* e *Mandaguari*.
 - **Novas Espécies Nativas Integradas**:
   - 🍯 **Mambucão** (*Frieseomelitta varia*): Famosa pelos potes de mel agrupados em cachos e pito tubular em cerume escuro.
   - 🐝 **Tubuna** (*Scaptotrigona depilis*): Enxames populosos de abelha preta reluzente e forte produção de própolis medicinal.
