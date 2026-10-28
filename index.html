@@ -930,8 +930,12 @@
             </div>
           </div>
 
-          <!-- Botão Excluir Ponto em Destaque -->
-          <div class="pt-3 border-t border-gray-100 dark:border-white/5">
+          <!-- Ações do Ponto: Editar & Excluir -->
+          <div class="pt-3 border-t border-gray-100 dark:border-white/5 space-y-2">
+            <button type="button" onclick="openEditSatPointModal(currentInspectedSatPoint?.id)" class="w-full py-2.5 px-3 rounded-2xl bg-honey-500 hover:bg-honey-600 text-gray-950 text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-amber-500/20">
+              <span>✏️</span>
+              <span>Editar Informações do Ponto</span>
+            </button>
             <button type="button" onclick="deleteCurrentSatPoint()" class="w-full py-2.5 px-3 rounded-2xl bg-red-500/15 hover:bg-red-500/25 text-red-600 dark:text-red-400 border border-red-500/30 text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm">
               <span>🗑️</span>
               <span>Excluir Ponto / Caixa do Meliponário</span>
@@ -979,10 +983,6 @@
       </div>
 
         <div class="flex flex-wrap items-center gap-3">
-          <button onclick="openAddHiveModal(false)" class="btn-honey px-4 py-2 rounded-xl text-xs font-bold cursor-pointer flex items-center gap-1.5 shadow-sm hover:scale-[1.02] transition-all">
-            <span>➕</span>
-            <span>Cadastrar Caixa / Foto</span>
-          </button>
           <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             Sensores Ativos
@@ -997,7 +997,7 @@
             <span>Colmeias Ativas</span>
             <span class="text-base">📦</span>
           </div>
-          <div class="text-3xl font-display font-extrabold text-gray-900 dark:text-white mt-2">28 Caixas</div>
+          <div id="kpi-active-hives" class="text-3xl font-display font-extrabold text-gray-900 dark:text-white mt-2">-- Caixas</div>
           <div class="flex items-center gap-2 mt-2">
             <span class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold flex items-center">↑ +3 este mês</span>
             <span class="text-[11px] text-gray-400">100% integridade</span>
@@ -1009,7 +1009,7 @@
             <span>Mel Armazenado</span>
             <span class="text-base">🍯</span>
           </div>
-          <div class="text-3xl font-display font-extrabold text-gray-900 dark:text-white mt-2">42.6 kg</div>
+          <div id="kpi-stored-honey" class="text-3xl font-display font-extrabold text-gray-900 dark:text-white mt-2">-- kg</div>
           <div class="flex items-center gap-2 mt-2">
             <span class="text-xs text-honey-600 dark:text-honey-400 font-semibold flex items-center">↑ +4.2kg/semana</span>
             <span class="text-[11px] text-gray-400">Safra Ouro</span>
@@ -1021,7 +1021,7 @@
             <span>Taxa de Voo Médio</span>
             <span class="text-base">🐝</span>
           </div>
-          <div class="text-3xl font-display font-extrabold text-honey-600 mt-2">94% Voo</div>
+          <div id="kpi-flight-rate" class="text-3xl font-display font-extrabold text-honey-600 mt-2">--% Voo</div>
           <div class="flex items-center gap-2 mt-2">
             <span class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold">Pico 11h-14h</span>
             <span class="text-[11px] text-gray-400">26.5°C ambiente</span>
@@ -1033,7 +1033,7 @@
             <span>Iscas em Monitoramento</span>
             <span class="text-base">🌲</span>
           </div>
-          <div class="text-3xl font-display font-extrabold text-gray-900 dark:text-white mt-2">14 Iscas</div>
+          <div id="kpi-traps-count" class="text-3xl font-display font-extrabold text-gray-900 dark:text-white mt-2">-- Iscas</div>
           <div class="flex items-center gap-2 mt-2">
             <span class="text-xs text-amber-600 dark:text-amber-400 font-semibold">3 com batedoras</span>
             <span class="text-[11px] text-gray-400">2 capturas confirmadas</span>
@@ -1107,6 +1107,31 @@
             <h4 class="text-lg font-bold text-gray-900 dark:text-white">Zero Infestação <span class="text-xs text-emerald-500 font-normal">100% Seguro</span></h4>
             <p class="text-[11px] text-gray-500">Vinagre de maçã em todas as tampas</p>
           </div>
+        </div>
+      </div>
+
+      <!-- SEÇÃO: MINHAS CAIXAS & ISCAS CADASTRADAS (SINCRONIZADO COM SATÉLITE) -->
+      <div id="meliponary-registered-hives-section" class="p-6 rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple space-y-5">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-gray-100 dark:border-gray-800 pb-4">
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-xl font-bold">
+              📦
+            </div>
+            <div>
+              <h3 class="text-base font-bold text-gray-900 dark:text-white">Minhas Caixas & Iscas Cadastradas</h3>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Gerenciamento direto, edição de espécies e localização em tempo real</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="dashboard-registered-count-badge" class="px-3 py-1 rounded-full text-xs font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400">
+              Carregando...
+            </span>
+          </div>
+        </div>
+
+        <!-- Grade de Caixas e Iscas Reais -->
+        <div id="dashboard-registered-hives-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- Cards gerados dinamicamente via updateDashboardKpisAndList() -->
         </div>
       </div>
 
@@ -2551,11 +2576,10 @@
           <div>
             <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Status:</label>
             <select id="sat-point-status" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white focus:outline-none focus:border-honey-500 font-medium">
-              <option value="Forte">Forte & Produtiva</option>
-              <option value="Média">Média / Estável</option>
-              <option value="Em Divisão">Em Divisão / Multiplicação</option>
-              <option value="Armadilhada">Isca Armadilhada (Aguardando)</option>
-              <option value="Capturada">Isca Capturada! (Pronta p/ transferir)</option>
+              <option value="Forte & Produtiva">Forte & Produtiva</option>
+              <option value="Média / Estável">Média / Estável</option>
+              <option value="Em Divisão / Multiplicação">Em Divisão / Multiplicação</option>
+              <option value="Fraca / Em Observação">Fraca / Em Observação</option>
             </select>
           </div>
         </div>
@@ -2626,6 +2650,104 @@
         <div class="flex justify-end space-x-2 pt-2 border-t border-gray-100 dark:border-white/5">
           <button type="button" onclick="closeAddPointModal()" class="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium">Cancelar</button>
           <button type="submit" class="px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-gray-950 font-bold shadow-md shadow-amber-500/20">Salvar no Mapa de Satélite</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: EDITAR PONTO / CAIXA NO SATÉLITE -->
+  <div id="edit-sat-point-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+    <div class="bg-white dark:bg-[#151821] rounded-3xl p-6 max-w-md w-full shadow-2xl border border-gray-100 dark:border-white/10 space-y-4 animate-scale-up">
+      <div class="flex items-center justify-between border-b border-gray-100 dark:border-white/5 pb-3">
+        <div class="flex items-center gap-2.5">
+          <div class="w-10 h-10 rounded-2xl bg-honey-500/20 text-honey-600 dark:text-honey-400 flex items-center justify-center text-xl font-bold">
+            ✏️
+          </div>
+          <div>
+            <h3 class="text-base font-bold text-gray-900 dark:text-white">Editar Caixa / Ninho-Isca</h3>
+            <p class="text-xs text-gray-500 dark:text-gray-400">Atualize informações biológicas e operacionais</p>
+          </div>
+        </div>
+        <button type="button" onclick="closeEditSatPointModal()" class="p-1 rounded-xl text-gray-400 hover:text-gray-600 dark:hover:text-white transition-colors">✕</button>
+      </div>
+
+      <form id="edit-sat-point-form" onsubmit="submitEditSatPoint(event)" class="space-y-4 text-xs">
+        <input type="hidden" id="edit-sat-point-original-id">
+
+        <div>
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Tipo de Ponto:</label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-amber-500/40 bg-amber-500/10 cursor-pointer">
+              <input type="radio" name="edit-point-type-choice" value="hive" id="edit-type-hive" onchange="toggleEditPointTypeFields(this.value)">
+              <span class="font-bold text-gray-900 dark:text-white">📦 Colmeia</span>
+            </label>
+            <label class="flex items-center gap-2 p-2.5 rounded-xl border border-emerald-500/40 bg-emerald-500/10 cursor-pointer">
+              <input type="radio" name="edit-point-type-choice" value="trap" id="edit-type-trap" onchange="toggleEditPointTypeFields(this.value)">
+              <span class="font-bold text-gray-900 dark:text-white">🧪 Ninho-Isca</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2.5">
+          <div>
+            <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Identificação / Código:</label>
+            <input type="text" id="edit-sat-point-code" required class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white font-mono font-bold focus:outline-none focus:border-honey-500">
+          </div>
+          <div>
+            <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Status:</label>
+            <select id="edit-sat-point-status" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white font-medium focus:outline-none focus:border-honey-500">
+              <!-- Preenchido dinamicamente -->
+            </select>
+          </div>
+        </div>
+
+        <div id="edit-sat-species-field-container">
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Espécie da Abelha (Atualiza Alcance de Voo):</label>
+          <select id="edit-sat-point-species" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white font-medium focus:outline-none focus:border-honey-500">
+            <option value="mirim">1. Mirim Droryana (~400m • Trigonini)</option>
+            <option value="jatai">2. Jataí Dourada (~500m • Trigonini)</option>
+            <option value="irai">3. Iraí (~600m • Trigonini)</option>
+            <option value="mambucao">4. Mambucão (~800m • Trigonini)</option>
+            <option value="manduri">5. Manduri (~1.000m • Trigonini)</option>
+            <option value="mandaguari">6. Mandaguari (~1.000m • Trigonini)</option>
+            <option value="tubuna">7. Tubuna (~1.100m • Trigonini)</option>
+            <option value="bora">8. Borá (~1.200m • Trigonini)</option>
+            <option value="mandacaia">9. Mandaçaia MQA (~1.500m • Meliponini)</option>
+            <option value="guaraipo">10. Guaraipo (~1.600m • Meliponini)</option>
+            <option value="bugia">11. Bugia (~1.800m • Meliponini)</option>
+            <option value="urucu">12. Uruçu Amarela (~2.000m • Meliponini)</option>
+            <option value="urucu_nordestina">13. Uruçu Nordestina (~2.000m • Meliponini)</option>
+            <option value="tiuba">14. Tiúba (~2.200m • Meliponini)</option>
+          </select>
+        </div>
+
+        <div id="edit-sat-strength-container">
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Força do Enxame:</label>
+          <select id="edit-sat-point-strength" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white font-bold focus:outline-none focus:border-honey-500">
+            <option value="Forte">🟢 Forte & Saudável</option>
+            <option value="Médio">🟡 Médio / Em Desenvolvimento</option>
+            <option value="Fraco">🔴 Fraco / Atenção Especial</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-gray-700 dark:text-gray-300 mb-1">Adicionar Nova Foto ao Ponto:</label>
+          <div class="flex items-center space-x-2">
+            <label class="cursor-pointer flex items-center space-x-2 px-3 py-2 rounded-xl bg-gray-100 dark:bg-[#0E1015] border border-dashed border-gray-300 dark:border-gray-700 hover:border-amber-500 text-gray-700 dark:text-gray-300 transition-colors">
+              <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><circle cx="12" cy="13" r="3"></circle></svg>
+              <span class="text-[11px] font-medium">Tirar / Escolher Foto</span>
+              <input type="file" id="edit-sat-form-photo-input" accept="image/*" capture="environment" class="hidden" onchange="handleEditSatFormPhoto(event)">
+            </label>
+            <span id="edit-sat-form-photo-feedback" class="text-[10px] text-gray-400 italic">Nenhuma foto selecionada</span>
+          </div>
+          <div id="edit-sat-form-photo-preview" class="hidden mt-2 relative w-full h-28 rounded-xl overflow-hidden border border-gray-200 dark:border-white/10">
+            <img id="edit-sat-form-photo-img" src="" alt="Prévia" class="w-full h-full object-cover">
+          </div>
+        </div>
+
+        <div class="flex justify-end space-x-2 pt-2 border-t border-gray-100 dark:border-white/5">
+          <button type="button" onclick="closeEditSatPointModal()" class="px-4 py-2 rounded-xl border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium">Cancelar</button>
+          <button type="submit" class="px-5 py-2 rounded-xl bg-honey-500 hover:bg-honey-600 text-gray-950 font-bold shadow-md shadow-amber-500/20">Salvar Alterações</button>
         </div>
       </form>
     </div>
@@ -6589,6 +6711,7 @@
         document.getElementById('view-dashboard').classList.remove('hidden');
         setTimeout(() => {
           initDashboardCharts();
+          if (typeof updateDashboardKpisAndList === 'function') updateDashboardKpisAndList();
         }, 50);
       } else if (tabId === 'species') {
         document.getElementById('view-species').classList.remove('hidden');
@@ -6816,6 +6939,7 @@
 
       // 3. Espelhar na nuvem Firebase se conectado
       syncDataToFirebaseCloud();
+      if (typeof updateDashboardKpisAndList === 'function') updateDashboardKpisAndList();
 
       // Fechar modal e limpar campo
       closeModal();
@@ -8161,11 +8285,28 @@
 
     function togglePointTypeFields(type) {
       const codeInput = document.getElementById('sat-point-code');
+      const statusSelect = document.getElementById('sat-point-status');
+      const speciesContainer = document.getElementById('sat-species-field-container');
       const nextNum = satPoints.length + 1;
+
       if (type === 'trap') {
-        codeInput.value = `ISCA-${nextNum < 10 ? '0' + nextNum : nextNum}`;
+        if (codeInput) codeInput.value = `ISCA-${nextNum < 10 ? '0' + nextNum : nextNum}`;
+        if (statusSelect) {
+          statusSelect.innerHTML = `
+            <option value="Isca Armadilhada (Aguardando)">Isca Armadilhada (Aguardando)</option>
+            <option value="Isca Capturada! (Pronta p/ transferir)">Isca Capturada! (Pronta p/ transferir)</option>
+          `;
+        }
       } else {
-        codeInput.value = `CX-${nextNum < 10 ? '0' + nextNum : nextNum}`;
+        if (codeInput) codeInput.value = `CX-${nextNum < 10 ? '0' + nextNum : nextNum}`;
+        if (statusSelect) {
+          statusSelect.innerHTML = `
+            <option value="Forte & Produtiva">Forte & Produtiva</option>
+            <option value="Média / Estável">Média / Estável</option>
+            <option value="Em Divisão / Multiplicação">Em Divisão / Multiplicação</option>
+            <option value="Fraca / Em Observação">Fraca / Em Observação</option>
+          `;
+        }
       }
     }
 
@@ -8308,7 +8449,291 @@
       }
     }
 
-    function saveSatPointsLocalAndCloud() {
+    
+    // =========================================================================
+    // ⚙️ GERENCIAMENTO & EDIÇÃO AVANÇADA DE PONTOS (COLMEIA / ISCA)
+    // =========================================================================
+    window.openPointInspector = openSatelliteInspector;
+    window.tempEditSatFormPhotoBase64 = null;
+
+    function openEditSatPointModal(pointId) {
+      const point = satPoints.find(p => p.id === pointId);
+      if (!point) {
+        showGpsToast("Ponto não encontrado para edição.", true, 3000);
+        return;
+      }
+
+      const modal = document.getElementById('edit-sat-point-modal');
+      if (!modal) return;
+
+      document.getElementById('edit-sat-point-original-id').value = point.id;
+      document.getElementById('edit-sat-point-code').value = point.id;
+
+      const isHive = point.type === 'hive';
+      const hiveRadio = document.getElementById('edit-type-hive');
+      const trapRadio = document.getElementById('edit-type-trap');
+      if (isHive && hiveRadio) hiveRadio.checked = true;
+      if (!isHive && trapRadio) trapRadio.checked = true;
+
+      toggleEditPointTypeFields(point.type);
+
+      const statusSelect = document.getElementById('edit-sat-point-status');
+      if (statusSelect) {
+        statusSelect.value = point.status || (isHive ? 'Forte & Produtiva' : 'Isca Armadilhada (Aguardando)');
+      }
+
+      const speciesSelect = document.getElementById('edit-sat-point-species');
+      if (speciesSelect) {
+        speciesSelect.value = point.species || 'mandacaia';
+      }
+
+      const strengthSelect = document.getElementById('edit-sat-point-strength');
+      if (strengthSelect) {
+        strengthSelect.value = point.strength || 'Forte';
+      }
+
+      window.tempEditSatFormPhotoBase64 = null;
+      const preview = document.getElementById('edit-sat-form-photo-preview');
+      const feedback = document.getElementById('edit-sat-form-photo-feedback');
+      if (preview) preview.classList.add('hidden');
+      if (feedback) feedback.innerText = (point.photos && point.photos.length > 0) ? `${point.photos.length} foto(s) anexadas` : 'Nenhuma foto nova';
+
+      modal.classList.remove('hidden');
+    }
+
+    function closeEditSatPointModal() {
+      const modal = document.getElementById('edit-sat-point-modal');
+      if (modal) modal.classList.add('hidden');
+      window.tempEditSatFormPhotoBase64 = null;
+    }
+
+    function toggleEditPointTypeFields(type) {
+      const statusSelect = document.getElementById('edit-sat-point-status');
+      const speciesContainer = document.getElementById('edit-sat-species-field-container');
+      const strengthContainer = document.getElementById('edit-sat-strength-container');
+
+      if (type === 'trap') {
+        if (statusSelect) {
+          statusSelect.innerHTML = `
+            <option value="Isca Armadilhada (Aguardando)">Isca Armadilhada (Aguardando)</option>
+            <option value="Isca Capturada! (Pronta p/ transferir)">Isca Capturada! (Pronta p/ transferir)</option>
+          `;
+        }
+        if (speciesContainer) speciesContainer.classList.add('hidden');
+        if (strengthContainer) strengthContainer.classList.add('hidden');
+      } else {
+        if (statusSelect) {
+          statusSelect.innerHTML = `
+            <option value="Forte & Produtiva">Forte & Produtiva</option>
+            <option value="Média / Estável">Média / Estável</option>
+            <option value="Em Divisão / Multiplicação">Em Divisão / Multiplicação</option>
+            <option value="Fraca / Em Observação">Fraca / Em Observação</option>
+          `;
+        }
+        if (speciesContainer) speciesContainer.classList.remove('hidden');
+        if (strengthContainer) strengthContainer.classList.remove('hidden');
+      }
+    }
+
+    async function handleEditSatFormPhoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      try {
+        const compressed = await compressImageFile(file, 700, 0.7);
+        window.tempEditSatFormPhotoBase64 = compressed;
+        document.getElementById('edit-sat-form-photo-img').src = compressed;
+        document.getElementById('edit-sat-form-photo-preview').classList.remove('hidden');
+        document.getElementById('edit-sat-form-photo-feedback').innerText = 'Nova foto pronta para salvar!';
+      } catch (e) {
+        showGpsToast("Erro ao processar foto: " + e.message, true, 4000);
+      }
+    }
+
+    function submitEditSatPoint(event) {
+      if (event) event.preventDefault();
+      const origId = document.getElementById('edit-sat-point-original-id').value;
+      const point = satPoints.find(p => p.id === origId);
+      if (!point) return;
+
+      const newId = document.getElementById('edit-sat-point-code').value.trim();
+      const newType = document.querySelector('input[name="edit-point-type-choice"]:checked')?.value || point.type;
+      const newStatus = document.getElementById('edit-sat-point-status').value;
+      const newSpecies = document.getElementById('edit-sat-point-species')?.value || point.species;
+      const newStrength = document.getElementById('edit-sat-point-strength')?.value || point.strength || 'Forte';
+
+      // Check ID conflict if renamed
+      if (newId !== origId && satPoints.some(p => p.id === newId)) {
+        alert("Já existe uma caixa ou isca cadastrada com este código. Escolha outro.");
+        return;
+      }
+
+      point.id = newId;
+      point.type = newType;
+      point.status = newStatus;
+      point.species = newSpecies;
+      point.strength = newStrength;
+
+      if (window.tempEditSatFormPhotoBase64) {
+        if (!point.photos) point.photos = [];
+        point.photos.unshift({
+          dataUrl: window.tempEditSatFormPhotoBase64,
+          category: 'Entrada/Pito',
+          date: new Date().toLocaleDateString('pt-BR')
+        });
+      }
+
+      saveSatPointsLocalAndCloud();
+      renderAllSatellitePoints();
+      updateDashboardKpisAndList();
+      closeEditSatPointModal();
+
+      if (currentInspectedSatPoint && (currentInspectedSatPoint.id === origId || currentInspectedSatPoint.id === newId)) {
+        openSatelliteInspector(point);
+      }
+
+      showGpsToast(`✅ ${newId} atualizado(a) com sucesso!`, true, 3000);
+    }
+
+    // =========================================================================
+    // 📊 SINCRONIZAÇÃO TOTAL DO PAINEL "MELIPONÁRIO" COM OS DADOS REAIS
+    // =========================================================================
+    function updateDashboardKpisAndList() {
+      if (!Array.isArray(satPoints)) return;
+
+      const hives = satPoints.filter(p => p.type === 'hive');
+      const traps = satPoints.filter(p => p.type === 'trap');
+
+      // 1. Atualizar KPIs Numéricos
+      const kpiHivesEl = document.getElementById('kpi-active-hives');
+      if (kpiHivesEl) kpiHivesEl.innerText = `${hives.length} Caixa${hives.length === 1 ? '' : 's'}`;
+
+      const kpiTrapsEl = document.getElementById('kpi-traps-count');
+      if (kpiTrapsEl) kpiTrapsEl.innerText = `${traps.length} Isca${traps.length === 1 ? '' : 's'}`;
+
+      // Mel Estimado com base nas médias biológicas do sistema
+      const honeyEstimates = {
+        mandacaia: 2.2, jatai: 1.0, mambucao: 1.5, tubuna: 2.5, guaraipo: 2.0,
+        mandaguari: 1.8, manduri: 1.5, bora: 3.0, bugia: 2.5, urucu: 3.5,
+        urucu_nordestina: 3.5, tiuba: 3.2, mirim: 0.6, irai: 0.8
+      };
+
+      let totalHoneyKg = 0;
+      const honeyBySpecies = {};
+
+      hives.forEach(h => {
+        const est = honeyEstimates[h.species] || 1.5;
+        totalHoneyKg += est;
+        const specName = (SPECIES_CONFIG[h.species] && SPECIES_CONFIG[h.species].name) ? SPECIES_CONFIG[h.species].name.split(' ')[0] : (h.species || 'Abelha');
+        honeyBySpecies[specName] = (honeyBySpecies[specName] || 0) + est;
+      });
+
+      const kpiHoneyEl = document.getElementById('kpi-stored-honey');
+      if (kpiHoneyEl) kpiHoneyEl.innerText = `${totalHoneyKg.toFixed(1)} kg`;
+
+      const kpiFlightEl = document.getElementById('kpi-flight-rate');
+      if (kpiFlightEl) {
+        const strongHivesCount = hives.filter(h => (h.strength === 'Forte' || (h.status && h.status.includes('Forte')))).length;
+        const flightRate = hives.length > 0 ? Math.round((strongHivesCount / hives.length) * 30 + 68) : 92;
+        kpiFlightEl.innerText = `${flightRate}% Voo`;
+      }
+
+      // Atualizar Gráfico de Barras de Mel por Espécie
+      if (typeof Chart !== 'undefined' && typeof honeyChart !== 'undefined' && honeyChart) {
+        const speciesKeys = Object.keys(honeyBySpecies);
+        if (speciesKeys.length > 0) {
+          honeyChart.data.labels = speciesKeys;
+          honeyChart.data.datasets[0].data = speciesKeys.map(k => Number(honeyBySpecies[k].toFixed(1)));
+          honeyChart.update();
+        }
+      }
+
+      // 2. Renderizar Grade de Caixas e Iscas Reais
+      const grid = document.getElementById('dashboard-registered-hives-grid');
+      const badgeCount = document.getElementById('dashboard-registered-count-badge');
+      if (badgeCount) {
+        badgeCount.innerText = `${hives.length} Colmeias • ${traps.length} Iscas`;
+      }
+
+      if (!grid) return;
+
+      if (satPoints.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-8 text-center bg-gray-50 dark:bg-[#0E1015] rounded-2xl border border-dashed border-gray-200 dark:border-gray-800">
+            <span class="text-3xl block mb-2">🛰️</span>
+            <p class="text-sm font-bold text-gray-700 dark:text-gray-300">Nenhuma colmeia ou isca cadastrada ainda.</p>
+            <p class="text-xs text-gray-400 mt-1">Acesse a aba <strong>"🛰️ Mapa do Meliponário"</strong> para cadastrar seus primeiros pontos via GPS ou clique!</p>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = satPoints.map(p => {
+        const isHive = p.type === 'hive';
+        const spec = SPECIES_CONFIG[p.species] || SPECIES_CONFIG.mandacaia;
+        const radius = BIOLOGICAL_SPECIES_RADIUS[p.species] || spec.radiusMeters || 1500;
+        const photoUrl = (p.photos && p.photos.length > 0) ? p.photos[0].dataUrl : (spec.macroUrl || 'assets/logo.png');
+        const strength = p.strength || 'Forte';
+        const strengthColor = strength === 'Forte' ? 'text-emerald-500 bg-emerald-500/10 border-emerald-500/30' : (strength === 'Médio' ? 'text-amber-500 bg-amber-500/10 border-amber-500/30' : 'text-red-500 bg-red-500/10 border-red-500/30');
+
+        return `
+          <div class="p-4 rounded-2xl bg-gray-50 dark:bg-[#0E1015] border border-gray-200 dark:border-gray-800 hover:border-amber-500/50 transition-all flex flex-col justify-between gap-3 shadow-sm">
+            <div class="flex items-start gap-3">
+              <div class="w-14 h-14 rounded-xl overflow-hidden shrink-0 border border-gray-200 dark:border-white/10 bg-gray-900">
+                <img src="${photoUrl}" alt="${p.id}" class="w-full h-full object-cover">
+              </div>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-1">
+                  <h4 class="font-mono font-bold text-sm text-gray-900 dark:text-white truncate">${p.id}</h4>
+                  <span class="px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase ${isHive ? 'bg-amber-500/15 text-amber-600 dark:text-amber-400' : 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400'}">
+                    ${isHive ? 'Colmeia' : 'Ninho-Isca'}
+                  </span>
+                </div>
+                <p class="text-xs text-gray-600 dark:text-gray-300 font-medium truncate mt-0.5">
+                  ${isHive ? spec.name : 'Aguardando Enxameação'}
+                </p>
+                <div class="flex items-center gap-1.5 mt-1 flex-wrap">
+                  <span class="text-[10px] font-semibold text-gray-500 dark:text-gray-400">
+                    ${p.status || 'Ativa'}
+                  </span>
+                  ${isHive ? `<span class="px-1.5 py-0.2 rounded-md text-[9px] font-bold border ${strengthColor}">${strength}</span>` : ''}
+                </div>
+              </div>
+            </div>
+
+            <div class="pt-2 border-t border-gray-200 dark:border-white/5 flex items-center justify-between gap-2">
+              <div class="text-[10px] text-gray-400 font-mono">
+                ${isHive ? `Alcance: ~${radius}m` : `Lat: ${p.lat.toFixed(4)}`}
+              </div>
+              <div class="flex items-center gap-1.5">
+                <button type="button" onclick="openEditSatPointModal('${p.id}')" class="px-2.5 py-1 rounded-xl bg-gray-200 dark:bg-white/10 hover:bg-amber-500 hover:text-gray-950 text-gray-700 dark:text-gray-300 font-bold text-[11px] transition-all flex items-center gap-1 cursor-pointer">
+                  <span>⚙️</span>
+                  <span>Editar</span>
+                </button>
+                <button type="button" onclick="goToSatPointOnMap('${p.id}')" class="px-2.5 py-1 rounded-xl bg-honey-500 hover:bg-honey-600 text-gray-950 font-bold text-[11px] transition-all flex items-center gap-1 shadow-sm cursor-pointer">
+                  <span>🛰️</span>
+                  <span>Ver no Mapa</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function goToSatPointOnMap(pointId) {
+      const point = satPoints.find(p => p.id === pointId);
+      if (!point) return;
+
+      switchTab('radar');
+      setTimeout(() => {
+        if (satelliteMap) {
+          satelliteMap.flyTo([point.lat, point.lon], 18, { animate: true });
+        }
+        openSatelliteInspector(point);
+      }, 250);
+    }
+
+function saveSatPointsLocalAndCloud() {
       try {
         localStorage.setItem('melipona_sat_points_v2', JSON.stringify(satPoints));
       } catch (err) {
