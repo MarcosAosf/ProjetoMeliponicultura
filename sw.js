@@ -1,4 +1,4 @@
-const CACHE_NAME = 'melipona-v5';
+const CACHE_NAME = 'melipona-v6';
 const ASSETS = [
   './',
   './index.html',
