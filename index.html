@@ -8091,13 +8091,21 @@
     }
 
     // Abertura Centralizada do Card Completo de Informações da Caixa
-    window.openBoxDetailCard = function(boxId) {
-      const point = satPoints.find(p => p.id === boxId);
-      if (!point) return;
+    window.openBoxDetailCard = function(boxIdOrPoint) {
+      let point = null;
+      if (typeof boxIdOrPoint === 'object' && boxIdOrPoint !== null) {
+        point = boxIdOrPoint;
+      } else {
+        point = satPoints.find(p => p.id === boxIdOrPoint);
+      }
+      if (!point) {
+        console.warn("Ponto não encontrado:", boxIdOrPoint);
+        return;
+      }
 
       // Voo suave até o marcador no satélite
       if (satelliteMap) {
-        satelliteMap.flyTo([point.lat, point.lon], 17, { animate: true, duration: 1.2 });
+        satelliteMap.flyTo([point.lat, point.lon], 17, { animate: true, duration: 1.0 });
       }
 
       openSatelliteInspector(point);
@@ -8168,6 +8176,7 @@
 
     // Painel de Inspeção do Ponto
     function openSatelliteInspector(point) {
+      if (!point) return;
       currentInspectedSatPoint = point;
       const drawer = document.getElementById('satellite-inspector-drawer');
       if (!drawer) return;
@@ -8179,16 +8188,21 @@
       // Foto no Topo
       const topPhotoEl = document.getElementById('sat-inspec-top-photo');
       const photoBtnLabel = document.getElementById('sat-inspec-photo-btn-label');
-      if (point.photos && point.photos.length > 0) {
-        topPhotoEl.src = point.photos[0].dataUrl;
-        if (photoBtnLabel) photoBtnLabel.innerText = "Trocar Foto";
-      } else {
-        topPhotoEl.src = spec.macroUrl || 'assets/logo.png';
-        if (photoBtnLabel) photoBtnLabel.innerText = "📷 Adicionar Foto";
+      if (topPhotoEl) {
+        if (point.photos && point.photos.length > 0) {
+          topPhotoEl.src = point.photos[0].dataUrl;
+          if (photoBtnLabel) photoBtnLabel.innerText = "Trocar Foto";
+        } else {
+          topPhotoEl.src = spec.macroUrl || 'assets/logo.png';
+          if (photoBtnLabel) photoBtnLabel.innerText = "📷 Adicionar Foto";
+        }
       }
 
-      document.getElementById('sat-inspec-code').innerText = point.id;
-      document.getElementById('sat-inspec-species').innerText = `${spec.name} (${spec.scientific || ''})`;
+      const codeEl = document.getElementById('sat-inspec-code');
+      if (codeEl) codeEl.innerText = point.id;
+
+      const specEl = document.getElementById('sat-inspec-species');
+      if (specEl) specEl.innerText = `${spec.name} (${spec.scientific || ''})`;
 
       // Status Pill & Select
       const statusPill = document.getElementById('sat-inspec-status-pill');
@@ -8221,23 +8235,31 @@
       const createdAtEl = document.getElementById('sat-inspec-created-at');
       const updatedAtEl = document.getElementById('sat-inspec-updated-at');
       if (createdAtEl) createdAtEl.innerText = formatIsoDateBr(point.createdAt);
-      if (updatedAtEl) updatedAtEl.innerText = point.updatedAt ? formatIsoDateBr(point.updatedAt) : 'Hoje';
+      if (updatedAtEl) updatedAtEl.innerText = point.updatedAt ? formatIsoDateBr(point.updatedAt) : (point.createdAt ? formatIsoDateBr(point.createdAt) : 'Hoje');
 
       const typeBadge = document.getElementById('sat-inspec-type-badge');
       const iconBadge = document.getElementById('sat-inspec-icon-badge');
       const speciesEditor = document.getElementById('sat-inspec-species-editor');
       const speciesSelect = document.getElementById('sat-inspec-species-select');
       const radiusBadge = document.getElementById('sat-inspec-radius-badge');
+      const metricLabel = document.getElementById('sat-inspec-metric-label');
+      const metricVal = document.getElementById('sat-inspec-metric-val');
+      const transferCont = document.getElementById('sat-inspec-transfer-container');
+      const qrBtn = document.getElementById('sat-inspec-qr-btn');
 
       if (isHive) {
-        typeBadge.innerText = 'Colmeia Racional';
-        typeBadge.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-amber-500/15 text-amber-600 dark:text-amber-400';
-        iconBadge.innerHTML = '📦';
-        iconBadge.className = 'w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-xl font-bold';
-        document.getElementById('sat-inspec-metric-label').innerText = 'Raio Real de Voo';
-        document.getElementById('sat-inspec-metric-val').innerText = `~${flightRadiusMeters.toLocaleString('pt-BR')}m (${spec.areaKm2 || '5.8 km²'})`;
-        document.getElementById('sat-inspec-transfer-container').classList.add('hidden');
-        document.getElementById('sat-inspec-qr-btn').classList.remove('hidden');
+        if (typeBadge) {
+          typeBadge.innerText = 'Colmeia Racional';
+          typeBadge.className = 'px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-amber-500 text-gray-950 shadow-md';
+        }
+        if (iconBadge) {
+          iconBadge.innerHTML = '📦';
+          iconBadge.className = 'w-10 h-10 rounded-2xl bg-amber-500/20 text-amber-500 flex items-center justify-center text-xl font-bold';
+        }
+        if (metricLabel) metricLabel.innerText = 'Raio Real de Voo';
+        if (metricVal) metricVal.innerText = `~${flightRadiusMeters.toLocaleString('pt-BR')}m (${spec.areaKm2 || '5.8 km²'})`;
+        if (transferCont) transferCont.classList.add('hidden');
+        if (qrBtn) qrBtn.classList.remove('hidden');
 
         // Exibe o seletor de espécies para edição em tempo real
         if (speciesEditor) speciesEditor.classList.remove('hidden');
@@ -8272,26 +8294,33 @@
           }
         }
       } else {
-        typeBadge.innerText = 'Ninho-Isca PET';
-        typeBadge.className = 'px-2 py-0.5 rounded-full text-[9px] font-extrabold uppercase tracking-wider bg-emerald-500/15 text-emerald-600 dark:text-emerald-400';
-        iconBadge.innerHTML = '🧪';
-        iconBadge.className = 'w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-xl font-bold';
+        if (typeBadge) {
+          typeBadge.innerText = 'Ninho-Isca PET';
+          typeBadge.className = 'px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-emerald-500 text-white shadow-md';
+        }
+        if (iconBadge) {
+          iconBadge.innerHTML = '🧪';
+          iconBadge.className = 'w-10 h-10 rounded-2xl bg-emerald-500/20 text-emerald-500 flex items-center justify-center text-xl font-bold';
+        }
         
         let daysInstalled = 1;
         if (point.createdAt) {
           const diffMs = Date.now() - new Date(point.createdAt).getTime();
           daysInstalled = Math.max(1, Math.floor(diffMs / (1000 * 60 * 60 * 24)));
         }
-        document.getElementById('sat-inspec-metric-label').innerText = 'Dias Armada';
-        document.getElementById('sat-inspec-metric-val').innerText = `${daysInstalled} dias`;
-        document.getElementById('sat-inspec-transfer-container').classList.remove('hidden');
-        document.getElementById('sat-inspec-qr-btn').classList.add('hidden');
+        if (metricLabel) metricLabel.innerText = 'Dias Armada';
+        if (metricVal) metricVal.innerText = `${daysInstalled} dias`;
+        if (radiusBadge) radiusBadge.innerText = '120m';
+        if (transferCont) transferCont.classList.remove('hidden');
+        if (qrBtn) qrBtn.classList.add('hidden');
         if (speciesEditor) speciesEditor.classList.add('hidden');
       }
 
       // Link Google Maps
       const mapsLink = document.getElementById('sat-inspec-maps-link');
-      mapsLink.href = `https://www.google.com/maps/dir/?api=1&destination=${point.lat},${point.lon}`;
+      if (mapsLink) {
+        mapsLink.href = `https://www.google.com/maps/dir/?api=1&destination=${point.lat},${point.lon}`;
+      }
 
       // Renderizar Galeria de Fotos
       renderSatPointPhotos(point);
