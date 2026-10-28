@@ -715,6 +715,14 @@
       <!-- MAPA DE SATÉLITE LEAFLET EM TELA CHEIA -->
       <div id="satellite-map-container" class="w-full h-full relative z-0"></div>
 
+      <!-- BANNER DE MODO DE POSICIONAMENTO POR CLIQUE NO MAPA -->
+      <div id="sat-pick-mode-banner" class="hidden absolute top-4 left-1/2 -translate-x-1/2 z-30 px-5 py-2.5 rounded-2xl bg-amber-500 text-gray-950 font-extrabold text-xs shadow-2xl border-2 border-white flex items-center gap-3 animate-bounce">
+        <span>🎯 Modo Ativo: Clique no terreno do mapa para posicionar a caixa/isca</span>
+        <button type="button" onclick="disableMapPickMode()" class="px-2 py-0.5 rounded-lg bg-black text-white text-[10px] uppercase font-bold hover:bg-gray-800">
+          Cancelar
+        </button>
+      </div>
+
       <!-- BARRA DE CONTROLE SUPERIOR FLUTUANTE DO SATÉLITE -->
       <div class="absolute top-6 sm:top-7 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-2 pointer-events-auto mt-1">
         <div class="flex flex-wrap items-center gap-2">
@@ -854,13 +862,17 @@
               <option value="mirim">1. Mirim Droryana (Raio: 400m • Área: ~0.5 km²)</option>
               <option value="jatai">2. Jataí Dourada (Raio: 500m • Área: ~0.8 km²)</option>
               <option value="irai">3. Iraí (Raio: 600m • Área: ~1.1 km²)</option>
-              <option value="manduri">4. Manduri (Raio: 1.000m • Área: ~3.1 km²)</option>
-              <option value="bora">5. Borá (Raio: 1.200m • Área: ~4.5 km²)</option>
-              <option value="mandacaia">6. Mandaçaia MQA (Raio: 1.500m • Área: ~7.1 km²)</option>
-              <option value="bugia">7. Bugia (Raio: 1.800m • Área: ~10.2 km²)</option>
-              <option value="urucu">8. Uruçu Amarela (Raio: 2.000m • Área: ~12.6 km²)</option>
-              <option value="urucu_nordestina">9. Uruçu Nordestina (Raio: 2.000m • Área: ~12.6 km²)</option>
-              <option value="tiuba">10. Tiúba / Uruçu-Cinzenta (Raio: 2.200m • Área: ~15.2 km²)</option>
+              <option value="mambucao">4. Mambucão (Raio: 800m • Área: ~2.0 km²)</option>
+              <option value="manduri">5. Manduri (Raio: 1.000m • Área: ~3.1 km²)</option>
+              <option value="mandaguari">6. Mandaguari (Raio: 1.000m • Área: ~3.1 km²)</option>
+              <option value="tubuna">7. Tubuna (Raio: 1.100m • Área: ~3.8 km²)</option>
+              <option value="bora">8. Borá (Raio: 1.200m • Área: ~4.5 km²)</option>
+              <option value="mandacaia">9. Mandaçaia MQA (Raio: 1.500m • Área: ~7.1 km²)</option>
+              <option value="guaraipo">10. Guaraipo (Raio: 1.600m • Área: ~8.0 km²)</option>
+              <option value="bugia">11. Bugia (Raio: 1.800m • Área: ~10.2 km²)</option>
+              <option value="urucu">12. Uruçu Amarela (Raio: 2.000m • Área: ~12.6 km²)</option>
+              <option value="urucu_nordestina">13. Uruçu Nordestina (Raio: 2.000m • Área: ~12.6 km²)</option>
+              <option value="tiuba">14. Tiúba / Uruçu-Cinzenta (Raio: 2.200m • Área: ~15.2 km²)</option>
             </select>
           </div>
 
@@ -918,10 +930,11 @@
             </div>
           </div>
 
-          <!-- Botão Excluir Ponto -->
-          <div class="pt-2">
-            <button onclick="deleteCurrentSatPoint()" class="w-full py-2 rounded-xl text-red-500 hover:bg-red-500/10 text-[11px] font-semibold transition-colors">
-              🗑️ Excluir Este Ponto
+          <!-- Botão Excluir Ponto em Destaque -->
+          <div class="pt-3 border-t border-gray-100 dark:border-white/5">
+            <button type="button" onclick="deleteCurrentSatPoint()" class="w-full py-2.5 px-3 rounded-2xl bg-red-500/15 hover:bg-red-500/25 text-red-600 dark:text-red-400 border border-red-500/30 text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm">
+              <span>🗑️</span>
+              <span>Excluir Ponto / Caixa do Meliponário</span>
             </button>
           </div>
         </div>
@@ -1126,22 +1139,36 @@
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h2 class="text-2xl font-display font-extrabold text-gray-900 dark:text-white">Enciclopédia de Espécies Nativas</h2>
-          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Fichas biológicas completas, atributos ecológicos e raio de forrageamento</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Fichas biológicas completas agrupadas por tribo, atributos ecológicos e raio de forrageamento</p>
         </div>
         <div class="flex flex-wrap items-center gap-2.5">
           <button onclick="openSpeciesComparatorModal()" class="px-4 py-2 rounded-xl btn-honey font-bold text-xs flex items-center gap-2 shadow-apple hover:scale-105 transition-all cursor-pointer">
             <span>⚖️</span>
             <span>Comparar Espécies</span>
           </button>
-          <span class="px-3 py-2 rounded-xl bg-gray-100 dark:bg-gray-800 text-xs font-semibold text-gray-700 dark:text-gray-300">
-            10 Espécies Mapeadas
+          <span id="species-count-badge" class="px-3 py-2 rounded-xl bg-amber-500/15 border border-amber-500/30 text-xs font-bold text-amber-700 dark:text-amber-400">
+            14 Espécies Nativas Mapeadas
           </span>
         </div>
       </div>
 
+      <!-- Filtros Rápidos por Tribo Biológica -->
+      <div class="flex flex-wrap items-center gap-2 pt-2 border-t border-gray-100 dark:border-white/5">
+        <span class="text-xs font-bold text-gray-500 dark:text-gray-400 mr-2">Filtrar por Tribo:</span>
+        <button onclick="filterSpeciesCatalog('all')" id="tribe-filter-all" class="px-3.5 py-1.5 rounded-xl text-xs font-bold bg-honey-500 text-gray-950 shadow-sm transition-all cursor-pointer">
+          Todas as Espécies (14)
+        </button>
+        <button onclick="filterSpeciesCatalog('Trigonini')" id="tribe-filter-trigonini" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:text-honey-500 transition-all cursor-pointer">
+          Tribo Trigonini (Jataí, Mambucão, Tubuna, Borá, Iraí, Mirim, Mandaguari)
+        </button>
+        <button onclick="filterSpeciesCatalog('Meliponini')" id="tribe-filter-meliponini" class="px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:text-honey-500 transition-all cursor-pointer">
+          Tribo Meliponini (Mandaçaia, Uruçus, Guaraipo, Tiúba, Manduri, Bugia)
+        </button>
+      </div>
+
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <!-- CARD: JATAÍ -->
-        <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+        <div data-tribe="Trigonini" class="species-catalog-card rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-jatai" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
               <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
@@ -1213,7 +1240,7 @@
         </div>
 
         <!-- CARD: MANDAÇAIA -->
-        <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+        <div data-tribe="Meliponini" class="species-catalog-card rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-mandacaia" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
               <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
@@ -1285,7 +1312,7 @@
         </div>
 
         <!-- CARD: URUÇU AMARELA -->
-        <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+        <div data-tribe="Meliponini" class="species-catalog-card rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-urucu" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
               <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
@@ -1357,7 +1384,7 @@
         </div>
 
         <!-- CARD: URUÇU NORDESTINA -->
-        <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+        <div data-tribe="Meliponini" class="species-catalog-card rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-urucu_nordestina" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
               <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
@@ -1429,7 +1456,7 @@
         </div>
 
         <!-- CARD: TIÚBA / URUÇU-CINZENTA -->
-        <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+        <div data-tribe="Meliponini" class="species-catalog-card rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-tiuba" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
               <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
@@ -1501,7 +1528,7 @@
         </div>
 
         <!-- CARD: MIRIM DRORYANA -->
-        <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+        <div data-tribe="Trigonini" class="species-catalog-card rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-mirim" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
               <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
@@ -1573,7 +1600,7 @@
         </div>
 
         <!-- CARD: IRAÍ -->
-        <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+        <div data-tribe="Trigonini" class="species-catalog-card rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-irai" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
               <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
@@ -1645,7 +1672,7 @@
         </div>
 
         <!-- CARD: BORÁ -->
-        <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+        <div data-tribe="Trigonini" class="species-catalog-card rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-bora" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
               <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
@@ -1717,7 +1744,7 @@
         </div>
 
         <!-- CARD: MANDURI -->
-        <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+        <div data-tribe="Meliponini" class="species-catalog-card rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-manduri" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
               <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
@@ -1789,7 +1816,7 @@
         </div>
 
         <!-- CARD: BUGIA -->
-        <div class="rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+        <div data-tribe="Meliponini" class="species-catalog-card rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
           <div>
             <div id="species-carousel-bugia" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
               <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
@@ -1854,6 +1881,294 @@
           </div>
           <div class="p-6 pt-0">
             <button onclick="window.mapSpeciesInRadar3D('bugia')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+              <span>Mapear no Radar 3D</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD: MAMBUCÃO (Frieseomelitta varia) -->
+        <div data-tribe="Trigonini" class="species-catalog-card rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+          <div>
+            <div id="species-carousel-mambucao" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
+              <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
+                <img src="./assets/species/mambucao.jpg" alt="Mambucão - Macro da Abelha" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Macro da Abelha
+                </span>
+              </div>
+              <div class="carousel-slide hidden absolute inset-0 w-full h-full transition-opacity duration-300" data-index="1">
+                <img src="./assets/species/mambucao_ninho.jpg" alt="Mambucão - Estrutura do Ninho" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Estrutura do Ninho
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
+                800m Raio
+              </span>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mambucao', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior"><span class="carousel-prev select-none font-sans leading-none">&#10094;</span></button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mambucao', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto"><span class="carousel-next select-none font-sans leading-none">&#10095;</span></button>
+              <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-mambucao', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-mambucao', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
+              </div>
+            </div>
+            <div class="p-6 space-y-4">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Tribo Trigonini</span>
+                  <span class="text-xs text-gray-400 font-mono font-bold">11. MAM</span>
+                </div>
+                <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">Mambucão</h3>
+                <p class="text-xs italic text-gray-500 dark:text-gray-400">Frieseomelitta varia</p>
+              </div>
+              <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                Abelha robusta e rústica com coloração amarelo-âmbar. Notável por armazenar mel em potes agrupados em formato de cachos e entrada tubular característica de cerume escuro.
+              </p>
+              <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Docilidade & Manejo</span>
+                    <span class="text-emerald-500 font-bold">95% (Muito Pacífica)</span>
+                  </div>
+                  <div class="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-emerald-500 rounded-full" style="width: 95%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Produtividade Média / Ano</span>
+                    <span class="text-honey-600 dark:text-honey-400 font-bold">~1.5 a 3.0 kg</span>
+                  </div>
+                  <div class="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-honey-500 rounded-full" style="width: 50%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 pt-0">
+            <button onclick="window.mapSpeciesInRadar3D('mambucao')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+              <span>Mapear no Radar 3D</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD: TUBUNA (Scaptotrigona depilis) -->
+        <div data-tribe="Trigonini" class="species-catalog-card rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+          <div>
+            <div id="species-carousel-tubuna" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
+              <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
+                <img src="./assets/species/tubuna.jpg" alt="Tubuna - Macro da Abelha" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Macro da Abelha
+                </span>
+              </div>
+              <div class="carousel-slide hidden absolute inset-0 w-full h-full transition-opacity duration-300" data-index="1">
+                <img src="./assets/species/tubuna_ninho.jpg" alt="Tubuna - Estrutura do Ninho" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Estrutura do Ninho
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
+                1.100m Raio
+              </span>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-tubuna', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior"><span class="carousel-prev select-none font-sans leading-none">&#10094;</span></button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-tubuna', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto"><span class="carousel-next select-none font-sans leading-none">&#10095;</span></button>
+              <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-tubuna', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-tubuna', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
+              </div>
+            </div>
+            <div class="p-6 space-y-4">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Tribo Trigonini</span>
+                  <span class="text-xs text-gray-400 font-mono font-bold">12. TUB</span>
+                </div>
+                <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">Tubuna</h3>
+                <p class="text-xs italic text-gray-500 dark:text-gray-400">Scaptotrigona depilis</p>
+              </div>
+              <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                Coloração preta reluzente e porte médio-robusto. Enxames muito populosos com alta produção de mel e própolis de forte ação fitoterápica. Defensiva no ninho.
+              </p>
+              <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Docilidade & Manejo</span>
+                    <span class="text-amber-500 font-bold">75% (Protetora do Ninho)</span>
+                  </div>
+                  <div class="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-amber-500 rounded-full" style="width: 75%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Produtividade Média / Ano</span>
+                    <span class="text-honey-600 dark:text-honey-400 font-bold">~2.0 a 4.5 kg</span>
+                  </div>
+                  <div class="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-honey-500 rounded-full" style="width: 65%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 pt-0">
+            <button onclick="window.mapSpeciesInRadar3D('tubuna')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+              <span>Mapear no Radar 3D</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD: GUARAIPO (Melipona bicolor) -->
+        <div data-tribe="Meliponini" class="species-catalog-card rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+          <div>
+            <div id="species-carousel-guaraipo" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
+              <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
+                <img src="./assets/species/guaraipo.jpg" alt="Guaraipo - Macro da Abelha" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Macro da Abelha
+                </span>
+              </div>
+              <div class="carousel-slide hidden absolute inset-0 w-full h-full transition-opacity duration-300" data-index="1">
+                <img src="./assets/species/guaraipo_ninho.jpg" alt="Guaraipo - Estrutura do Ninho" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Estrutura do Ninho
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
+                1.600m Raio
+              </span>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-guaraipo', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior"><span class="carousel-prev select-none font-sans leading-none">&#10094;</span></button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-guaraipo', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto"><span class="carousel-next select-none font-sans leading-none">&#10095;</span></button>
+              <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-guaraipo', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-guaraipo', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
+              </div>
+            </div>
+            <div class="p-6 space-y-4">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Tribo Meliponini</span>
+                  <span class="text-xs text-gray-400 font-mono font-bold">13. GUA</span>
+                </div>
+                <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">Guaraipo</h3>
+                <p class="text-xs italic text-gray-500 dark:text-gray-400">Melipona bicolor</p>
+              </div>
+              <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                Espécie nobre das florestas de altitude da Mata Atlântica. Rara característica de poliginia (múltiplas rainhas férteis no mesmo ninho). Mel de sabor refinado.
+              </p>
+              <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Docilidade & Manejo</span>
+                    <span class="text-emerald-500 font-bold">100% (Extremamente Mansa)</span>
+                  </div>
+                  <div class="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-emerald-500 rounded-full" style="width: 100%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Produtividade Média / Ano</span>
+                    <span class="text-honey-600 dark:text-honey-400 font-bold">~2.0 a 4.0 kg</span>
+                  </div>
+                  <div class="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-honey-500 rounded-full" style="width: 60%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 pt-0">
+            <button onclick="window.mapSpeciesInRadar3D('guaraipo')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
+              <span>Mapear no Radar 3D</span>
+              <span>→</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- CARD: MANDAGUARI (Scaptotrigona postica) -->
+        <div data-tribe="Trigonini" class="species-catalog-card rounded-3xl bg-white dark:bg-[#151821] border border-gray-100 dark:border-gray-800 shadow-apple overflow-hidden flex flex-col justify-between hover:border-honey-500/40 transition-all duration-300">
+          <div>
+            <div id="species-carousel-mandaguari" class="group/carousel h-52 w-full relative overflow-hidden bg-gray-900 select-none">
+              <div class="carousel-slide absolute inset-0 w-full h-full transition-opacity duration-300" data-index="0">
+                <img src="./assets/species/mandaguari.jpg" alt="Mandaguari - Macro da Abelha" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Macro da Abelha
+                </span>
+              </div>
+              <div class="carousel-slide hidden absolute inset-0 w-full h-full transition-opacity duration-300" data-index="1">
+                <img src="./assets/species/mandaguari_ninho.jpg" alt="Mandaguari - Estrutura do Ninho" class="w-full h-full object-cover" loading="lazy" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+                <span class="absolute bottom-3 left-3 text-[11px] font-bold tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-black/70 text-amber-300 backdrop-blur-sm border border-amber-400/20 pointer-events-none flex items-center gap-1.5">
+                  <span class="w-1.5 h-1.5 rounded-full bg-honey-500"></span>
+                  Estrutura do Ninho
+                </span>
+              </div>
+              <span class="absolute top-3.5 right-3.5 px-2.5 py-1 rounded-lg text-[10px] font-bold bg-honey-500 text-black shadow-md z-10 pointer-events-none">
+                1.000m Raio
+              </span>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mandaguari', -1)" class="carousel-btn-prev absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Foto anterior"><span class="carousel-prev select-none font-sans leading-none">&#10094;</span></button>
+              <button type="button" onclick="navigateSpeciesCarousel('species-carousel-mandaguari', 1)" class="carousel-btn-next absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/60 hover:bg-black/85 text-white flex items-center justify-center text-sm font-bold opacity-80 sm:opacity-0 group-hover/carousel:opacity-100 transition-opacity backdrop-blur-sm border border-white/20 z-10 cursor-pointer shadow-md" aria-label="Próxima foto"><span class="carousel-next select-none font-sans leading-none">&#10095;</span></button>
+              <div class="carousel-dots absolute bottom-3 right-3 flex items-center gap-1.5 z-10">
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-mandaguari', 0)" class="carousel-dot h-1.5 rounded-full bg-honey-500 w-4 transition-all cursor-pointer" aria-label="Ir para foto 1"></button>
+                <button type="button" onclick="setSpeciesCarouselSlide('species-carousel-mandaguari', 1)" class="carousel-dot h-1.5 rounded-full bg-white/50 w-1.5 transition-all cursor-pointer" aria-label="Ir para foto 2"></button>
+              </div>
+            </div>
+            <div class="p-6 space-y-4">
+              <div>
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Tribo Trigonini</span>
+                  <span class="text-xs text-gray-400 font-mono font-bold">14. MPO</span>
+                </div>
+                <h3 class="text-xl font-display font-bold text-gray-900 dark:text-white mt-1">Mandaguari</h3>
+                <p class="text-xs italic text-gray-500 dark:text-gray-400">Scaptotrigona postica</p>
+              </div>
+              <p class="text-xs text-gray-600 dark:text-gray-300 leading-relaxed">
+                Abelha preta com pubescência amarelada e asas fumê. Excelente capacidade de polinização e enxames defensivos de alta produtividade.
+              </p>
+              <div class="space-y-2.5 pt-2 border-t border-gray-100 dark:border-gray-800 text-xs">
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Docilidade & Manejo</span>
+                    <span class="text-amber-500 font-bold">80% (Defensiva)</span>
+                  </div>
+                  <div class="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-amber-500 rounded-full" style="width: 80%"></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="flex justify-between text-[11px] font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                    <span>Produtividade Média / Ano</span>
+                    <span class="text-honey-600 dark:text-honey-400 font-bold">~2.0 a 4.0 kg</span>
+                  </div>
+                  <div class="h-1.5 w-full bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                    <div class="h-full bg-honey-500 rounded-full" style="width: 60%"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="p-6 pt-0">
+            <button onclick="window.mapSpeciesInRadar3D('mandaguari')" class="w-full btn-honey py-3 rounded-2xl text-xs font-bold cursor-pointer flex items-center justify-center gap-2">
               <span>Mapear no Radar 3D</span>
               <span>→</span>
             </button>
@@ -2194,24 +2509,34 @@
           <select id="sat-point-species" class="w-full px-3 py-2 rounded-xl border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-[#0E1015] text-gray-900 dark:text-white focus:outline-none focus:border-honey-500 font-medium">
             <option value="mandacaia">1. Mandaçaia MQA (~1.500m • Meliponini)</option>
             <option value="jatai" selected>2. Jataí Dourada (~500m • Trigonini)</option>
-            <option value="urucu">3. Uruçu Amarela (~2.000m • Meliponini)</option>
-            <option value="urucu_nordestina">4. Uruçu Nordestina (~2.000m • Meliponini)</option>
-            <option value="tiuba">5. Tiúba (~2.200m • Meliponini)</option>
-            <option value="mirim">6. Mirim Droryana (~400m • Trigonini)</option>
-            <option value="irai">7. Iraí (~600m • Trigonini)</option>
-            <option value="bora">8. Borá (~1.200m • Trigonini)</option>
-            <option value="manduri">9. Manduri (~1.000m • Meliponini)</option>
-            <option value="bugia">10. Bugia (~1.800m • Meliponini)</option>
+            <option value="mambucao">3. Mambucão (~800m • Trigonini)</option>
+            <option value="tubuna">4. Tubuna (~1.100m • Trigonini)</option>
+            <option value="guaraipo">5. Guaraipo (~1.600m • Meliponini)</option>
+            <option value="mandaguari">6. Mandaguari (~1.000m • Trigonini)</option>
+            <option value="urucu">7. Uruçu Amarela (~2.000m • Meliponini)</option>
+            <option value="urucu_nordestina">8. Uruçu Nordestina (~2.000m • Meliponini)</option>
+            <option value="tiuba">9. Tiúba (~2.200m • Meliponini)</option>
+            <option value="mirim">10. Mirim Droryana (~400m • Trigonini)</option>
+            <option value="irai">11. Iraí (~600m • Trigonini)</option>
+            <option value="bora">12. Borá (~1.200m • Trigonini)</option>
+            <option value="manduri">13. Manduri (~1.000m • Meliponini)</option>
+            <option value="bugia">14. Bugia (~1.800m • Meliponini)</option>
           </select>
         </div>
 
         <!-- Coordenadas GPS -->
         <div class="p-3 rounded-2xl bg-gray-50 dark:bg-[#0E1015] border border-gray-200 dark:border-gray-700 space-y-2">
-          <div class="flex items-center justify-between">
+          <div class="flex flex-wrap items-center justify-between gap-1.5">
             <span class="font-bold text-gray-700 dark:text-gray-300">Posição no Mapa:</span>
-            <button type="button" onclick="captureGpsForSatForm()" class="px-2.5 py-1 rounded-xl bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold hover:bg-amber-500/30 transition-colors">
-              📍 Obter GPS do Aparelho
-            </button>
+            <div class="flex items-center gap-1.5">
+              <button type="button" onclick="enableMapPickMode()" class="px-2.5 py-1 rounded-xl bg-honey-500 text-gray-950 font-bold hover:bg-amber-500 transition-colors shadow-sm flex items-center gap-1" title="Clique em qualquer lugar do mapa de satélite para posicionar esta caixa">
+                <span>🎯</span>
+                <span>Clicar no Mapa</span>
+              </button>
+              <button type="button" onclick="captureGpsForSatForm()" class="px-2.5 py-1 rounded-xl bg-amber-500/20 text-amber-600 dark:text-amber-400 font-bold hover:bg-amber-500/30 transition-colors">
+                📍 GPS
+              </button>
+            </div>
           </div>
           <div class="grid grid-cols-2 gap-2 font-mono">
             <div>
@@ -2334,6 +2659,10 @@
             <option value="bora">8. Borá (Tetragona clavipes)</option>
             <option value="manduri">9. Manduri (Melipona marginata)</option>
             <option value="bugia">10. Bugia (Melipona mondury)</option>
+            <option value="mambucao">Mambucão (Frieseomelitta varia)</option>
+            <option value="tubuna">Tubuna (Scaptotrigona depilis)</option>
+            <option value="guaraipo">Guaraipo (Melipona bicolor)</option>
+            <option value="mandaguari">Mandaguari (Scaptotrigona postica)</option>
           </select>
         </div>
 
@@ -2350,6 +2679,10 @@
             <option value="bora">8. Borá (Tetragona clavipes)</option>
             <option value="manduri">9. Manduri (Melipona marginata)</option>
             <option value="bugia">10. Bugia (Melipona mondury)</option>
+            <option value="mambucao">Mambucão (Frieseomelitta varia)</option>
+            <option value="tubuna">Tubuna (Scaptotrigona depilis)</option>
+            <option value="guaraipo">Guaraipo (Melipona bicolor)</option>
+            <option value="mandaguari">Mandaguari (Scaptotrigona postica)</option>
           </select>
         </div>
       </div>
@@ -2828,6 +3161,7 @@
       bugia: {
         name: 'Bugia',
         scientific: 'Melipona mondury',
+        tribe: 'Meliponini',
         radiusMeters: 1800,
         areaKm2: '8.41 km²',
         scale3D: 18.0,
@@ -2836,6 +3170,58 @@
         bodyScale: { x: 1.6, y: 1.2, z: 1.2 },
         wingScale: 1.2,
         overallScale: 1.45
+      },
+      mambucao: {
+        name: 'Mambucão',
+        scientific: 'Frieseomelitta varia',
+        tribe: 'Trigonini',
+        radiusMeters: 800,
+        areaKm2: '2.01 km²',
+        scale3D: 8.5,
+        bodyColor: 0x8B5A2B,
+        stripeColor: 0xF59E0B,
+        bodyScale: { x: 1.15, y: 0.8, z: 0.8 },
+        wingScale: 0.9,
+        overallScale: 0.95
+      },
+      tubuna: {
+        name: 'Tubuna',
+        scientific: 'Scaptotrigona depilis',
+        tribe: 'Trigonini',
+        radiusMeters: 1100,
+        areaKm2: '3.80 km²',
+        scale3D: 11.5,
+        bodyColor: 0x111827,
+        stripeColor: 0x374151,
+        bodyScale: { x: 1.3, y: 0.9, z: 0.9 },
+        wingScale: 1.05,
+        overallScale: 1.15
+      },
+      guaraipo: {
+        name: 'Guaraipo',
+        scientific: 'Melipona bicolor',
+        tribe: 'Meliponini',
+        radiusMeters: 1600,
+        areaKm2: '8.04 km²',
+        scale3D: 16.5,
+        bodyColor: 0x3D2314,
+        stripeColor: 0xD97706,
+        bodyScale: { x: 1.55, y: 1.15, z: 1.15 },
+        wingScale: 1.2,
+        overallScale: 1.4
+      },
+      mandaguari: {
+        name: 'Mandaguari',
+        scientific: 'Scaptotrigona postica',
+        tribe: 'Trigonini',
+        radiusMeters: 1000,
+        areaKm2: '3.14 km²',
+        scale3D: 10.5,
+        bodyColor: 0x18181B,
+        stripeColor: 0x71717A,
+        bodyScale: { x: 1.25, y: 0.85, z: 0.85 },
+        wingScale: 1.0,
+        overallScale: 1.1
       }
     };
 
@@ -6548,6 +6934,46 @@
         docil: '95% (Muito Mansa)',
         cold: 'Alta (Nativa da Mata de Araucárias e planaltos)',
         trait: 'Coloração dourada brilhante e mel floral de baixíssima acidez.'
+      },
+      mambucao: {
+        name: 'Mambucão',
+        tribo: 'Tribo Trigonini',
+        radius: '800 metros',
+        area: '~2.01 km²',
+        honey: '1.5 a 3.0 kg',
+        docil: '95% (Dócil, excelente defensora)',
+        cold: 'Média (Adapta-se ao Cerrado e Mata Atlântica)',
+        trait: 'Potes de mel em formato de cachos e pito de entrada em cerume escuro.'
+      },
+      tubuna: {
+        name: 'Tubuna',
+        tribo: 'Tribo Trigonini',
+        radius: '1.100 metros',
+        area: '~3.80 km²',
+        honey: '2.0 a 4.5 kg',
+        docil: '75% (Vigorosa e protetora do ninho)',
+        cold: 'Alta (Muito rústica e resistente ao frio)',
+        trait: 'Entrada ampla em funil de cerume escuro e enxames extremamente populosos.'
+      },
+      guaraipo: {
+        name: 'Guaraipo',
+        tribo: 'Tribo Meliponini',
+        radius: '1.600 metros',
+        area: '~8.04 km²',
+        honey: '2.0 a 4.0 kg',
+        docil: '100% (Mansa e nobre)',
+        cold: 'Muito Alta (Típica de florestas úmidas de altitude)',
+        trait: 'Colônias com poliginia (múltiplas rainhas férteis coexistindo) e coloração bicolorada.'
+      },
+      mandaguari: {
+        name: 'Mandaguari',
+        tribo: 'Tribo Trigonini',
+        radius: '1.000 metros',
+        area: '~3.14 km²',
+        honey: '2.0 a 4.0 kg',
+        docil: '80% (Defensiva se manuseada sem fumaça/respeito)',
+        cold: 'Média-Alta',
+        trait: 'Entrada espiralada/tubular de cerume e campeiras velozes de grande alcance.'
       }
     };
 
@@ -6961,9 +7387,15 @@
       // Renderizar pontos cadastrados pelo usuário
       renderAllSatellitePoints();
 
-      // Clique no mapa para abrir cadastro de ponto naquela coordenada
+      // Clique no mapa de satélite para capturar coordenadas e posicionar ponto
       satelliteMap.on('click', function(e) {
-        openAddPointModal(e.latlng.lat, e.latlng.lng);
+        if (isMapPickModeActive) {
+          disableMapPickMode();
+          openAddPointModal(e.latlng.lat, e.latlng.lng);
+          showGpsToast(`🎯 Coordenadas capturadas do clique: ${e.latlng.lat.toFixed(5)}, ${e.latlng.lng.toFixed(5)}`, true, 3500);
+        } else {
+          openAddPointModal(e.latlng.lat, e.latlng.lng);
+        }
       });
 
       // Solicitar automaticamente GPS do usuário ao abrir
@@ -7163,9 +7595,13 @@
       mirim: 400,
       jatai: 500,
       irai: 600,
+      mambucao: 800,
       manduri: 1000,
+      mandaguari: 1000,
+      tubuna: 1100,
       bora: 1200,
       mandacaia: 1500,
+      guaraipo: 1600,
       bugia: 1800,
       urucu: 2000,
       urucu_nordestina: 2000,
@@ -7548,14 +7984,88 @@
       }
     }
 
+    // =========================================================
+    // 🎯 MODO DE POSICIONAMENTO POR CLIQUE NO MAPA
+    // =========================================================
+    let isMapPickModeActive = false;
+
+    function enableMapPickMode() {
+      isMapPickModeActive = true;
+      const modal = document.getElementById('add-sat-point-modal');
+      if (modal) modal.classList.add('hidden'); // Oculta o modal temporariamente para ver o satélite livremente
+
+      const banner = document.getElementById('sat-pick-mode-banner');
+      if (banner) banner.classList.remove('hidden');
+
+      if (satelliteMap) {
+        satelliteMap.getContainer().style.cursor = 'crosshair';
+      }
+      showGpsToast("🎯 Modo Ativo: Clique no mapa de satélite onde deseja posicionar a caixa!", true, 4000);
+    }
+
+    function disableMapPickMode() {
+      isMapPickModeActive = false;
+      const banner = document.getElementById('sat-pick-mode-banner');
+      if (banner) banner.classList.add('hidden');
+
+      if (satelliteMap) {
+        satelliteMap.getContainer().style.cursor = '';
+      }
+      const modal = document.getElementById('add-sat-point-modal');
+      if (modal) modal.classList.remove('hidden');
+    }
+
+    function filterSpeciesCatalog(tribe) {
+      const cards = document.querySelectorAll('.species-catalog-card');
+      cards.forEach(card => {
+        if (tribe === 'all' || card.getAttribute('data-tribe') === tribe) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+
+      ['all', 'trigonini', 'meliponini'].forEach(t => {
+        const btn = document.getElementById(`tribe-filter-${t}`);
+        if (!btn) return;
+        if (t.toLowerCase() === tribe.toLowerCase()) {
+          btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-bold bg-honey-500 text-gray-950 shadow-sm transition-all cursor-pointer";
+        } else {
+          btn.className = "px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:text-honey-500 transition-all cursor-pointer";
+        }
+      });
+    }
+
     function deleteCurrentSatPoint() {
       if (!currentInspectedSatPoint) return;
-      if (confirm(`Tem certeza que deseja excluir o ponto ${currentInspectedSatPoint.id}?`)) {
-        satPoints = satPoints.filter(p => p.id !== currentInspectedSatPoint.id);
-        saveSatPointsLocalAndCloud();
-        closeSatelliteInspector();
-        renderAllSatellitePoints();
+      const pointId = currentInspectedSatPoint.id;
+      const pointTypeLabel = currentInspectedSatPoint.type === 'trap' ? 'o Ninho-Isca' : 'a Colmeia';
+
+      const confirmed = window.confirm(`Deseja remover ${pointTypeLabel} "${pointId}" do meliponário e do mapa de satélite? Esta ação não pode ser desfeita.`);
+      if (!confirmed) return;
+
+      // 1. Remover do array local
+      satPoints = satPoints.filter(p => p.id !== pointId);
+
+      // 2. Limpar círculo da memória do mapa
+      if (pointCircleInstances.has(pointId)) {
+        const circle = pointCircleInstances.get(pointId);
+        if (circle && satCirclesLayer) {
+          satCirclesLayer.removeLayer(circle);
+        }
+        pointCircleInstances.delete(pointId);
       }
+
+      // 3. Salvar permanentemente no LocalStorage e Nuvem Firestore
+      saveSatPointsLocalAndCloud();
+
+      // 4. Fechar gaveta lateral
+      closeSatelliteInspector();
+
+      // 5. Redesenhar o mapa Leaflet em tempo real sem o pino e sem o círculo
+      renderAllSatellitePoints();
+
+      showGpsToast(`🗑️ ${pointTypeLabel} "${pointId}" foi excluído(a) com sucesso!`, true, 3000);
     }
 
     // Modal Cadastrar Ponto
