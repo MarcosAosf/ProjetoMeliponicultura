@@ -770,11 +770,11 @@
             <span>Cadastrar Ponto</span>
           </button>
 
-          <!-- Filtros de Ponto (Todos / Colmeias / Iscas) -->
-          <div class="hidden sm:flex items-center gap-1 px-2 py-1 rounded-2xl glass-panel shadow-apple border border-gray-200/50 dark:border-white/10 text-xs">
-            <button onclick="toggleMapPointFilter('all')" id="filter-all-btn" class="px-2 py-0.5 rounded-xl font-bold bg-honey-500 text-gray-950 text-[11px]">Todos</button>
-            <button onclick="toggleMapPointFilter('hive')" id="filter-hive-btn" class="px-2 py-0.5 rounded-xl font-semibold text-gray-600 dark:text-gray-300 hover:text-honey-500 text-[11px]">📦 Colmeias</button>
-            <button onclick="toggleMapPointFilter('trap')" id="filter-trap-btn" class="px-2 py-0.5 rounded-xl font-semibold text-gray-600 dark:text-gray-300 hover:text-emerald-500 text-[11px]">🧪 Iscas</button>
+          <!-- Filtros de Ponto (Todos / Colmeias / Iscas - Visível no mobile e desktop) -->
+          <div class="flex items-center gap-1 px-2 py-1 rounded-2xl glass-panel shadow-apple border border-gray-200/50 dark:border-white/10 text-xs">
+            <button onclick="toggleMapPointFilter('all')" id="filter-all-btn" class="px-2.5 py-1 rounded-xl font-bold bg-honey-500 text-gray-950 text-[11px] cursor-pointer transition-all">Todos</button>
+            <button onclick="toggleMapPointFilter('hive')" id="filter-hive-btn" class="px-2.5 py-1 rounded-xl font-semibold text-gray-600 dark:text-gray-300 hover:text-honey-500 text-[11px] cursor-pointer transition-all">📦 Caixas</button>
+            <button onclick="toggleMapPointFilter('trap')" id="filter-trap-btn" class="px-2.5 py-1 rounded-xl font-semibold text-gray-600 dark:text-gray-300 hover:text-emerald-500 text-[11px] cursor-pointer transition-all">🧪 Iscas</button>
           </div>
 
           <!-- Botão Ocultar / Mostrar Círculos de Raio Real -->
@@ -7797,6 +7797,7 @@
 
         let circle = null;
         // CÍRCULO GEOGRÁFICO DE ALCANCE REAL EM METROS NO MAPA DE SATÉLITE (NUNCA circleMarker)
+        // CÍRCULO DE ALCANCE EXCLUSIVO PARA COLMEIAS RACIONAIS (ISCAS MOSTRAM APENAS O PINO DA LOCALIZAÇÃO)
         if (isHive) {
           circle = L.circle([point.lat, point.lon], {
             radius: flightRadiusMeters,
@@ -7808,29 +7809,11 @@
             interactive: false
           }).addTo(satCirclesLayer);
 
-          circle.bindTooltip(`${point.id} • ${spec.name}<br><strong>Raio Real: ${flightRadiusMeters.toLocaleString('pt-BR')}m</strong>`, {
+          circle.bindTooltip(`${point.id} • ${spec.name}<br><strong>Raio de Forrageamento: ${flightRadiusMeters.toLocaleString('pt-BR')}m</strong>`, {
             sticky: true,
             className: 'glass-panel text-xs text-gray-900 font-bold p-1 rounded-lg'
           });
-        } else {
-          // Ninho-Isca PET: Alcance do atrativo feromonado (~120m)
-          circle = L.circle([point.lat, point.lon], {
-            radius: 120,
-            color: '#10B981',
-            weight: 2,
-            fillColor: '#10B981',
-            fillOpacity: 0.16,
-            dashArray: '6, 6',
-            interactive: false
-          }).addTo(satCirclesLayer);
 
-          circle.bindTooltip(`${point.id} (Isca PET)<br><strong>Atrativo: 120m</strong>`, {
-            sticky: true,
-            className: 'glass-panel text-xs text-gray-900 font-bold p-1 rounded-lg'
-          });
-        }
-
-        if (circle) {
           pointCircleInstances.set(point.id, circle);
         }
 
@@ -7892,13 +7875,16 @@
         const btn = document.getElementById(`filter-${f}-btn`);
         if (btn) {
           if (f === filterType) {
-            btn.className = `px-2 py-0.5 rounded-xl font-bold ${f === 'trap' ? 'bg-emerald-500 text-white' : 'bg-honey-500 text-gray-950'} text-[11px]`;
+            btn.className = `px-2.5 py-1 rounded-xl font-bold cursor-pointer transition-all ${f === 'trap' ? 'bg-emerald-500 text-white shadow-sm' : 'bg-honey-500 text-gray-950 shadow-sm'} text-[11px]`;
           } else {
-            btn.className = 'px-2 py-0.5 rounded-xl font-semibold text-gray-600 dark:text-gray-300 hover:text-honey-500 text-[11px]';
+            btn.className = 'px-2.5 py-1 rounded-xl font-semibold text-gray-600 dark:text-gray-300 hover:text-honey-500 text-[11px] cursor-pointer transition-all';
           }
         }
       });
       renderAllSatellitePoints();
+      if (typeof renderSatBoxesQuickPanel === 'function') {
+        renderSatBoxesQuickPanel();
+      }
     }
 
 
@@ -7933,7 +7919,10 @@
       const badgeCount = document.getElementById('quick-panel-count-badge');
       if (!listEl) return;
 
-      const points = Array.isArray(satPoints) ? satPoints : [];
+      let points = Array.isArray(satPoints) ? satPoints : [];
+      if (typeof currentSatPointFilter !== 'undefined' && currentSatPointFilter !== 'all') {
+        points = points.filter(p => p.type === currentSatPointFilter);
+      }
       if (badgeCount) badgeCount.innerText = points.length;
 
       if (points.length === 0) {
